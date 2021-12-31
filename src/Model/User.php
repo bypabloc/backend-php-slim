@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 
 class User extends Eloquent
 {
+    use Pagination;
     /**
      * The attributes that are mass assignable.
      *
@@ -24,4 +25,5 @@ class User extends Eloquent
     protected $hidden = [
         'password',
     ];
+
 }

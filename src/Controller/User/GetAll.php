@@ -9,6 +9,8 @@ use App\Serializer\JsonResponse;
 
 use App\Model\User;
 
+use App\Services\Pagination;
+
 final class GetAll
 {
     use JsonResponse;
@@ -16,16 +18,22 @@ final class GetAll
     public function __invoke(Request $request, Response $response): Response
     {
         try {
-            $getParsedBody = (array) $request->getParsedBody();
-    
-            $password = '12345678';
-    
+            $body = (array) $request->getParsedBody()['data'] ?? [];
+            
+            $users = User::pagination((int) $body['page'], (int) $body['per_page']);
+            
             $data = [
-                'getParsedBody' => $getParsedBody,
-                'users' => User::all(),
+                'users' => $users,
             ];
         } catch (\Throwable $th) {
-            return $this->response($response, 500, $th);
+
+            return $this->response($response, 500, [
+                'errors' => [
+                    'message' => $th->getMessage(),
+                    'getFile' => $th->getFile(),
+                    'getLine' => $th->getLine(),
+                ],
+            ]);
         }
 
         return $this->response($response, 200, $data);
