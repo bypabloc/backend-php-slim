@@ -8,10 +8,11 @@ $capsule = new Capsule;
 
 $capsule->addConnection([
    "driver" => "pgsql",
-   "host" =>"127.0.0.1",
-   "database" => "php_slim_test",
-   "username" => "postgres",
-   "password" => "123456",
+   "host" => getenv("DB_HOST"),
+   "database" => getenv("DB_NAME"),
+   "username" => getenv("DB_USER"),
+   "password" => getenv("DB_PASS"),
+   "port" => getenv("DB_PORT"),
 ]);
 
 $capsule->setAsGlobal();

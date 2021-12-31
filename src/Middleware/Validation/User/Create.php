@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Middleware\User;
+namespace App\Middleware\Validation\User;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
@@ -10,6 +10,8 @@ use App\Serializer\JsonResponse;
 use App\Serializer\RequestValidatorErrors;
 
 use App\Services\Validator;
+
+use App\Middleware\Validation\Rule\Unique;
 
 class Create
 {
@@ -24,7 +26,7 @@ class Create
             $validator = new Validator();
 
             $validator->validate($params, [
-                'email' => ['required', 'string', 'email'],
+                'email' => ['required', 'string', 'email', new Unique('users', 'email')],
                 'nickname' => ['required', 'string', 'min:3', 'max:20'],
                 'password' => ['required', 'string', 'min:6', 'max:50'],
                 'passwordConfirmation' => ['required', 'string', 'min:6', 'max:50', 'same:password'],
@@ -40,7 +42,7 @@ class Create
                 $request = $request->withParsedBody([
                     'data' => $validator->data,
                 ]);
-                $response = $handler->handle($request);
+                return $handler->handle($request);
             }else{
                 $response = new Response();
                 $response = $this->response($response, 422, [

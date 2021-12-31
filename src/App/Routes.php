@@ -15,6 +15,8 @@ use App\Controller\Migration;
 // $app->get('/status', 'App\Controller\DefaultController:getStatus');
 // $app->post('/login', \App\Controller\User\Login::class);
 
+// $app->add( new \App\Middleware\JsonBodyParserMiddleware() );
+
 $app->get('/migrations', \App\Controller\Migrations::class);
 
 $app->group('/migrations', function (RouteCollectorProxy $app) {
@@ -30,6 +32,6 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
             return $response;
         });
         $app->get('/get_all', User\GetAll::class)->add(new \App\Middleware\Pagination());
-        $app->post('/create', User\Create::class)->add(new \App\Middleware\User\Create());
+        $app->post('/create', User\Create::class)->add(new \App\Middleware\Validation\User\Create());
     });
 });

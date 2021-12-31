@@ -7,18 +7,27 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 use App\Serializer\JsonResponse;
 
+use App\Services\Hash;
+
+use App\Model\User;
+
 final class Create
 {
     use JsonResponse;
 
     public function __invoke(Request $request, Response $response): Response
     {
-        $getParsedBody = (array) $request->getParsedBody();
+        $params = (array) $request->getParsedBody() ?: [];
+        $body = $params['data'] ?? [];
 
-        $user = User::Create([    'name' => "Ahmed Khan",    'email' => "ahmed.khan@lbs.com",    'password' => password_hash("ahmedkhan",PASSWORD_BCRYPT), ]);
-
+        $user = User::Create([
+            'nickname' => $body['nickname'],
+            'email' => $body['email'],
+            'password' => Hash::make($body['password']),
+        ]);
+        
         $data = [
-            'getParsedBody' => $getParsedBody,
+            'getParsedBody' => $body,
             'user' => $user,
         ];
 

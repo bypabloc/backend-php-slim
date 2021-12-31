@@ -15,11 +15,18 @@ final class GetAll
 
     public function __invoke(Request $request, Response $response): Response
     {
-        $getParsedBody = (array) $request->getParsedBody();
-
-        $data = [
-            'getParsedBody' => $getParsedBody,
-        ];
+        try {
+            $getParsedBody = (array) $request->getParsedBody();
+    
+            $password = '12345678';
+    
+            $data = [
+                'getParsedBody' => $getParsedBody,
+                'users' => User::all(),
+            ];
+        } catch (\Throwable $th) {
+            return $this->response($response, 500, $th);
+        }
 
         return $this->response($response, 200, $data);
     }

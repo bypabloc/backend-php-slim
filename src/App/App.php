@@ -13,9 +13,13 @@ if (file_exists($envFile)) {
 }
 
 $dotenv->required(['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASS', 'DB_PORT']);
-$settings = require __DIR__ . '/Settings.php';
+
+use \App\App\Settings;
 
 try {
+    $settings = new Settings();
+    $settings();
+
     $app = AppFactory::create();
 
     $app->addRoutingMiddleware();
