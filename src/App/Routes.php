@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 use App\Controller\UserController;
+use App\Controller\User;
 
 // $app->get('/', 'App\Controller\DefaultController:getHelp');
 // $app->get('/status', 'App\Controller\DefaultController:getStatus');
@@ -21,28 +22,11 @@ $app->get('/hello/{name}', function ($request, $response, array $args) {
 
 $app->group('/api/v1', function (RouteCollectorProxy $app) {
     $app->group('/users', function (RouteCollectorProxy $app) {
-        $app->get('/list', [UserController::class, 'list'])->add(new \App\Middleware\Pagination());
-        // $app->get('/list', function (Request $request, Response $response, array $args) {
-        //     // Route for /billing
-        //     $response->getBody()->write('11111111');
-    
-        //     return $response;
-        // });
-        // $app->get('/2', function (Request $request, Response $response, array $args) {
-        //     // Route for /billing
-        //     $response->getBody()->write('222222222');
-    
-        //     return $response;
-        // });
+        $app->get('/test', function ($request, $response, array $args) {
+            $response->getBody()->write('Prueba');
+            
+            return $response;
+        });
+        $app->get('/get_all', User\GetAll::class)->add(new \App\Middleware\Pagination());
     });
 });
-
-// $app->group('/api/v1', function () use ($app): void {
-//     $app->group('/users', function () use ($app): void {
-//         $app->get('', function ($request, $response, array $args) {
-//             $response->getBody()->write('prueba');
-            
-//             return $response;
-//         });
-//     });
-// });
