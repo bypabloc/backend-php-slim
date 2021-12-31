@@ -21,7 +21,7 @@ $app->get('/hello/{name}', function ($request, $response, array $args) {
 
 $app->group('/api/v1', function (RouteCollectorProxy $app) {
     $app->group('/users', function (RouteCollectorProxy $app) {
-        $app->get('/list', [UserController::class, 'list']);
+        $app->get('/list', [UserController::class, 'list'])->add(new \App\Middleware\Pagination());
         // $app->get('/list', function (Request $request, Response $response, array $args) {
         //     // Route for /billing
         //     $response->getBody()->write('11111111');

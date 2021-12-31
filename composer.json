@@ -6,7 +6,10 @@
         "nextras/orm": "^4.0",
         "justinrainbow/json-schema": "^5.2",
         "vlucas/phpdotenv": "^5.4",
-        "slim/psr7": "^1.5"
+        "slim/psr7": "^1.5",
+        "opis/json-schema": "^2.2",
+        "illuminate/container": "^8.77",
+        "illuminate/validation": "^8.77"
     },
     "config": {
     },

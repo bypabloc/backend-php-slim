@@ -5,28 +5,22 @@ namespace App\Controller;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class UserController extends Controller
+use App\Serializer\JsonResponse;
+
+use App\Request\Pagination;
+
+class UserController
 {
+    use JsonResponse;
+
     public function list(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $data = array('name' => 'Rob', 'age' => 40);
+        $getParsedBody = (array) $request->getParsedBody();
 
-        return $this->jsonResponse($response, 200, $data);
+        $data = [
+            'getParsedBody' => $getParsedBody,
+        ];
+
+        return $this->response($response, 200, $data);
     }
 }
-
-// {
-//     public function __construct()
-//     {
-//         var_dump('__METHOD__');
-//     }
-    
-//     public function home(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-//     {
-//         // your code here
-//         // use $this->view to render the HTML
-//         // ...
-        
-//         return $response;
-//     }
-// }

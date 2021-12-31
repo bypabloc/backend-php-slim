@@ -2,18 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Serializer;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-abstract class Controller
+trait JsonResponse
 {
-    public function __construct()
-    {
-    }
-
-    protected function jsonResponse(
+    public function response(
         ResponseInterface $response,
         int $status,
         array $data,
