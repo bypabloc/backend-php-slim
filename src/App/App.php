@@ -37,3 +37,5 @@ try {
 }
 
 require __DIR__ . '/Routes.php';
+
+require __DIR__ . '/../Config/bootstrap.php';

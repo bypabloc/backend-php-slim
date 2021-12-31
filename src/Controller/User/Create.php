@@ -7,9 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 use App\Serializer\JsonResponse;
 
-use App\Model\User;
-
-final class GetAll
+final class Create
 {
     use JsonResponse;
 
@@ -17,8 +15,11 @@ final class GetAll
     {
         $getParsedBody = (array) $request->getParsedBody();
 
+        $user = User::Create([    'name' => "Ahmed Khan",    'email' => "ahmed.khan@lbs.com",    'password' => password_hash("ahmedkhan",PASSWORD_BCRYPT), ]);
+
         $data = [
             'getParsedBody' => $getParsedBody,
+            'user' => $user,
         ];
 
         return $this->response($response, 200, $data);
