@@ -11,6 +11,7 @@ use App\Controller\User;
 use App\Controller\Role;
 use App\Controller\Migration;
 use App\Controller\Auth;
+use App\Controller\Permission;
 
 use App\Middleware\Token;
 use App\Middleware\BodyParser;
@@ -33,6 +34,14 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->get('/get_all', User\GetAll::class)->add(new \App\Middleware\Pagination());
         $app->post('/create', User\Create::class)->add(new \App\Middleware\Validation\User\Create());
 
+    })->add(Token::class);
+
+    $app->group('/permissions', function (RouteCollectorProxy $app) {
+        $app->get('/get_all', Permission\GetAll::class)->add(new \App\Middleware\Pagination());
+        $app->get('/find', Permission\Find::class)->add(new \App\Middleware\Validation\Permission\Find());
+        $app->post('/create', Permission\Create::class)->add(new \App\Middleware\Validation\Permission\Create());
+        // $app->post('/update', Role\Update::class)->add(new \App\Middleware\Validation\Role\Update());
+        // $app->post('/state', Role\State::class)->add(new \App\Middleware\Validation\Role\State());
     })->add(Token::class);
 
     $app->group('/roles', function (RouteCollectorProxy $app) {
