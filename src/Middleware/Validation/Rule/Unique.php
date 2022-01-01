@@ -41,9 +41,11 @@ class Unique implements Rule, DataAwareRule
      */
     public function passes($attribute, $value)
     {
-        $row = Capsule::table('users')->where([
-            'email' => $value,
-        ])->first();
+        $query = Capsule::table($this->table)->where([
+            $this->column => $value,
+        ]);
+        
+        $row = $query->first();
 
         return $row === null;
     }

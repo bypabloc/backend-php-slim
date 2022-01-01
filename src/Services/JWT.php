@@ -82,8 +82,6 @@ class JWT
             return;
         }
 
-        print_r($session);
-
         $session = self::$session;
 
         if($session->expired_at < date('Y-m-d H:i:s')){

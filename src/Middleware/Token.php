@@ -24,6 +24,8 @@ class Token
             $headers_list[$name] = implode(", ", $values);
         }
 
+        $bodyPrev = (array) $request->getParsedBody() ?: [];
+
         try {
             $validator = new Validator();
 
@@ -39,7 +41,7 @@ class Token
     
             if(!$validator->isValid()){
                 $response = new Response();
-                $response = $this->response($response, 401, [
+                return $this->response($response, 401, [
                     'errors' => ['Token not found'],
                 ]);
             }
@@ -50,15 +52,22 @@ class Token
             $jwt->VerifyToken($token);
             if(!$jwt->isValid()){
                 $response = new Response();
-                $response = $this->response($response, 401, [
+                return $this->response($response, 401, [
                     'errors' => $jwt->errors(),
                 ]);
-            }else{
-                $request = $request->withParsedBody([
-                    'session' => $jwt->session(),
-                ]);
-                return $handler->handle($request);
             }
+
+            $request = $request->withAttribute('session', $jwt->session());
+
+            // $newBody = array_merge($bodyPrev, [
+            //     'body' => $validator->data,
+            //     'session' => $jwt->session(),
+            // ]);
+
+            // $request = $request->withParsedBody($newBody);
+            
+            return $handler->handle($request);
+
         } catch (\Throwable $th) {
             $response = new Response();
             $response = $this->response($response, 500, [

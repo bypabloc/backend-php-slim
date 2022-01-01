@@ -20,12 +20,12 @@ class Create
     
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
-        $params = (array) $request->getParsedBody(); // get all body params
+        $body = $request->getAttribute('body');
 
         try {
             $validator = new Validator();
 
-            $validator->validate($params, [
+            $validator->validate($body, [
                 'email' => ['required', 'string', 'email', new Unique('users', 'email')],
                 'nickname' => ['required', 'string', 'min:3', 'max:20'],
                 'password' => ['required', 'string', 'min:6', 'max:50'],
@@ -38,17 +38,17 @@ class Create
                 'same' => 'The :attribute field must same :same.',
             ]);
     
-            if($validator->isValid()){
-                $request = $request->withParsedBody([
-                    'data' => $validator->data,
-                ]);
-                return $handler->handle($request);
-            }else{
+            if(!$validator->isValid()){
                 $response = new Response();
-                $response = $this->response($response, 422, [
+                return $this->response($response, 422, [
                     'errors' => $validator->errors,
                 ]);
             }
+
+            $request = $request->withAttribute('body', $validator->data);
+            
+            return $handler->handle($request);
+
         } catch (\Throwable $th) {
             $response = new Response();
             $response = $this->response($response, 500, [

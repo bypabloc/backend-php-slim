@@ -17,20 +17,27 @@ final class Create
 
     public function __invoke(Request $request, Response $response): Response
     {
-        $params = (array) $request->getParsedBody() ?: [];
-        $body = $params['data'] ?? [];
+        $session = $request->getAttribute('session');
+        $body = $request->getAttribute('body');
 
-        $user = User::Create([
-            'nickname' => $body['nickname'],
-            'email' => $body['email'],
-            'password' => Hash::make($body['password']),
-        ]);
-        
-        $data = [
-            'getParsedBody' => $body,
-            'user' => $user,
+        $user = new User();
+        $user->nickname = $body['nickname'] ?? '';
+        $user->email = $body['email'] ?? '';
+        $user->password = $body['password'] ?? '';
+
+        $user->creatingCustom();
+
+        $user->save();
+
+        $res = [
+            'data' => [
+                'session' => $session,
+                'user' => [
+                    'nickname' => $user->nickname,
+                    'email' => $user->email,
+                ],
+            ],
         ];
-
-        return $this->response($response, 200, $data);
+        return $this->response($response, 200, $res);
     }
 }

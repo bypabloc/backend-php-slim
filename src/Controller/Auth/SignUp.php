@@ -16,8 +16,7 @@ final class SignUp
     public function __invoke(Request $request, Response $response): Response
     {
         try {
-            $params = (array) $request->getParsedBody() ?: [];
-            $body = $params['data'] ?? [];
+            $body = $request->getAttribute('body');
     
             $user = new User();
             $user->nickname = $body['nickname'] ?? '';

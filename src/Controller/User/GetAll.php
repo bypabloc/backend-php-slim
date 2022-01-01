@@ -17,25 +17,16 @@ final class GetAll
 
     public function __invoke(Request $request, Response $response): Response
     {
-        try {
-            $body = (array) $request->getParsedBody()['data'] ?? [];
-            
-            $users = User::pagination((int) $body['page'], (int) $body['per_page']);
-            
-            $data = [
+        $params = $request->getAttribute('params');
+        $session = $params['session'];
+        
+        $users = User::pagination((int) $params['page'], (int) $params['per_page']);
+        
+        $res = [
+            'data' => [
                 'users' => $users,
-            ];
-        } catch (\Throwable $th) {
-
-            return $this->response($response, 500, [
-                'errors' => [
-                    'message' => $th->getMessage(),
-                    'getFile' => $th->getFile(),
-                    'getLine' => $th->getLine(),
-                ],
-            ]);
-        }
-
-        return $this->response($response, 200, $data);
+            ],
+        ];
+        return $this->response($response, 200, $res);
     }
 }

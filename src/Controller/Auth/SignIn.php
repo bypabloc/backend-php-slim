@@ -17,48 +17,41 @@ final class SignIn
 
     public function __invoke(Request $request, Response $response): Response
     {
-        try {
-            $params = (array) $request->getParsedBody() ?: [];
-            $body = $params['data'] ?? [];
+        $body = $request->getAttribute('body');
 
-            $column = '';
-            $value = '';
-            if (filter_var($body['user'], FILTER_VALIDATE_EMAIL)) {
-                $column = 'email';
-                $value = $body['user'];
-            }else{
-                $column = 'nickname';
-                $value = $body['user'];
-            }
+        $column = '';
+        $value = '';
+        if (filter_var($body['user'], FILTER_VALIDATE_EMAIL)) {
+            $column = 'email';
+            $value = $body['user'];
+        }else{
+            $column = 'nickname';
+            $value = $body['user'];
+        }
 
-            $user = User::where($column, $value)->get()->first();
-            if(!Hash::validate($body['password'], $user->password)){
-                return $this->response($response, 422, [
-                    'errors' => [
-                        'user' => ['Credentials are incorrect.'],
-                    ],
-                ]);
-            }
-
-            $user->generateToken();
-
-            $data = [
-                'user' => [
-                    'nickname' => $user->nickname,
-                    'email' => $user->email,
-                    'token' => $user->token,
-                ],
-            ];
-        } catch (\Throwable $th) {
-            return $this->response($response, 500, [
+        $user = User::where($column, $value)->get()->first();
+        if(!Hash::validate($body['password'], $user->password)){
+            return $this->response($response, 422, [
                 'errors' => [
-                    'message' => $th->getMessage(),
-                    'getFile' => $th->getFile(),
-                    'getLine' => $th->getLine(),
+                    'user' => ['Credentials are incorrect.'],
                 ],
             ]);
         }
 
-        return $this->response($response, 200, $data);
+        $user->generateToken();
+
+        $data = [
+            'user' => [
+                'nickname' => $user->nickname,
+                'email' => $user->email,
+                'token' => $user->token,
+            ],
+        ];
+        
+        $res = [
+            'data' => $data,
+        ];
+
+        return $this->response($response, 200, $res);
     }
 }

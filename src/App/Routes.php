@@ -12,12 +12,11 @@ use App\Controller\Migration;
 use App\Controller\Auth;
 
 use App\Middleware\Token;
+use App\Middleware\BodyParser;
 
 // $app->get('/', 'App\Controller\DefaultController:getHelp');
 // $app->get('/status', 'App\Controller\DefaultController:getStatus');
 // $app->post('/login', \App\Controller\User\Login::class);
-
-// $app->add( new \App\Middleware\JsonBodyParserMiddleware() );
 
 $app->get('/migrations', \App\Controller\Migrations::class);
 
@@ -39,7 +38,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->get('/get_all', User\GetAll::class)->add(new \App\Middleware\Pagination());
         $app->post('/create', User\Create::class)->add(new \App\Middleware\Validation\User\Create());
 
-    });
+    })->add(Token::class);
 
     $app->group('/auth', function (RouteCollectorProxy $app) {
 
@@ -48,4 +47,4 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->post('/sign_out', Auth\SignOut::class)->add(Token::class);
 
     });
-});
+})->add(BodyParser::class);

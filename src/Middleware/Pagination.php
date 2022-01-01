@@ -18,8 +18,7 @@ class Pagination
     
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
-        $params = (array) $request->getQueryParams(); // get all params get query params
-        // $params = (array) $request->getParsedBody(); // get all body params
+        $params = $request->getAttribute('params');
 
         try {
             $validator = new Validator();
@@ -31,17 +30,17 @@ class Pagination
                 'required' => 'The :attribute field is required.',
             ]);
     
-            if($validator->isValid()){
-                $request = $request->withParsedBody([
-                    'data' => $validator->data,
-                ]);
-                $response = $handler->handle($request);
-            }else{
+            if(!$validator->isValid()){
                 $response = new Response();
-                $response = $this->response($response, 422, [
+                return $this->response($response, 422, [
                     'errors' => $validator->errors,
                 ]);
             }
+
+            $request = $request->withAttribute('params', $validator->data);
+            
+            return $handler->handle($request);
+
         } catch (\Throwable $th) {
             $response = new Response();
             $response = $this->response($response, 500, [
