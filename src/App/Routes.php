@@ -11,6 +11,8 @@ use App\Controller\User;
 use App\Controller\Migration;
 use App\Controller\Auth;
 
+use App\Middleware\Token;
+
 // $app->get('/', 'App\Controller\DefaultController:getHelp');
 // $app->get('/status', 'App\Controller\DefaultController:getStatus');
 // $app->post('/login', \App\Controller\User\Login::class);
@@ -43,6 +45,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
 
         $app->post('/sign_up', Auth\SignUp::class)->add(new \App\Middleware\Validation\Auth\SignUp());
         $app->post('/sign_in', Auth\SignIn::class)->add(new \App\Middleware\Validation\Auth\SignIn());
+        $app->post('/sign_out', Auth\SignOut::class)->add(Token::class);
 
     });
 });

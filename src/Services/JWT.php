@@ -12,6 +12,9 @@ class JWT
 
     private static $key;
 
+    private static $session = null;
+    private static $errors = [];
+
     public function __construct(){
         $this->key = getenv("SECRET_KEY");
     }
@@ -35,9 +38,10 @@ class JWT
         int $user_id,
     ) : string
     {
-        // print_r(self::TimeExpired());die;
-        $dateTokenExpiration = self::TimeExpired()->dateTokenExpiration;
-        $dateTokenFormat = self::TimeExpired()->dateTokenFormat;
+        $timeExpired = self::TimeExpired();
+
+        $dateTokenExpiration = $timeExpired->dateTokenExpiration;
+        $dateTokenFormat = $timeExpired->dateTokenFormat;
 
         $payload = [
             'uuid' => $uuid,
@@ -57,6 +61,60 @@ class JWT
         return $token;
     }
 
+    private static function ExistsToken(
+        string $token,
+    ) : bool
+    {
+        $session = Session::find($token);
+        if(!$session){
+            return false;
+        }
+        self::$session = $session;
+        return true;
+    }
+
+    public static function VerifyToken(
+        string $token,
+    ) : void
+    {
+        if(!self::ExistsToken($token)){
+            self::$errors = ['Token not found'];
+            return;
+        }
+
+        print_r($session);
+
+        $session = self::$session;
+
+        if($session->expired_at < date('Y-m-d H:i:s')){
+            self::DestroyTokens($session->user_id);
+            self::$errors = ['Token expired'];
+            return;
+        }
+
+        self::RefreshToken($session);
+    }
+
+    public static function RefreshToken(
+        Session $session,
+    ) : void
+    {
+        $timeExpired = self::TimeExpired();
+
+        $dateTokenFormat = $timeExpired->dateTokenFormat;
+
+        $session->update([
+            'expired_at' => $dateTokenFormat,
+        ]);
+    }
+
+    public static function DestroySession(
+        Session $session,
+    ) : void
+    {
+        $session->delete();
+    }
+
     public static function DestroyTokens(
         int $user_id,
     ) : void
@@ -64,4 +122,24 @@ class JWT
         Session::where('user_id', $user_id)->delete();
     }
 
+    public static function isValid(
+    ) : bool
+    {
+        if(count(self::$errors) > 0){
+            return false;
+        }
+        return true;
+    }
+
+    public static function errors(
+    ) : array
+    {
+        return self::$errors;
+    }
+
+    public static function session(
+    ) : Session
+    {
+        return self::$session;
+    }
 }
