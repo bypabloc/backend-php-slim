@@ -5,6 +5,8 @@ namespace App\Services;
 use Firebase\JWT\JWT as FirebaseJWT;
 use Firebase\JWT\Key;
 
+use App\Model\Session;
+
 class JWT
 {
 
@@ -17,9 +19,11 @@ class JWT
     public static function TimeExpired() : object
     {
         $expirationInSeconds = 60 * 60; // one hour
-        $dateTokenExpiration = time() + $expirationInSeconds * 1000;
+        $dateTokenExpiration = time() + $expirationInSeconds;
+        $dateTokenFormat = date('Y-m-d H:i:s', $dateTokenExpiration);
 
         return (object) [
+            'dateTokenFormat' => $dateTokenFormat,
             'dateTokenExpiration' => $dateTokenExpiration,
             'expirationInSeconds' => $expirationInSeconds
         ];
@@ -32,12 +36,32 @@ class JWT
     ) : string
     {
         // print_r(self::TimeExpired());die;
+        $dateTokenExpiration = self::TimeExpired()->dateTokenExpiration;
+        $dateTokenFormat = self::TimeExpired()->dateTokenFormat;
+
         $payload = [
             'uuid' => $uuid,
-            'exp' => self::TimeExpired()->dateTokenExpiration
+            'exp' => $dateTokenExpiration
         ];
 
-        return FirebaseJWT::encode($payload, self::$key, 'HS256');
+        $token = FirebaseJWT::encode($payload, self::$key, 'HS256');
+
+        self::DestroyTokens($user_id);
+
+        Session::create([
+            'token' => $token,
+            'user_id' => $user_id,
+            'expired_at' => $dateTokenFormat,
+        ]);
+
+        return $token;
+    }
+
+    public static function DestroyTokens(
+        int $user_id,
+    ) : void
+    {
+        Session::where('user_id', $user_id)->delete();
     }
 
 }
