@@ -1,19 +1,21 @@
 <?php
 
-namespace App\Middleware\Validation\Auth;
+namespace App\Middleware\Validation\Role;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Psr7\Response;
 
 use App\Serializer\JsonResponse;
+use App\Serializer\RequestValidatorErrors;
 
 use App\Services\Validator;
 
 use App\Middleware\Validation\Rule\Unique;
 
-class SignIn
+class Create
 {
+    use RequestValidatorErrors;
     use JsonResponse;
     
     public function __invoke(Request $request, RequestHandler $handler): Response
@@ -24,8 +26,8 @@ class SignIn
             $validator = new Validator();
 
             $validator->validate($body, [
-                'user' => ['required', 'string', 'min:3', 'max:20'],
-                'password' => ['required', 'string', 'min:6', 'max:50'],
+                'name' => ['required', 'string', new Unique('roles', 'name')],
+                'permissions' => ['array'],
             ], [
                 'required' => 'The :attribute field is required.',
                 'email' => 'The :attribute field must type email.',
@@ -40,7 +42,7 @@ class SignIn
                     'errors' => $validator->errors,
                 ]);
             }
-            
+
             $request = $request->withAttribute('body', $validator->data);
             
             return $handler->handle($request);

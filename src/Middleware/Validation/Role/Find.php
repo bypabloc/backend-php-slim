@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Middleware\Validation\Auth;
+namespace App\Middleware\Validation\Role;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
@@ -10,22 +10,21 @@ use App\Serializer\JsonResponse;
 
 use App\Services\Validator;
 
-use App\Middleware\Validation\Rule\Unique;
+use App\Middleware\Validation\Rule\Exist;
 
-class SignIn
+class Find
 {
     use JsonResponse;
     
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
-        $body = $request->getAttribute('body');
+        $params = $request->getAttribute('params');
 
         try {
             $validator = new Validator();
 
-            $validator->validate($body, [
-                'user' => ['required', 'string', 'min:3', 'max:20'],
-                'password' => ['required', 'string', 'min:6', 'max:50'],
+            $validator->validate($params, [
+                'id' => ['required', 'string', new Exist('roles', 'id')],
             ], [
                 'required' => 'The :attribute field is required.',
                 'email' => 'The :attribute field must type email.',
@@ -41,7 +40,7 @@ class SignIn
                 ]);
             }
             
-            $request = $request->withAttribute('body', $validator->data);
+            $request = $request->withAttribute('params', $validator->data);
             
             return $handler->handle($request);
 

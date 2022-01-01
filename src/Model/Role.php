@@ -5,19 +5,18 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
-class Session extends Model
+class Role extends Model
 {
-    protected $primaryKey = 'token';
-
+    use Pagination;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'token',
-        'user_id',
-        'expired_at',
+        'name',
+        'is_active',
+        'created_by',
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -26,9 +25,4 @@ class Session extends Model
      */
     protected $hidden = [
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }

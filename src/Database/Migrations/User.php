@@ -13,6 +13,9 @@ class User
                 $table->bigIncrements('id');
                 $table->string('nickname')->unique();
                 $table->string('email')->unique();
+
+                // $table->boolean('is_super')->default(false);
+                
                 $table->uuid('uuid')->unique();
                 $table->string('password');
                 $table->timestamps();

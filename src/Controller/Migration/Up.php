@@ -9,6 +9,9 @@ use App\Serializer\JsonResponse;
 
 use App\Database\Migrations\User;
 use App\Database\Migrations\Session;
+use App\Database\Migrations\Role;
+use App\Database\Migrations\Permission;
+use App\Database\Migrations\RolePermission;
 
 final class Up
 {
@@ -17,8 +20,10 @@ final class Up
     public function __invoke(Request $request, Response $response): Response
     {
         User::up();
-        
         Session::up();
+        Role::up();
+        Permission::up();
+        RolePermission::up();
 
         return $this->response($response, 200, []);
     }

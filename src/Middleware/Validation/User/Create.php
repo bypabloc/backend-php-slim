@@ -27,7 +27,7 @@ class Create
 
             $validator->validate($body, [
                 'email' => ['required', 'string', 'email', new Unique('users', 'email')],
-                'nickname' => ['required', 'string', 'min:3', 'max:20'],
+                'nickname' => ['required', 'string', new Unique('users', 'nickname')],
                 'password' => ['required', 'string', 'min:6', 'max:50'],
                 'passwordConfirmation' => ['required', 'string', 'min:6', 'max:50', 'same:password'],
             ], [

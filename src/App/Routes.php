@@ -8,17 +8,12 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 use App\Controller\User;
+use App\Controller\Role;
 use App\Controller\Migration;
 use App\Controller\Auth;
 
 use App\Middleware\Token;
 use App\Middleware\BodyParser;
-
-// $app->get('/', 'App\Controller\DefaultController:getHelp');
-// $app->get('/status', 'App\Controller\DefaultController:getStatus');
-// $app->post('/login', \App\Controller\User\Login::class);
-
-$app->get('/migrations', \App\Controller\Migrations::class);
 
 $app->group('/migrations', function (RouteCollectorProxy $app) {
     $app->get('/up', Migration\Up::class);
@@ -38,6 +33,14 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->get('/get_all', User\GetAll::class)->add(new \App\Middleware\Pagination());
         $app->post('/create', User\Create::class)->add(new \App\Middleware\Validation\User\Create());
 
+    })->add(Token::class);
+
+    $app->group('/roles', function (RouteCollectorProxy $app) {
+        $app->get('/get_all', Role\GetAll::class)->add(new \App\Middleware\Pagination());
+        $app->get('/find', Role\Find::class)->add(new \App\Middleware\Validation\Role\Find());
+        $app->post('/create', Role\Create::class)->add(new \App\Middleware\Validation\Role\Create());
+        // $app->post('/update', Role\Update::class)->add(new \App\Middleware\Validation\User\Update());
+        // $app->post('/state', Role\state::class)->add(new \App\Middleware\Validation\User\State());
     })->add(Token::class);
 
     $app->group('/auth', function (RouteCollectorProxy $app) {
