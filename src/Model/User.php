@@ -2,9 +2,15 @@
 
 namespace App\Model;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
-class User extends Eloquent
+use App\Services\Hash;
+use Ramsey\Uuid\Uuid;
+
+use App\Services\JWT;
+
+class User extends Model
 {
     use Pagination;
     /**
@@ -16,6 +22,7 @@ class User extends Eloquent
         'email',
         'nickname',
         'password',
+        'uuid',
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -26,4 +33,14 @@ class User extends Eloquent
         'password',
     ];
 
+    public function creatingCustom()
+    {
+        $this->password = Hash::make($this->password);
+        $this->uuid = Uuid::uuid4()->toString();
+    }
+
+    public function createdCustom()
+    {
+        $this->token = JWT::GenerateToken($this->uuid, $this->id);
+    }
 }

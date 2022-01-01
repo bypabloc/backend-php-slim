@@ -8,13 +8,16 @@ class User
 {
     public static function up()
     {
-        Capsule::schema()->create('users', function ($table) {
-            $table->increments('id');
-            $table->string('nickname')->unique();
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->timestamps();
-        });
+        if (!Capsule::schema()->hasTable('users')) {
+            Capsule::schema()->create('users', function ($table) {
+                $table->bigIncrements('id');
+                $table->string('nickname')->unique();
+                $table->string('email')->unique();
+                $table->uuid('uuid')->unique();
+                $table->string('password');
+                $table->timestamps();
+            });
+        }
     }
 
     public static function down()

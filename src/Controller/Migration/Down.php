@@ -8,6 +8,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use App\Serializer\JsonResponse;
 
 use App\Database\Migrations\User;
+use App\Database\Migrations\Session;
 
 final class Down
 {
@@ -15,6 +16,7 @@ final class Down
 
     public function __invoke(Request $request, Response $response): Response
     {
+        Session::down();
         User::down();
 
         return $this->response($response, 200, []);
