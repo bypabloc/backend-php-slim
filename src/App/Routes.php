@@ -41,7 +41,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->get('/find', Permission\Find::class)->add(new \App\Middleware\Validation\Permission\Find());
         $app->post('/create', Permission\Create::class)->add(new \App\Middleware\Validation\Permission\Create());
         // $app->post('/update', Role\Update::class)->add(new \App\Middleware\Validation\Role\Update());
-        // $app->post('/state', Role\State::class)->add(new \App\Middleware\Validation\Role\State());
+        $app->post('/state', Permission\State::class)->add(new \App\Middleware\Validation\Permission\State());
     })->add(Token::class);
 
     $app->group('/roles', function (RouteCollectorProxy $app) {
