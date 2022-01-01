@@ -25,6 +25,7 @@ class Validator
 
         $validator = $factory->make($params, $validators, [
             'required' => 'The :attribute field is required.',
+            'string' => 'The :attribute must be a string.',
             'email' => 'The :attribute field must type email.',
             'min' => 'The :attribute field must greater than :min.',
             'max' => 'The :attribute field must less than :max.',
