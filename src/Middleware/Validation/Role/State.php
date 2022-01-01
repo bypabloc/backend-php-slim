@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Middleware\Validation\Auth;
+namespace App\Middleware\Validation\Role;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
@@ -10,9 +10,9 @@ use App\Serializer\JsonResponse;
 
 use App\Services\Validator;
 
-use App\Middleware\Validation\Rule\Unique;
+use App\Middleware\Validation\Rule\Exist;
 
-class SignIn
+class State
 {
     use JsonResponse;
     
@@ -24,9 +24,9 @@ class SignIn
             $validator = new Validator();
 
             $validator->validate($body, [
-                'user' => ['required', 'string', 'min:3', 'max:20'],
-                'password' => ['required', 'string', 'min:6', 'max:50'],
-            ]);
+                'id' => ['required', 'string', new Exist('roles', 'id')],
+                'state' => ['required', 'string', 'in:0,1'],
+            ], );
     
             if(!$validator->isValid()){
                 $response = new Response();

@@ -40,7 +40,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->get('/find', Role\Find::class)->add(new \App\Middleware\Validation\Role\Find());
         $app->post('/create', Role\Create::class)->add(new \App\Middleware\Validation\Role\Create());
         // $app->post('/update', Role\Update::class)->add(new \App\Middleware\Validation\User\Update());
-        // $app->post('/state', Role\state::class)->add(new \App\Middleware\Validation\User\State());
+        $app->post('/state', Role\State::class)->add(new \App\Middleware\Validation\Role\State());
     })->add(Token::class);
 
     $app->group('/auth', function (RouteCollectorProxy $app) {

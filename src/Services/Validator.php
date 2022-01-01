@@ -16,14 +16,21 @@ class Validator
     {
     }
 
-    public function validate(array $params, array $validators, array $messages): void
+    public function validate(array $params, array $validators): void
     {
         $filesystem = new Filesystem\Filesystem();
         $fileLoader = new Translation\FileLoader($filesystem, '');
         $translator = new Translation\Translator($fileLoader, 'en_US');
         $factory = new Validation\Factory($translator);
 
-        $validator = $factory->make($params, $validators, $messages);
+        $validator = $factory->make($params, $validators, [
+            'required' => 'The :attribute field is required.',
+            'email' => 'The :attribute field must type email.',
+            'min' => 'The :attribute field must greater than :min.',
+            'max' => 'The :attribute field must less than :max.',
+            'same' => 'The :attribute field must same :size.',
+            'in' => 'The :attribute must be one of the following types: :values',
+        ]);
 
         if(!$validator->fails()){
             $this->data = $validator->validated();

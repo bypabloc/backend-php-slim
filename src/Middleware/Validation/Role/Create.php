@@ -28,12 +28,6 @@ class Create
             $validator->validate($body, [
                 'name' => ['required', 'string', new Unique('roles', 'name')],
                 'permissions' => ['array'],
-            ], [
-                'required' => 'The :attribute field is required.',
-                'email' => 'The :attribute field must type email.',
-                'min' => 'The :attribute field must greater than :min.',
-                'max' => 'The :attribute field must less than :max.',
-                'same' => 'The :attribute field must same :same.',
             ]);
     
             if(!$validator->isValid()){

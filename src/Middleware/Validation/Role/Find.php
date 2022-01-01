@@ -25,12 +25,6 @@ class Find
 
             $validator->validate($params, [
                 'id' => ['required', 'string', new Exist('roles', 'id')],
-            ], [
-                'required' => 'The :attribute field is required.',
-                'email' => 'The :attribute field must type email.',
-                'min' => 'The :attribute field must greater than :min.',
-                'max' => 'The :attribute field must less than :max.',
-                'same' => 'The :attribute field must same :same.',
             ]);
     
             if(!$validator->isValid()){

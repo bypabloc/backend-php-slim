@@ -26,8 +26,6 @@ class Pagination
             $validator->validate($params, [
                 'page' => ['required', 'integer', 'min:1'],
                 'per_page' => ['required', 'integer', 'min:5'],
-            ], [
-                'required' => 'The :attribute field is required.',
             ]);
     
             if(!$validator->isValid()){

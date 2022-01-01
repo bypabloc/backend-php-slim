@@ -30,12 +30,6 @@ class Create
                 'nickname' => ['required', 'string', new Unique('users', 'nickname')],
                 'password' => ['required', 'string', 'min:6', 'max:50'],
                 'passwordConfirmation' => ['required', 'string', 'min:6', 'max:50', 'same:password'],
-            ], [
-                'required' => 'The :attribute field is required.',
-                'email' => 'The :attribute field must type email.',
-                'min' => 'The :attribute field must greater than :min.',
-                'max' => 'The :attribute field must less than :max.',
-                'same' => 'The :attribute field must same :same.',
             ]);
     
             if(!$validator->isValid()){
