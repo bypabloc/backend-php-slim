@@ -11,6 +11,7 @@ use App\Serializer\JsonResponse;
 use App\Services\Validator;
 
 use App\Middleware\Validation\Rule\Exist;
+use App\Middleware\Validation\Rule\OnlyLetters;
 
 class Update
 {
@@ -25,7 +26,8 @@ class Update
 
             $validator->validate($body, [
                 'id' => ['required', 'string', new Exist('permissions', 'id')],
-                'name' => ['required', 'string', 'min:3', 'max:50'],
+                'name' => ['string', 'min:3', 'max:50', 'required_without:alias'],
+                'alias' => ['string', 'min:3', 'max:50', 'required_without:name', new OnlyLetters()],
                 'state' => ['string', 'in:0,1'],
             ], );
     

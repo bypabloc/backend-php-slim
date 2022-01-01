@@ -21,7 +21,12 @@ final class Update
         $body = $request->getAttribute('body');
 
         $permission = Permission::find($body['id']);
-        $permission->name = $body['name'];
+        if($body['name'] !== null){
+            $permission->name = $body['name'];
+        }
+        if($body['alias'] !== null){
+            $permission->alias = $body['alias'];
+        }
         if($body['state'] !== null){
             $permission->is_active = $body['state'];
         }
