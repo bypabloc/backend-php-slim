@@ -43,4 +43,9 @@ class User extends Model
     {
         $this->token = JWT::GenerateToken($this->uuid, $this->id);
     }
+
+    public function generateToken()
+    {
+        $this->token = JWT::GenerateToken($this->uuid, $this->id);
+    }
 }

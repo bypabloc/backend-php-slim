@@ -42,6 +42,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
     $app->group('/auth', function (RouteCollectorProxy $app) {
 
         $app->post('/sign_up', Auth\SignUp::class)->add(new \App\Middleware\Validation\Auth\SignUp());
+        $app->post('/sign_in', Auth\SignIn::class)->add(new \App\Middleware\Validation\Auth\SignIn());
 
     });
 });
