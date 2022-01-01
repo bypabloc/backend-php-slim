@@ -12,6 +12,7 @@ use App\Serializer\RequestValidatorErrors;
 use App\Services\Validator;
 
 use App\Middleware\Validation\Rule\Unique;
+use App\Middleware\Validation\Rule\ExistList;
 
 class Create
 {
@@ -27,7 +28,7 @@ class Create
 
             $validator->validate($body, [
                 'name' => ['required', 'string', new Unique('roles', 'name')],
-                'permissions' => ['array'],
+                'permissions' => ['array', new ExistList('permissions', 'id')],
             ]);
     
             if(!$validator->isValid()){
