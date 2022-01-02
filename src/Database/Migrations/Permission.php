@@ -26,8 +26,8 @@ class Permission
             Capsule::table('permissions')->insert(
                 [
                     [
-                        'name' => 'buyers',
-                        'alias' => 'buyers',
+                        'name' => 'products_categories',
+                        'alias' => 'products_categories',
                         'created_by' => 1,
                     ],
                     [

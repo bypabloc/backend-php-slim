@@ -22,8 +22,22 @@ final class Create
 
         $product_category = new ProductCategory();
         $product_category->name = $body['name'];
-        $product_category->alias = strtolower($body['alias']);
+        $product_category->slug = $body['slug'];
+        if(!empty($body['state'])){
+            $product_category->is_active = $body['state'];
+        }
+        if(!empty($body['user_id'])){
+            $product_category->user_id = $body['user_id'];
+        }
         $product_category->created_by = $session->user_id;
+
+        // string('name',20)->unique();
+        // string('slug',20)->unique();
+
+        // boolean('is_active')->default(1);
+
+        // unsignedBigInteger('user_id')->nullable();
+        // foreign('user_id')->references('id')->on('users');
 
         // $product_category->creatingCustom();
 
@@ -31,7 +45,6 @@ final class Create
 
         $res = [
             'data' => [
-                'session' => $session,
                 'product_category' => $product_category,
             ],
         ];

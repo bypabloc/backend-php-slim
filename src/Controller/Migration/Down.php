@@ -13,6 +13,7 @@ use App\Database\Migrations\Role;
 use App\Database\Migrations\Permission;
 use App\Database\Migrations\RolePermission;
 use App\Database\Migrations\AlterTableUser;
+use App\Database\Migrations\ProductCategory;
 
 final class Down
 {
@@ -20,6 +21,7 @@ final class Down
 
     public function __invoke(Request $request, Response $response): Response
     {
+        ProductCategory::down();
         AlterTableUser::down();
         RolePermission::down();
         Permission::down();

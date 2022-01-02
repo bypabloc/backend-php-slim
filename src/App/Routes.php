@@ -12,6 +12,7 @@ use App\Controller\Role;
 use App\Controller\Migration;
 use App\Controller\Auth;
 use App\Controller\Permission;
+use App\Controller\ProductCategory;
 
 use App\Middleware\Token;
 use App\Middleware\BodyParser;
@@ -58,11 +59,11 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
 
     $app->group('/products_categories', function (RouteCollectorProxy $app) {
         
-        // $app->get('/get_all', Role\GetAll::class)->add(new \App\Middleware\Pagination());
-        // $app->get('/find', Role\Find::class)->add(new \App\Middleware\Validation\Role\Find());
-        // $app->post('/create', Role\Create::class)->add(new \App\Middleware\Validation\Role\Create());
-        // $app->post('/update', Role\Update::class)->add(new \App\Middleware\Validation\Role\Update());
-        // $app->post('/state', Role\State::class)->add(new \App\Middleware\Validation\Role\State());
+        $app->get('/get_all', ProductCategory\GetAll::class)->add(new \App\Middleware\Pagination());
+        // $app->get('/find', ProductCategory\Find::class)->add(new \App\Middleware\Validation\ProductCategory\Find());
+        $app->post('/create', ProductCategory\Create::class)->add(new \App\Middleware\Validation\ProductCategory\Create());
+        // $app->post('/update', ProductCategory\Update::class)->add(new \App\Middleware\Validation\ProductCategory\Update());
+        // $app->post('/state', ProductCategory\State::class)->add(new \App\Middleware\Validation\ProductCategory\State());
 
     })->add(new CanPermission('products_categories'))->add(Token::class);
 

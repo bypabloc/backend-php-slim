@@ -12,8 +12,8 @@ class ProductCategory
             Capsule::schema()->create('products_categories', function ($table) {
                 $table->bigIncrements('id');
 
-                $table->string('name')->unique();
-                $table->string('slug')->unique();
+                $table->string('name',20)->unique();
+                $table->string('slug',20)->unique();
 
                 $table->boolean('is_active')->default(1);
 

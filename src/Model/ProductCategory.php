@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Log;
 class ProductCategory extends Model
 {
     use Pagination;
+
+    protected $table = 'products_categories';
+
     /**
      * The attributes that are mass assignable.
      *
