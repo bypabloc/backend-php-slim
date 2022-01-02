@@ -37,6 +37,12 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
 
     });
 
+    $app->get('/buyer', function ($request, $response, array $args) {
+        $response->getBody()->write('Buyer');
+        
+        return $response;
+    });
+
     $app->group('/users', function (RouteCollectorProxy $app) {
 
         $app->get('/get_all', User\GetAll::class)->add(new \App\Middleware\Pagination());

@@ -19,6 +19,20 @@ class Role
 
                 $table->timestamps();
             });
+
+            Capsule::table('roles')->insert(
+                [
+                    [
+                        'name' => 'admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'buyer',
+                        'created_by' => 1,
+                    ],
+                ]
+            );
+
         }
     }
 

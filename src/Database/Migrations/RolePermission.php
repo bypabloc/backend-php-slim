@@ -18,11 +18,22 @@ class RolePermission
                 $table->unsignedBigInteger('permission_id');
                 $table->foreign('permission_id')->references('id')->on('permissions');
 
-                $table->unsignedBigInteger('created_by');
-                $table->foreign('created_by')->references('id')->on('users');
-
                 $table->timestamps();
             });
+
+            $permissions = Capsule::table('permissions')->pluck('id')->toArray();
+            $roles_permissions = [];
+            foreach ($permissions as $permission) {
+                $roles_permissions[] = [
+                    'role_id' => 1,
+                    'permission_id' => $permission,
+                ];
+            }
+            $roles_permissions[] = [
+                'role_id' => 2,
+                'permission_id' => 1,
+            ];
+            Capsule::table('roles_permissions')->insert($roles_permissions);
         }
     }
 

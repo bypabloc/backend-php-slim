@@ -10,7 +10,8 @@
         "illuminate/database": "^8.77",
         "firebase/php-jwt": "^5.5",
         "illuminate/support": "^8.77",
-        "ramsey/uuid": "^4.2"
+        "ramsey/uuid": "^4.2",
+        "doctrine/dbal": "^3.2"
     },
     "config": {
     },

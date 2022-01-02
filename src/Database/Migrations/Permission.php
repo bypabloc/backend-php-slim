@@ -22,6 +22,36 @@ class Permission
 
                 $table->timestamps();
             });
+
+            Capsule::table('permissions')->insert(
+                [
+                    [
+                        'name' => 'buyer',
+                        'alias' => 'buyer',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'seller',
+                        'alias' => 'seller',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'users',
+                        'alias' => 'users',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'roles',
+                        'alias' => 'roles',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'permissions',
+                        'alias' => 'permissions',
+                        'created_by' => 1,
+                    ],
+                ]
+            );
         }
     }
 

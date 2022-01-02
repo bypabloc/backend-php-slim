@@ -12,6 +12,7 @@ use App\Database\Migrations\Session;
 use App\Database\Migrations\Role;
 use App\Database\Migrations\Permission;
 use App\Database\Migrations\RolePermission;
+use App\Database\Migrations\AlterTableUser;
 
 final class Up
 {
@@ -24,6 +25,7 @@ final class Up
         Role::up();
         Permission::up();
         RolePermission::up();
+        AlterTableUser::up();
 
         return $this->response($response, 200, []);
     }
