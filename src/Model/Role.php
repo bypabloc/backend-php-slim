@@ -39,6 +39,7 @@ class Role extends Model
 
     public function permissions()
     {
+        // https://laravel.com/docs/8.x/eloquent-relationships#many-to-many
         return $this->belongsToMany(Permission::class, 'roles_permissions', 'role_id', 'permission_id');
     }
 }
