@@ -29,29 +29,6 @@ $app->get('/test', function ($request, $response, array $args) {
 
 $app->group('/api/v1', function (RouteCollectorProxy $app) {
 
-    $app->group('/users', function (RouteCollectorProxy $app) {
-
-        $app->get('/get_all', User\GetAll::class)->add(new \App\Middleware\Pagination());
-        $app->post('/create', User\Create::class)->add(new \App\Middleware\Validation\User\Create());
-
-    })->add(Token::class);
-
-    $app->group('/permissions', function (RouteCollectorProxy $app) {
-        $app->get('/get_all', Permission\GetAll::class)->add(new \App\Middleware\Pagination());
-        $app->get('/find', Permission\Find::class)->add(new \App\Middleware\Validation\Permission\Find());
-        $app->post('/create', Permission\Create::class)->add(new \App\Middleware\Validation\Permission\Create());
-        $app->post('/update', Permission\Update::class)->add(new \App\Middleware\Validation\Permission\Update());
-        $app->post('/state', Permission\State::class)->add(new \App\Middleware\Validation\Permission\State());
-    })->add(Token::class);
-
-    $app->group('/roles', function (RouteCollectorProxy $app) {
-        $app->get('/get_all', Role\GetAll::class)->add(new \App\Middleware\Pagination());
-        $app->get('/find', Role\Find::class)->add(new \App\Middleware\Validation\Role\Find());
-        $app->post('/create', Role\Create::class)->add(new \App\Middleware\Validation\Role\Create());
-        $app->post('/update', Role\Update::class)->add(new \App\Middleware\Validation\Role\Update());
-        $app->post('/state', Role\State::class)->add(new \App\Middleware\Validation\Role\State());
-    })->add(Token::class);
-
     $app->group('/auth', function (RouteCollectorProxy $app) {
 
         $app->post('/sign_up', Auth\SignUp::class)->add(new \App\Middleware\Validation\Auth\SignUp());
@@ -59,4 +36,35 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->post('/sign_out', Auth\SignOut::class)->add(Token::class);
 
     });
+
+    $app->group('/users', function (RouteCollectorProxy $app) {
+
+        $app->get('/get_all', User\GetAll::class)->add(new \App\Middleware\Pagination());
+        $app->post('/create', User\Create::class)->add(new \App\Middleware\Validation\User\Create());
+
+    })->add(Token::class);
+
+    $app->group('/roles', function (RouteCollectorProxy $app) {
+        
+        $app->get('/get_all', Role\GetAll::class)->add(new \App\Middleware\Pagination());
+        $app->get('/find', Role\Find::class)->add(new \App\Middleware\Validation\Role\Find());
+        $app->post('/create', Role\Create::class)->add(new \App\Middleware\Validation\Role\Create());
+        $app->post('/update', Role\Update::class)->add(new \App\Middleware\Validation\Role\Update());
+        $app->post('/state', Role\State::class)->add(new \App\Middleware\Validation\Role\State());
+
+        $app->post('/assign_permission', Role\AssignPermission::class)->add(new \App\Middleware\Validation\Role\AssignPermission());
+        $app->post('/assign_permissions', Role\AssignPermissions::class)->add(new \App\Middleware\Validation\Role\AssignPermissions());
+
+    })->add(Token::class);
+
+    $app->group('/permissions', function (RouteCollectorProxy $app) {
+
+        $app->get('/get_all', Permission\GetAll::class)->add(new \App\Middleware\Pagination());
+        $app->get('/find', Permission\Find::class)->add(new \App\Middleware\Validation\Permission\Find());
+        $app->post('/create', Permission\Create::class)->add(new \App\Middleware\Validation\Permission\Create());
+        $app->post('/update', Permission\Update::class)->add(new \App\Middleware\Validation\Permission\Update());
+        $app->post('/state', Permission\State::class)->add(new \App\Middleware\Validation\Permission\State());
+
+    })->add(Token::class);
+
 })->add(BodyParser::class);

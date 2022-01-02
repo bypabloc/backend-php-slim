@@ -12,10 +12,6 @@ trait Pagination
 
         $users = $query->skip($offset)->take($limit)->get();
 
-        $last_offset = ($totalPages - 1) * $limit;
-        $previous_offset = ($offset - $page) > 0 ? ($offset - $page) : 0;
-        $next_page = $page + 1 > $totalPages ? $last_offset : ($offset + $page);
-
         $pagination = [
             'totalPages' => $totalPages,
             'page' => $page,

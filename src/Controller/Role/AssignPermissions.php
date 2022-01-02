@@ -12,7 +12,7 @@ use App\Services\Hash;
 use App\Model\Role;
 use App\Model\RolePermission;
 
-final class Create
+final class AssignPermissions
 {
     use JsonResponse;
 
@@ -22,16 +22,9 @@ final class Create
         $body = $request->getAttribute('body');
 
         $user_id = $session->user_id;
+        $role_id = $body['role_id'];
 
-        $role = new Role();
-        $role->name = $body['name'];
-        $role->created_by = $user_id;
-
-        $role->save();
-
-        // RolePermission::whereIn('permission_id', $body['permissions'])->delete();
-
-        $role_id = $role->id;
+        RolePermission::where('role_id', $role_id)->delete();
         
         $roles_permissions = [];
         foreach ($body['permissions'] as $permission) {
@@ -43,11 +36,17 @@ final class Create
         }
         RolePermission::insert($roles_permissions);
 
+        $role = Role::find($role_id);
+
+        // Role::where('id', $role_id)->update([
+        //     'updated_by' => $user_id,
+        // ]);
+
         $res = [
             'data' => [
-                'session' => $session,
                 'role' => $role,
             ],
+            'message' => 'Permission assigned successfully',
         ];
         return $this->response($response, 200, $res);
     }
