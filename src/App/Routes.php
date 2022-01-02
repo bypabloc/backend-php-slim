@@ -38,17 +38,29 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
 
     });
 
-    // buyers
-    // sellers
-    // users
-    // roles
-    // permissions
+    /**
+     * Consulta de todos los productos por usuario
+     * Consulta de todos los productos en general
+     * Consulta de un producto por SEO friendly URLs (slugs)
+     */
 
-    $app->get('/buyers', function ($request, $response, array $args) {
-        $response->getBody()->write('Buyers');
+    $app->get('/cart', function ($request, $response, array $args) {
+        $response->getBody()->write('cart');
         
         return $response;
-    });
+    })->add(new CanPermission('cart'))->add(Token::class);
+
+    $app->get('/products', function ($request, $response, array $args) {
+        $response->getBody()->write('products');
+        
+        return $response;
+    })->add(new CanPermission('products'))->add(Token::class);
+
+    $app->get('/categories', function ($request, $response, array $args) {
+        $response->getBody()->write('categories');
+        
+        return $response;
+    })->add(new CanPermission('categories'))->add(Token::class);
 
     $app->group('/users', function (RouteCollectorProxy $app) {
 
@@ -68,7 +80,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->post('/assign_permission', Role\AssignPermission::class)->add(new \App\Middleware\Validation\Role\AssignPermission());
         $app->post('/assign_permissions', Role\AssignPermissions::class)->add(new \App\Middleware\Validation\Role\AssignPermissions());
 
-    })->add(Token::class);
+    })->add(new CanPermission('roles'))->add(Token::class);
 
     $app->group('/permissions', function (RouteCollectorProxy $app) {
 
@@ -78,6 +90,6 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->post('/update', Permission\Update::class)->add(new \App\Middleware\Validation\Permission\Update());
         $app->post('/state', Permission\State::class)->add(new \App\Middleware\Validation\Permission\State());
 
-    })->add(Token::class);
+    })->add(new CanPermission('permissions'))->add(Token::class);
 
 })->add(BodyParser::class);
