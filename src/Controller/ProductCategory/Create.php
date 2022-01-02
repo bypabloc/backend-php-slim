@@ -39,7 +39,7 @@ final class Create
         // unsignedBigInteger('user_id')->nullable();
         // foreign('user_id')->references('id')->on('users');
 
-        // $product_category->creatingCustom();
+        $product_category->creatingCustom();
 
         $product_category->save();
 

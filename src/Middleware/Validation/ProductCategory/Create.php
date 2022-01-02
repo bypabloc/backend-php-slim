@@ -28,8 +28,7 @@ class Create
             $validator = new Validator();
 
             $validator->validate($body, [
-                'name' => ['required', 'string', new Unique('products_categories', 'name')],
-                'slug' => ['required', 'string', new Unique('products_categories', 'slug')],
+                'name' => ['required', 'string', 'max:20', new Unique('products_categories', 'name')],
                 'is_active' => ['boolean'],
                 'user_id' => ['integer', new Exist('users', 'id')],
             ]);

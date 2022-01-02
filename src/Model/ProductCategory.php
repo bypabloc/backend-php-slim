@@ -5,6 +5,8 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
+use App\Services\Slug;
+
 class ProductCategory extends Model
 {
     use Pagination;
@@ -40,4 +42,9 @@ class ProductCategory extends Model
      */
     protected $hidden = [
     ];
+
+    public function creatingCustom()
+    {
+        $this->slug = Slug::make($this->name);
+    }
 }
