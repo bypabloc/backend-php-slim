@@ -18,10 +18,30 @@ class Product extends Model
      */
     protected $fillable = [
         'name',
+        'description',
         'slug',
-        'is_active',
+
+        'price',
+
+        'discount_type',
+        // 1 = percentage
+        // 2 = amount
+        'discount_quantity',
+
+        'stock',
+
+        'image',
+
+        'weight',
+        'height',
+        'width',
+        'length',
+
+        'likes',
+
+        'state',
+
         'user_id',
-        'created_by',
     ];
 
     /**
@@ -30,7 +50,6 @@ class Product extends Model
      * @var array
      */
     protected $casts = [
-        'is_active' => 'boolean',
     ];
 
     /**
