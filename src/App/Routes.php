@@ -56,10 +56,14 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         return $response;
     })->add(new CanPermission('products'))->add(Token::class);
 
-    $app->get('/categories', function ($request, $response, array $args) {
-        $response->getBody()->write('categories');
+    $app->group('/categories', function (RouteCollectorProxy $app) {
         
-        return $response;
+        // $app->get('/get_all', Role\GetAll::class)->add(new \App\Middleware\Pagination());
+        // $app->get('/find', Role\Find::class)->add(new \App\Middleware\Validation\Role\Find());
+        // $app->post('/create', Role\Create::class)->add(new \App\Middleware\Validation\Role\Create());
+        // $app->post('/update', Role\Update::class)->add(new \App\Middleware\Validation\Role\Update());
+        // $app->post('/state', Role\State::class)->add(new \App\Middleware\Validation\Role\State());
+
     })->add(new CanPermission('categories'))->add(Token::class);
 
     $app->group('/users', function (RouteCollectorProxy $app) {
