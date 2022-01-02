@@ -12,17 +12,21 @@ class ProductCategory
             Capsule::schema()->create('products_categories', function ($table) {
                 $table->bigIncrements('id');
 
-                $table->string('name');
+                $table->string('name')->unique();
+                $table->string('slug')->unique();
 
-                $table->string('slug');
+                $table->boolean('is_active')->default(1);
 
-                $table->unsignedBigInteger('user_id');
+                $table->unsignedBigInteger('user_id')->nullable();
                 $table->foreign('user_id')->references('id')->on('users');
 
-                $table->boolean('state')->default(1);
+                $table->unsignedBigInteger('created_by');
+                $table->foreign('created_by')->references('id')->on('users');
                 
                 $table->timestamps();
             });
+
+            // products_categories_users
         }
     }
 

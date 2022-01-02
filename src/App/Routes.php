@@ -56,7 +56,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         return $response;
     })->add(new CanPermission('products'))->add(Token::class);
 
-    $app->group('/categories', function (RouteCollectorProxy $app) {
+    $app->group('/products_categories', function (RouteCollectorProxy $app) {
         
         // $app->get('/get_all', Role\GetAll::class)->add(new \App\Middleware\Pagination());
         // $app->get('/find', Role\Find::class)->add(new \App\Middleware\Validation\Role\Find());
@@ -64,7 +64,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         // $app->post('/update', Role\Update::class)->add(new \App\Middleware\Validation\Role\Update());
         // $app->post('/state', Role\State::class)->add(new \App\Middleware\Validation\Role\State());
 
-    })->add(new CanPermission('categories'))->add(Token::class);
+    })->add(new CanPermission('products_categories'))->add(Token::class);
 
     $app->group('/users', function (RouteCollectorProxy $app) {
 

@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Controller\ProductCategory;
+
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+
+use App\Serializer\JsonResponse;
+
+use App\Services\Hash;
+
+use App\Model\ProductCategory;
+
+final class State
+{
+    use JsonResponse;
+
+    public function __invoke(Request $request, Response $response): Response
+    {
+        $session = $request->getAttribute('session');
+        $body = $request->getAttribute('body');
+
+        $product_category = ProductCategory::find($body['id']);
+        $product_category->is_active = $body['state'];
+        // $product_category->updatingCustom();
+        $product_category->save();
+
+        $res = [
+            'data' => [
+                'product_category' => $product_category,
+            ],
+        ];
+        return $this->response($response, 200, $res);
+    }
+}
