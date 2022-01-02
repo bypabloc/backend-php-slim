@@ -19,6 +19,16 @@ class Session extends Model
         'user_id',
         'expired_at',
     ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
     /**
      * The attributes that should be hidden for arrays.
      *

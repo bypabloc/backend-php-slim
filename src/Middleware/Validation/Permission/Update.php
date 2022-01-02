@@ -28,7 +28,7 @@ class Update
                 'id' => ['required', 'string', new Exist('permissions', 'id')],
                 'name' => ['string', 'min:3', 'max:50', 'required_without:alias'],
                 'alias' => ['string', 'min:3', 'max:50', 'required_without:name', new OnlyLetters()],
-                'state' => ['string', 'in:0,1'],
+                'state' => ['boolean'],
             ], );
     
             if(!$validator->isValid()){

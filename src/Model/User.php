@@ -24,6 +24,16 @@ class User extends Model
         'password',
         'uuid',
     ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
     /**
      * The attributes that should be hidden for arrays.
      *

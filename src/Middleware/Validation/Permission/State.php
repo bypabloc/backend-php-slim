@@ -25,7 +25,7 @@ class State
 
             $validator->validate($body, [
                 'id' => ['required', 'string', new Exist('permissions', 'id')],
-                'state' => ['required', 'string', 'in:0,1'],
+                'state' => ['required', 'boolean'],
             ], );
     
             if(!$validator->isValid()){

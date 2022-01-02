@@ -19,6 +19,16 @@ class Permission extends Model
         'is_active',
         'created_by',
     ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
     /**
      * The attributes that should be hidden for arrays.
      *

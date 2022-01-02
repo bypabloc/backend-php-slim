@@ -10,6 +10,7 @@ class RolePermission extends Model
     use Pagination;
 
     protected $table = 'roles_permissions';
+    
     /**
      * The attributes that are mass assignable.
      *
@@ -20,6 +21,7 @@ class RolePermission extends Model
         'permission_id',
         'created_by',
     ];
+
     /**
      * The attributes that should be hidden for arrays.
      *

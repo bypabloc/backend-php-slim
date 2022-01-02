@@ -15,37 +15,31 @@ final class SignUp
 
     public function __invoke(Request $request, Response $response): Response
     {
-        try {
-            $body = $request->getAttribute('body');
-    
-            $user = new User();
-            $user->nickname = $body['nickname'] ?? '';
-            $user->email = $body['email'] ?? '';
-            $user->password = $body['password'] ?? '';
+        $body = $request->getAttribute('body');
 
-            $user->creatingCustom();
+        $user = new User();
+        $user->nickname = $body['nickname'];
+        $user->email = $body['email'];
+        $user->password = $body['password'];
 
-            $user->save();
+        $user->creatingCustom();
 
-            $user->createdCustom();
+        $user->save();
 
-            $data = [
-                'user' => [
-                    'nickname' => $user->nickname,
-                    'email' => $user->email,
-                    'token' => $user->token,
-                ],
-            ];
-        } catch (\Throwable $th) {
-            return $this->response($response, 500, [
-                'errors' => [
-                    'message' => $th->getMessage(),
-                    'getFile' => $th->getFile(),
-                    'getLine' => $th->getLine(),
-                ],
-            ]);
-        }
+        $user->createdCustom();
 
-        return $this->response($response, 200, $data);
+        $data = [
+            'user' => [
+                'nickname' => $user->nickname,
+                'email' => $user->email,
+                'token' => $user->token,
+            ],
+        ];
+
+        $res = [
+            'data' => $data,
+        ];
+
+        return $this->response($response, 200, $res);
     }
 }

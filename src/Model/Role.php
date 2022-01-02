@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 class Role extends Model
 {
     use Pagination;
+    
     /**
      * The attributes that are mass assignable.
      *
@@ -18,6 +19,16 @@ class Role extends Model
         'is_active',
         'created_by',
     ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
     /**
      * The attributes that should be hidden for arrays.
      *
