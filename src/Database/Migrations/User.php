@@ -33,6 +33,12 @@ class User
                         'uuid' => Uuid::uuid4()->toString(),
                         'password' => Hash::make('admin'),
                     ],
+                    [
+                        'nickname' => 'buyer',
+                        'email' => 'buyer@mail.com',
+                        'uuid' => Uuid::uuid4()->toString(),
+                        'password' => Hash::make('buyer'),
+                    ],
                 ]
             );
 

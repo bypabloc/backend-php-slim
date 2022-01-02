@@ -15,6 +15,7 @@ class AlterTableUser
             });
 
             Capsule::table('users')->where('id', 1)->update(['role_id' => 1]);
+            Capsule::table('users')->where('id', 2)->update(['role_id' => 2]);
 
             Capsule::schema()->table('users', function ($table) {
                 $table->unsignedBigInteger('role_id')->nullable(false)->change();

@@ -37,8 +37,14 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
 
     });
 
-    $app->get('/buyer', function ($request, $response, array $args) {
-        $response->getBody()->write('Buyer');
+    // buyers
+    // sellers
+    // users
+    // roles
+    // permissions
+
+    $app->get('/buyers', function ($request, $response, array $args) {
+        $response->getBody()->write('Buyers');
         
         return $response;
     });

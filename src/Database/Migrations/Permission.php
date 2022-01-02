@@ -26,13 +26,13 @@ class Permission
             Capsule::table('permissions')->insert(
                 [
                     [
-                        'name' => 'buyer',
-                        'alias' => 'buyer',
+                        'name' => 'buyers',
+                        'alias' => 'buyers',
                         'created_by' => 1,
                     ],
                     [
-                        'name' => 'seller',
-                        'alias' => 'seller',
+                        'name' => 'sellers',
+                        'alias' => 'sellers',
                         'created_by' => 1,
                     ],
                     [
