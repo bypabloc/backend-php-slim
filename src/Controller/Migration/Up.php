@@ -14,6 +14,7 @@ use App\Database\Migrations\Permission;
 use App\Database\Migrations\RolePermission;
 use App\Database\Migrations\AlterTableUser;
 use App\Database\Migrations\ProductCategory;
+use App\Database\Migrations\Product;
 
 final class Up
 {
@@ -28,6 +29,7 @@ final class Up
         RolePermission::up();
         AlterTableUser::up();
         ProductCategory::up();
+        Product::up();
 
         return $this->response($response, 200, []);
     }

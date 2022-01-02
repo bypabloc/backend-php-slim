@@ -13,6 +13,7 @@ use App\Controller\Migration;
 use App\Controller\Auth;
 use App\Controller\Permission;
 use App\Controller\ProductCategory;
+use App\Controller\Product;
 
 use App\Middleware\Token;
 use App\Middleware\BodyParser;
@@ -51,10 +52,14 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         return $response;
     })->add(new CanPermission('cart'))->add(Token::class);
 
-    $app->get('/products', function ($request, $response, array $args) {
-        $response->getBody()->write('products');
+    $app->group('/products', function (RouteCollectorProxy $app) {
         
-        return $response;
+        $app->get('/get_all', Product\GetAll::class)->add(new \App\Middleware\Pagination());
+        // $app->get('/find', Product\Find::class)->add(new \App\Middleware\Validation\Product\Find());
+        // $app->post('/create', Product\Create::class)->add(new \App\Middleware\Validation\Product\Create());
+        // $app->post('/update', Product\Update::class)->add(new \App\Middleware\Validation\Product\Update());
+        // $app->post('/state', Product\State::class)->add(new \App\Middleware\Validation\Product\State());
+
     })->add(new CanPermission('products'))->add(Token::class);
 
     $app->group('/products_categories', function (RouteCollectorProxy $app) {

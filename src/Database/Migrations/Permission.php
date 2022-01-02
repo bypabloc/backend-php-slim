@@ -31,8 +31,8 @@ class Permission
                         'created_by' => 1,
                     ],
                     [
-                        'name' => 'sellers',
-                        'alias' => 'sellers',
+                        'name' => 'products',
+                        'alias' => 'products',
                         'created_by' => 1,
                     ],
                     [
