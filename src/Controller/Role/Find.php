@@ -21,6 +21,7 @@ final class Find
         $params = $request->getAttribute('params');
 
         $role = Role::find($params['id']);
+        $role->permissions;
 
         $res = [
             'data' => [
