@@ -13,6 +13,7 @@ use App\Services\Validator;
 
 use App\Middleware\Validation\Rule\Unique;
 use App\Middleware\Validation\Rule\ExistList;
+use App\Middleware\Validation\Rule\ListNotRepeat;
 
 class Create
 {
@@ -28,7 +29,7 @@ class Create
 
             $validator->validate($body, [
                 'name' => ['required', 'string', new Unique('roles', 'name')],
-                'permissions' => ['array', new ExistList('permissions', 'id')],
+                'permissions' => ['array', new ExistList('permissions', 'id'), new ListNotRepeat()],
             ]);
     
             if(!$validator->isValid()){

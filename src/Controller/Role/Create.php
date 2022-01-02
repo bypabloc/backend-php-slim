@@ -10,6 +10,7 @@ use App\Serializer\JsonResponse;
 use App\Services\Hash;
 
 use App\Model\Role;
+use App\Model\RolePermission;
 
 final class Create
 {
@@ -20,13 +21,27 @@ final class Create
         $session = $request->getAttribute('session');
         $body = $request->getAttribute('body');
 
+        $user_id = $session->user_id;
+
         $role = new Role();
         $role->name = $body['name'] ?? '';
-        $role->created_by = $session->user_id;
-
-        // $role->creatingCustom();
+        $role->created_by = $user_id;
 
         $role->save();
+
+        // RolePermission::whereIn('permission_id', $body['permissions'])->delete();
+
+        $role_id = $role->id;
+        
+        $role_permissions = [];
+        foreach ($body['permissions'] as $permission) {
+            array_push($role_permissions, [
+                'role_id' => $role_id,
+                'permission_id' => $permission,
+                'created_by' => $user_id,
+            ]);
+        }
+        RolePermission::insert($role_permissions);
 
         $res = [
             'data' => [
