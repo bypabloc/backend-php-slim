@@ -21,22 +21,18 @@ final class Update
         $body = $request->getAttribute('body');
 
         $product_category = ProductCategory::find($body['id']);
-        if($body['name'] !== null){
-            $product_category->name = $body['name'];
-        }
-        if($body['alias'] !== null){
-            $product_category->alias = $body['alias'];
-        }
-        if($body['state'] !== null){
+        $product_category->name = $body['name'];
+        if(!empty($body['state'])){
             $product_category->is_active = $body['state'];
         }
-        // $product_category->updatingCustom();
+
+        $product_category->updatingCustom();
+
         $product_category->save();
 
         $res = [
             'data' => [
                 'product_category' => $product_category,
-                'body' => $body,
             ],
         ];
         return $this->response($response, 200, $res);

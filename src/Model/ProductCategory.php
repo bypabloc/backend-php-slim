@@ -47,4 +47,9 @@ class ProductCategory extends Model
     {
         $this->slug = Slug::make($this->name);
     }
+
+    public function updatingCustom()
+    {
+        $this->slug = Slug::make($this->name);
+    }
 }

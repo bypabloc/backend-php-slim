@@ -62,8 +62,8 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->get('/get_all', ProductCategory\GetAll::class)->add(new \App\Middleware\Pagination());
         $app->get('/find', ProductCategory\Find::class)->add(new \App\Middleware\Validation\ProductCategory\Find());
         $app->post('/create', ProductCategory\Create::class)->add(new \App\Middleware\Validation\ProductCategory\Create());
-        // $app->post('/update', ProductCategory\Update::class)->add(new \App\Middleware\Validation\ProductCategory\Update());
-        // $app->post('/state', ProductCategory\State::class)->add(new \App\Middleware\Validation\ProductCategory\State());
+        $app->post('/update', ProductCategory\Update::class)->add(new \App\Middleware\Validation\ProductCategory\Update());
+        $app->post('/state', ProductCategory\State::class)->add(new \App\Middleware\Validation\ProductCategory\State());
 
     })->add(new CanPermission('products_categories'))->add(Token::class);
 

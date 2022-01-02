@@ -26,8 +26,7 @@ class Update
 
             $validator->validate($body, [
                 'id' => ['required', 'integer', new Exist('products_categories', 'id')],
-                'name' => ['string', 'min:3', 'max:50', 'required_without:alias'],
-                'alias' => ['string', 'min:3', 'max:50', 'required_without:name', new OnlyLetters()],
+                'name' => ['string', 'min:3', 'max:20'],
                 'state' => ['boolean'],
             ], );
     
