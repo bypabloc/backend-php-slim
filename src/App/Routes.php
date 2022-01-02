@@ -15,6 +15,7 @@ use App\Controller\Permission;
 
 use App\Middleware\Token;
 use App\Middleware\BodyParser;
+use App\Middleware\CanPermission;
 
 $app->group('/migrations', function (RouteCollectorProxy $app) {
     $app->get('/up', Migration\Up::class);
@@ -54,7 +55,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->get('/get_all', User\GetAll::class)->add(new \App\Middleware\Pagination());
         $app->post('/create', User\Create::class)->add(new \App\Middleware\Validation\User\Create());
 
-    })->add(Token::class);
+    })->add(new CanPermission('users'))->add(Token::class);
 
     $app->group('/roles', function (RouteCollectorProxy $app) {
         

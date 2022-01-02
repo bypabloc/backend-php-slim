@@ -138,6 +138,7 @@ class JWT
     public static function session(
     ) : Session
     {
+
         return self::$session;
     }
 }

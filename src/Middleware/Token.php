@@ -51,15 +51,10 @@ class Token
                 ]);
             }
 
-            $request = $request->withAttribute('session', $jwt->session());
+            $session = $jwt->session();
 
-            // $newBody = array_merge($bodyPrev, [
-            //     'body' => $validator->data,
-            //     'session' => $jwt->session(),
-            // ]);
+            $request = $request->withAttribute('session', $session);
 
-            // $request = $request->withParsedBody($newBody);
-            
             return $handler->handle($request);
 
         } catch (\Throwable $th) {

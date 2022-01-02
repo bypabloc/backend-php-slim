@@ -39,6 +39,7 @@ class Session extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOne(User::class, 'id', 'user_id');
+        // return $this->belongsTo(User::class);
     }
 }

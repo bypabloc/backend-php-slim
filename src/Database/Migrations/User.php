@@ -31,13 +31,13 @@ class User
                         'nickname' => 'admin',
                         'email' => 'admin@mail.com',
                         'uuid' => Uuid::uuid4()->toString(),
-                        'password' => Hash::make('admin'),
+                        'password' => Hash::make('admin123'),
                     ],
                     [
                         'nickname' => 'buyer',
                         'email' => 'buyer@mail.com',
                         'uuid' => Uuid::uuid4()->toString(),
-                        'password' => Hash::make('buyer'),
+                        'password' => Hash::make('buyer123'),
                     ],
                 ]
             );

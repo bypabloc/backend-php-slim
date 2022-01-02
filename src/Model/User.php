@@ -58,4 +58,9 @@ class User extends Model
     {
         $this->token = JWT::GenerateToken($this->uuid, $this->id);
     }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
 }
