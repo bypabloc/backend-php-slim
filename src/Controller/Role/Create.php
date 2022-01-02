@@ -33,15 +33,15 @@ final class Create
 
         $role_id = $role->id;
         
-        $role_permissions = [];
+        $roles_permissions = [];
         foreach ($body['permissions'] as $permission) {
-            array_push($role_permissions, [
+            array_push($roles_permissions, [
                 'role_id' => $role_id,
                 'permission_id' => $permission,
                 'created_by' => $user_id,
             ]);
         }
-        RolePermission::insert($role_permissions);
+        RolePermission::insert($roles_permissions);
 
         $res = [
             'data' => [
