@@ -41,6 +41,12 @@ class Exist implements Rule, DataAwareRule
      */
     public function passes($attribute, $value)
     {
+        if (!filter_var($value, FILTER_VALIDATE_INT)) {
+            return true;
+        }
+
+        $value = intval($value);
+
         return Capsule::table($this->table)->where([
             $this->column => $value,
         ])->exists();

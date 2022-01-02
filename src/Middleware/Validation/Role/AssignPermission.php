@@ -26,8 +26,8 @@ class AssignPermission
             $validator = new Validator();
 
             $validator->validate($body, [
-                'id' => ['required', 'string', new Exist('roles', 'id')],
-                'permission' => ['required', 'string', new Exist('permissions', 'id')],
+                'id' => ['required', 'integer', new Exist('roles', 'id')],
+                'permission' => ['required', 'integer', new Exist('permissions', 'id')],
             ]);
     
             if(!$validator->isValid()){

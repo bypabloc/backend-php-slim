@@ -46,6 +46,6 @@ class ListNotRepeat implements Rule, DataAwareRule
      */
     public function message()
     {
-        return 'The :attribute must not repeat.';
+        return 'The :attribute should not be repeated.';
     }
 }

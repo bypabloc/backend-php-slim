@@ -7,10 +7,9 @@ use Illuminate\Contracts\Validation\DataAwareRule;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-class ExistList implements Rule, DataAwareRule
+class ListContent implements Rule, DataAwareRule
 {
-    public $table = '';
-    public $column = '';
+    public $type = '';
 
     protected $data = [];
 
@@ -19,10 +18,9 @@ class ExistList implements Rule, DataAwareRule
      *
      * @return void
      */
-    public function __construct($table, $column)
+    public function __construct($type)
     {
-        $this->table = $table;
-        $this->column = $column;
+        $this->type = $type;
     }
 
     public function setData($data)
@@ -48,16 +46,19 @@ class ExistList implements Rule, DataAwareRule
             return true;
         }
         
-        foreach ($value as $item) {
-            if (!filter_var($item, FILTER_VALIDATE_INT)) {
-                return true;
-            }
-        }
-        
-        $ids = Capsule::table($this->table)->whereIn($this->column, $value)->pluck('id')->toArray();
         foreach($value as $key => $v){
-            if(in_array($v, $ids)){
-                unset($value[$key]);
+            switch ($this->type) {
+                case 'integer':
+                    if (filter_var($v, FILTER_VALIDATE_INT)) {
+                        unset($value[$key]);
+                    }
+                    break;
+                
+                default:
+                    if (filter_var($v, FILTER_VALIDATE_INT)) {
+                        unset($value[$key]);
+                    }
+                    break;
             }
         }
 
@@ -73,6 +74,6 @@ class ExistList implements Rule, DataAwareRule
      */
     public function message()
     {
-        return 'The :attribute not found all items, the items are: ' . implode(', ', $this->data['value'] );
+        return 'The :attribute must be list of ' . $this->type . ', the items with errors are: ' . implode(', ', $this->data['value'] );
     }
 }

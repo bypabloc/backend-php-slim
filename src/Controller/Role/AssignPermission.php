@@ -22,7 +22,7 @@ final class AssignPermission
         $body = $request->getAttribute('body');
 
         $user_id = $session->user_id;
-        $role_id = $body['role_id'];
+        $role_id = $body['id'];
         $permission = $body['permission'];
 
         RolePermission::where('role_id', $role_id)->where('permission_id', $permission)->delete();

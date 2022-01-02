@@ -24,7 +24,7 @@ class Find
             $validator = new Validator();
 
             $validator->validate($params, [
-                'id' => ['required', 'string', new Exist('permissions', 'id')],
+                'id' => ['required', 'integer', new Exist('permissions', 'id')],
             ]);
     
             if(!$validator->isValid()){

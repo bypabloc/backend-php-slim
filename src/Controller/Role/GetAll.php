@@ -20,7 +20,7 @@ final class GetAll
         $params = $request->getAttribute('params');
         $session = $params['session'];
         
-        $users = Role::pagination((int) $params['page'], (int) $params['per_page']);
+        $roles = Role::pagination((int) $params['page'], (int) $params['per_page']);
         
         $res = [
             'data' => [

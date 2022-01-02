@@ -14,6 +14,7 @@ use App\Services\Validator;
 use App\Middleware\Validation\Rule\Exist;
 use App\Middleware\Validation\Rule\ExistList;
 use App\Middleware\Validation\Rule\ListNotRepeat;
+use App\Middleware\Validation\Rule\ListContent;
 
 class AssignPermissions
 {
@@ -26,10 +27,10 @@ class AssignPermissions
 
         try {
             $validator = new Validator();
-
+            
             $validator->validate($body, [
-                'id' => ['required', 'string', new Exist('roles', 'id')],
-                'permissions' => ['array', new ExistList('permissions', 'id'), new ListNotRepeat()],
+                'id' => ['required', 'integer', new Exist('roles', 'id')],
+                'permissions' => ['array', new ListContent('integer'), new ExistList('permissions', 'id'), new ListNotRepeat()],
             ]);
     
             if(!$validator->isValid()){
