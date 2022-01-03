@@ -9,9 +9,6 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 class Exist implements Rule, DataAwareRule
 {
-    public $table = '';
-    public $column = '';
-
     protected $data = [];
 
     /**
@@ -19,10 +16,12 @@ class Exist implements Rule, DataAwareRule
      *
      * @return void
      */
-    public function __construct($table, $column)
+    public function __construct(
+        protected $table,
+        protected $column = 'id',
+        protected $owner = null,
+    )
     {
-        $this->table = $table;
-        $this->column = $column;
     }
 
     public function setData($data)
@@ -47,9 +46,17 @@ class Exist implements Rule, DataAwareRule
 
         $value = intval($value);
 
-        return Capsule::table($this->table)->where([
+        $query = Capsule::table($this->table)->where([
             $this->column => $value,
-        ])->exists();
+        ]);
+
+        if ($this->owner) {
+            if(isset($this->data[$this->owner]) && !empty($this->data[$this->owner])){
+                $query->where($this->owner, $this->data[$this->owner]);
+            }
+        }
+
+        return $query->exists();
     }
 
     /**

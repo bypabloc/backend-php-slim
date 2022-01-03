@@ -19,6 +19,7 @@ use App\Controller\MyProfile;
 use App\Middleware\Token;
 use App\Middleware\BodyParser;
 use App\Middleware\CanPermission;
+use App\Middleware\CheckPermissionAdmin;
 
 $app->group('/migrations', function (RouteCollectorProxy $app) {
     $app->get('/up', Migration\Up::class);
@@ -55,21 +56,21 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
 
     $app->group('/products', function (RouteCollectorProxy $app) {
         
-        $app->get('/get_all', Product\GetAll::class)->add(new \App\Middleware\Pagination());
-        $app->get('/find', Product\Find::class)->add(new \App\Middleware\Validation\Product\Find());
-        $app->post('/create', Product\Create::class)->add(new \App\Middleware\Validation\Product\Create());
-        $app->post('/update', Product\Update::class)->add(new \App\Middleware\Validation\Product\Update());
-        $app->post('/state', Product\State::class)->add(new \App\Middleware\Validation\Product\State());
+        $app->get('/get_all', Product\GetAll::class)->add(new \App\Middleware\Pagination())->add(new CheckPermissionAdmin('products.get_all.admin'));
+        $app->get('/find', Product\Find::class)->add(new \App\Middleware\Validation\Product\Find())->add(new CheckPermissionAdmin('products.find.admin'));
+        $app->post('/create', Product\Create::class)->add(new \App\Middleware\Validation\Product\Create())->add(new CheckPermissionAdmin('products.create.admin'));
+        $app->post('/update', Product\Update::class)->add(new \App\Middleware\Validation\Product\Update())->add(new CheckPermissionAdmin('products.update.admin'));
+        $app->post('/state', Product\State::class)->add(new \App\Middleware\Validation\Product\State())->add(new CheckPermissionAdmin('products.state.admin'));
 
     })->add(new CanPermission('products'))->add(Token::class);
 
     $app->group('/products_categories', function (RouteCollectorProxy $app) {
         
-        $app->get('/get_all', ProductCategory\GetAll::class)->add(new \App\Middleware\Pagination());
-        $app->get('/find', ProductCategory\Find::class)->add(new \App\Middleware\Validation\ProductCategory\Find());
-        $app->post('/create', ProductCategory\Create::class)->add(new \App\Middleware\Validation\ProductCategory\Create());
-        $app->post('/update', ProductCategory\Update::class)->add(new \App\Middleware\Validation\ProductCategory\Update());
-        $app->post('/state', ProductCategory\State::class)->add(new \App\Middleware\Validation\ProductCategory\State());
+        $app->get('/get_all', ProductCategory\GetAll::class)->add(new \App\Middleware\Pagination())->add(new CheckPermissionAdmin('products_categories.get_all.admin'));
+        $app->get('/find', ProductCategory\Find::class)->add(new \App\Middleware\Validation\ProductCategory\Find())->add(new CheckPermissionAdmin('products_categories.find.admin'));
+        $app->post('/create', ProductCategory\Create::class)->add(new \App\Middleware\Validation\ProductCategory\Create())->add(new CheckPermissionAdmin('products_categories.create.admin'));
+        $app->post('/update', ProductCategory\Update::class)->add(new \App\Middleware\Validation\ProductCategory\Update())->add(new CheckPermissionAdmin('products_categories.update.admin'));
+        $app->post('/state', ProductCategory\State::class)->add(new \App\Middleware\Validation\ProductCategory\State())->add(new CheckPermissionAdmin('products_categories.state.admin'));
 
     })->add(new CanPermission('products_categories'))->add(Token::class);
 

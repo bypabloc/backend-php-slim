@@ -23,15 +23,25 @@ class Create
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
         $body = $request->getAttribute('body');
+        $session = $request->getAttribute('session');
+        $check_permission_admin = $request->getAttribute('check_permission_admin');
+        
+        $validators = [
+            'name' => ['required', 'string', 'max:20', new Unique('products_categories', 'name')],
+            'is_active' => ['boolean'],
+            'user_id' => ['integer', new Exist('users', 'id')],
+        ];
+        if (!$check_permission_admin) {
+            $body['user_id'] = $session->user_id;
+            $validators['user_id'] = ['integer'];
+        }else{
+            array_push($validators['user_id'],'required');
+        }
 
         try {
             $validator = new Validator();
 
-            $validator->validate($body, [
-                'name' => ['required', 'string', 'max:20', new Unique('products_categories', 'name')],
-                'is_active' => ['boolean'],
-                'user_id' => ['integer', new Exist('users', 'id')],
-            ]);
+            $validator->validate($body, $validators);
     
             if(!$validator->isValid()){
                 $response = new Response();

@@ -55,6 +55,57 @@ class Permission
                         'alias' => 'permissions',
                         'created_by' => 1,
                     ],
+                    [
+                        'name' => 'products_categories.get_all.admin',
+                        'alias' => 'products_categories.get_all.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'products_categories.find.admin',
+                        'alias' => 'products_categories.find.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'products_categories.create.admin',
+                        'alias' => 'products_categories.create.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'products_categories.update.admin',
+                        'alias' => 'products_categories.update.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'products_categories.state.admin',
+                        'alias' => 'products_categories.state.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'products.get_all.admin',
+                        'alias' => 'products.get_all.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'products.find.admin',
+                        'alias' => 'products.find.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'products.create.admin',
+                        'alias' => 'products.create.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'products.update.admin',
+                        'alias' => 'products.update.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'products.state.admin',
+                        'alias' => 'products.state.admin',
+                        'created_by' => 1,
+                    ],
+                    
                 ],
             );
         }

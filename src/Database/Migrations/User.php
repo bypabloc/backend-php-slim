@@ -34,13 +34,19 @@ class User
                         'nickname' => 'admin',
                         'email' => 'admin@mail.com',
                         'uuid' => Uuid::uuid4()->toString(),
-                        'password' => Hash::make('admin123'),
+                        'password' => Hash::make('12345678'),
                     ],
                     [
-                        'nickname' => 'buyer',
-                        'email' => 'buyer@mail.com',
+                        'nickname' => 'user1',
+                        'email' => 'user1@mail.com',
                         'uuid' => Uuid::uuid4()->toString(),
-                        'password' => Hash::make('buyer123'),
+                        'password' => Hash::make('12345678'),
+                    ],
+                    [
+                        'nickname' => 'user2',
+                        'email' => 'user2@mail.com',
+                        'uuid' => Uuid::uuid4()->toString(),
+                        'password' => Hash::make('12345678'),
                     ],
                 ]
             );

@@ -19,13 +19,26 @@ class Find
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
         $params = $request->getAttribute('params');
+        $session = $request->getAttribute('session');
+        $check_permission_admin = $request->getAttribute('check_permission_admin');
+
+        $validators = [
+            'id' => ['required', 'integer', new Exist('products', 'id')],
+        ];
+        if (!$check_permission_admin) {
+            $user_id = $session->user_id;
+            $body['user_id'] = $user_id;
+            $validators['id'] = [new Exist(
+                table: 'products_categories',
+                column: 'id',
+                owner: 'user_id',
+            )];
+        }
 
         try {
             $validator = new Validator();
 
-            $validator->validate($params, [
-                'id' => ['required', 'integer', new Exist('products', 'id')],
-            ]);
+            $validator->validate($params, $validators);
     
             if(!$validator->isValid()){
                 $response = new Response();

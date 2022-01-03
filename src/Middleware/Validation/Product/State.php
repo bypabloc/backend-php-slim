@@ -19,14 +19,28 @@ class State
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
         $body = $request->getAttribute('body');
+        $session = $request->getAttribute('session');
+        $check_permission_admin = $request->getAttribute('check_permission_admin');
 
+        $validators = [
+            'id' => ['required', 'integer', new Exist('products', 'id')],
+            'state' => ['integer', 'between:0,10'],
+        ];
+
+        if (!$check_permission_admin) {
+            $user_id = $session->user_id;
+            $body['user_id'] = $user_id;
+            $validators['id'] = [new Exist(
+                table: 'products_categories',
+                column: 'id',
+                owner: 'user_id',
+            )];
+        }
+        
         try {
             $validator = new Validator();
 
-            $validator->validate($body, [
-                'id' => ['required', 'integer', new Exist('products', 'id')],
-                'state' => ['integer', 'between:0,10'],
-            ], );
+            $validator->validate($body, $validators);
     
             if(!$validator->isValid()){
                 $response = new Response();

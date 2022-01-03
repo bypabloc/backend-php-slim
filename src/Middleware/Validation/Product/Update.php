@@ -22,33 +22,48 @@ class Update
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
         $body = $request->getAttribute('body');
+        $session = $request->getAttribute('session');
+        $check_permission_admin = $request->getAttribute('check_permission_admin');
+
+        $validators = [
+            'id' => ['required', 'integer', new Exist('products', 'id')],
+            'name' => ['string', 'max:255', new Unique('products', 'name')],
+            'description' => ['string', 'max:250'],
+            'price' => ['numeric', 'min:0'],
+            'discount_type' => ['integer', 'in:0,1,2'],
+            'discount_quantity' => ['numeric', 'min:0', 'required_with:discount_type'],
+
+            'stock' => ['numeric', 'min:1'],
+
+            'image' => [new IsBase64(
+                types: ['png','jpg', 'jpeg', 'gif'],
+                size: 2048
+            ,)],
+
+            'weight' => ['string', 'min:0'],
+            'height' => ['string', 'min:0'],
+            'width' => ['string', 'min:0'],
+            'length' => ['string', 'min:0'],
+
+            'state' => ['integer', 'between:0,10'],
+            'product_category_id' => ['integer', new Exist('products_categories', 'id')],
+        ];
+        if ($check_permission_admin) {
+            $validators['user_id'] = ['integer', new Exist('users', 'id')];
+        }else{
+            $user_id = $session->user_id;
+            $body['user_id'] = $user_id;
+            $validators['id'] = [new Exist(
+                table: 'products',
+                column: 'id',
+                owner: 'user_id',
+            )];
+        }
 
         try {
             $validator = new Validator();
 
-            $validator->validate($body, [
-                'id' => ['required', 'integer', new Exist('products', 'id')],
-                'name' => ['string', 'max:255', new Unique('products', 'name')],
-                'description' => ['string', 'max:250'],
-                'price' => ['numeric', 'min:0'],
-                'discount_type' => ['integer', 'in:0,1,2'],
-                'discount_quantity' => ['numeric', 'min:0', 'required_with:discount_type'],
-
-                'stock' => ['numeric', 'min:1'],
-
-                'image' => [new IsBase64(
-                    types: ['png','jpg', 'jpeg', 'gif'],
-                    size: 2048
-                ,)],
-
-                'weight' => ['string', 'min:0'],
-                'height' => ['string', 'min:0'],
-                'width' => ['string', 'min:0'],
-                'length' => ['string', 'min:0'],
-
-                'state' => ['integer', 'between:0,10'],
-                'product_category_id' => ['integer', new Exist('products_categories', 'id')],
-            ], );
+            $validator->validate($body, $validators);
     
             if(!$validator->isValid()){
                 $response = new Response();

@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\DataAwareRule;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-class Unique implements Rule, DataAwareRule
+class ItemOwner implements Rule, DataAwareRule
 {
     protected $data = [];
 
@@ -18,9 +18,8 @@ class Unique implements Rule, DataAwareRule
      */
     public function __construct(
         protected $table,
-        protected $column = 'id',
-        protected $id = null,
-        protected $owner = null,
+        protected $column = 'user_id',
+        protected $owner,
     )
     {
     }
@@ -41,27 +40,9 @@ class Unique implements Rule, DataAwareRule
      */
     public function passes($attribute, $value)
     {
-        if ($this->id) {
-            $this->data['id'] = $this->id;
-        }
-
-        $query = Capsule::table($this->table)->where([
-            $this->column => $value,
-        ]);
-
-        if(isset($this->data['id'])){
-            $query->where('id', '!=', $this->data['id']);
-        }
-
-        if ($this->owner) {
-            if(isset($this->data[$this->owner]) && !empty($this->data[$this->owner])){
-                $query->where($this->owner, $this->data[$this->owner]);
-            }
-        }
-        
-        $row = $query->first();
-
-        return $row === null;
+        return Capsule::table($this->table)->where([
+            $this->column => $this->owner,
+        ])->exists();
     }
 
     /**
@@ -71,6 +52,6 @@ class Unique implements Rule, DataAwareRule
      */
     public function message()
     {
-        return 'The :attribute already exists.';
+        return 'The item owner is not valid.';
     }
 }
