@@ -28,11 +28,28 @@ class Create
             $validator = new Validator();
 
             $validator->validate($body, [
-                'name' => ['required', 'string', 'max:20', new Unique('Product', 'name')],
-                'is_active' => ['boolean'],
+                'name' => ['required', 'string', 'max:255', new Unique('products', 'name')],
+                'description' => ['string', 'max:250'],
+                'price' => ['required', 'numeric', 'min:0'],
+                'discount_type' => ['integer', 'in:0,1,2'],
+                'discount_quantity' => ['required', 'numeric', 'min:0', 'required_with:discount_type'],
+
+                'stock' => ['required', 'numeric', 'min:1'],
+
+                'image' => ['string','max:500'],
+
+                'weight' => ['string', 'min:0'],
+                'height' => ['string', 'min:0'],
+                'width' => ['string', 'min:0'],
+                'length' => ['string', 'min:0'],
+
+                'likes' => ['integer', 'min:0'],
+
+                'state' => ['integer', 'between:0,10'],
+
                 'user_id' => ['integer', new Exist('users', 'id')],
             ]);
-    
+
             if(!$validator->isValid()){
                 $response = new Response();
                 return $this->response($response, 422, [

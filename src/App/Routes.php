@@ -56,7 +56,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         
         $app->get('/get_all', Product\GetAll::class)->add(new \App\Middleware\Pagination());
         // $app->get('/find', Product\Find::class)->add(new \App\Middleware\Validation\Product\Find());
-        // $app->post('/create', Product\Create::class)->add(new \App\Middleware\Validation\Product\Create());
+        $app->post('/create', Product\Create::class)->add(new \App\Middleware\Validation\Product\Create());
         // $app->post('/update', Product\Update::class)->add(new \App\Middleware\Validation\Product\Update());
         // $app->post('/state', Product\State::class)->add(new \App\Middleware\Validation\Product\State());
 

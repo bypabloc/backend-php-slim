@@ -42,6 +42,8 @@ class Product extends Model
         'state',
 
         'user_id',
+
+        'product_category_id',
     ];
 
     /**

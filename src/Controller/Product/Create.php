@@ -22,13 +22,43 @@ final class Create
 
         $product = new Product();
         $product->name = $body['name'];
+        if(!empty($body['description'])){
+            $product->description = $body['description'];
+        }
+        $product->price = $body['price'];
+        if(!empty($body['discount_type'])){
+            $product->discount_type = $body['discount_type'];
+        }
+        if(!empty($body['discount_quantity'])){
+            $product->discount_quantity = $body['discount_quantity'];
+        }
+        $product->stock = $body['stock'];
+        if(!empty($body['image'])){
+            $product->image = $body['image'];
+        }
+        if(!empty($body['weight'])){
+            $product->weight = $body['weight'];
+        }
+        if(!empty($body['height'])){
+            $product->height = $body['height'];
+        }
+        if(!empty($body['width'])){
+            $product->width = $body['width'];
+        }
+        if(!empty($body['length'])){
+            $product->length = $body['length'];
+        }
+        if(!empty($body['likes'])){
+            $product->likes = $body['likes'];
+        }
         if(!empty($body['state'])){
-            $product->is_active = $body['state'];
+            $product->state = $body['state'];
         }
         if(!empty($body['user_id'])){
             $product->user_id = $body['user_id'];
+        }else{
+            $product->user_id = $session->user_id;
         }
-        $product->created_by = $session->user_id;
 
         $product->creatingCustom();
 

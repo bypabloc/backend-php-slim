@@ -18,10 +18,10 @@ class Product
 
                 $table->double('price', 8, 2);
 
-                $table->smallInteger('discount_type');
+                $table->smallInteger('discount_type')->default(0);
                 // 1 = percentage
                 // 2 = amount
-                $table->double('discount_quantity', 8, 2);
+                $table->double('discount_quantity', 8, 2)->nullable();
 
                 $table->integer('stock');
 
@@ -35,6 +35,9 @@ class Product
                 $table->integer('likes')->default(0);
 
                 $table->smallInteger('state')->default(1);
+
+                $table->unsignedBigInteger('product_category_id')->nullable();
+                $table->foreign('product_category_id')->references('id')->on('products_categories');
 
                 $table->unsignedBigInteger('user_id')->nullable();
                 $table->foreign('user_id')->references('id')->on('users');

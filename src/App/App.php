@@ -7,17 +7,27 @@ use Slim\Factory\AppFactory;
 require __DIR__ . '/../../vendor/autoload.php';
 $baseDir = __DIR__ . '/../../';
 
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UploadedFileInterface;
+use Slim\Middleware\OutputBufferingMiddleware;
+use Slim\Psr7\Factory\StreamFactory;
+use DI\ContainerBuilder;
 use \App\App\Settings;
 
 try {
+
+    $containerBuilder = new ContainerBuilder();
+    $container = $containerBuilder->build();
+
     $settings = new Settings();
     $settings();
 
+    AppFactory::setContainer($container);
     $app = AppFactory::create();
 
     $app->addRoutingMiddleware();
     $app->addBodyParsingMiddleware();
-
     $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 
     $app->add(function ($request, $handler) {
@@ -31,6 +41,7 @@ try {
     $container = $app->getContainer();
 
 } catch (\Throwable $th) {
+    echo $th->getMessage();
 }
 
 require __DIR__ . '/Routes.php';

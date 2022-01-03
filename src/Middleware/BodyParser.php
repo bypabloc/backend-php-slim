@@ -16,7 +16,7 @@ class BodyParser
             $headers_list[$name] = implode(", ", $values);
         }
 
-        $bodyPrev = (array) $request->getParsedBody() ?: [];
+        $bodyPrev = $request->getParsedBody() ?: [];
 
         $params = (array) $request->getQueryParams() ?: [];
 
