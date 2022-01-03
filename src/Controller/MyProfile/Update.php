@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\User;
+namespace App\Controller\MyProfile;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -11,7 +11,7 @@ use App\Services\Hash;
 
 use App\Model\User;
 
-final class Create
+final class Update
 {
     use JsonResponse;
 
@@ -20,22 +20,22 @@ final class Create
         $session = $request->getAttribute('session');
         $body = $request->getAttribute('body');
 
-        $user = new User();
-        $user->nickname = $body['nickname'];
-        $user->email = $body['email'];
-        $user->password = $body['password'];
-        $user->role_id = $body['role_id'];
-
-        $user->creatingCustom();
-
+        $user = User::find($body['id']);
+        if(!empty($body['nickname'])){
+            $user->nickname = $body['nickname'];
+        }
+        if(!empty($body['email'])){
+            $user->email = $body['email'];
+        }
+        if(isset($body['is_active'])){
+            $role->is_active = $body['is_active'];
+        }
+        
         $user->save();
 
         $res = [
             'data' => [
-                'user' => [
-                    'nickname' => $user->nickname,
-                    'email' => $user->email,
-                ],
+                'user' => $user,
             ],
         ];
         return $this->response($response, 200, $res);

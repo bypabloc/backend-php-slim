@@ -21,6 +21,8 @@ class User
                 $table->uuid('uuid')->unique();
                 $table->string('password');
 
+                $table->string('image',255)->nullable();
+
                 $table->boolean('is_active')->default(1);
                 
                 $table->timestamps();

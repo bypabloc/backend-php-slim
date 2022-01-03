@@ -35,6 +35,10 @@ class Update
                 'passwordConfirmation' => ['string', 'min:6', 'max:50', 'same:password', 'required_with:password'],
                 'role_id' => ['integer', new Exist('roles', 'id')],
                 'is_active' => ['boolean'],
+                'image' => [new IsBase64(
+                    types: ['png','jpg', 'jpeg', 'gif'],
+                    size: 2048,
+                )],
             ], );
     
             if(!$validator->isValid()){

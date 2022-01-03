@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\User;
+namespace App\Controller\MyProfile;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -11,7 +11,7 @@ use App\Services\Hash;
 
 use App\Model\User;
 
-final class Create
+final class ChangePassword
 {
     use JsonResponse;
 
@@ -20,13 +20,18 @@ final class Create
         $session = $request->getAttribute('session');
         $body = $request->getAttribute('body');
 
-        $user = new User();
-        $user->nickname = $body['nickname'];
-        $user->email = $body['email'];
+        $user = $session->user;
+        if(!Hash::validate($body['password_current'], $user->password)){
+            return $this->response($response, 422, [
+                'errors' => [
+                    'user' => ['Credentials are incorrect.'],
+                ],
+            ]);
+        }
+        
         $user->password = $body['password'];
-        $user->role_id = $body['role_id'];
 
-        $user->creatingCustom();
+        $user->updatingCustom();
 
         $user->save();
 

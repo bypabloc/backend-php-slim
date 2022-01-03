@@ -34,7 +34,6 @@ final class Create
 
         $res = [
             'data' => [
-                'session' => $session,
                 'permission' => $permission,
             ],
         ];

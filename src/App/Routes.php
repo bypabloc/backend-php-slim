@@ -14,6 +14,7 @@ use App\Controller\Auth;
 use App\Controller\Permission;
 use App\Controller\ProductCategory;
 use App\Controller\Product;
+use App\Controller\MyProfile;
 
 use App\Middleware\Token;
 use App\Middleware\BodyParser;
@@ -71,6 +72,14 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->post('/state', ProductCategory\State::class)->add(new \App\Middleware\Validation\ProductCategory\State());
 
     })->add(new CanPermission('products_categories'))->add(Token::class);
+
+    $app->group('/my-profile', function (RouteCollectorProxy $app) {
+        
+        $app->get('/get_info', MyProfile\GetInfo::class);
+        $app->post('/change_password', MyProfile\ChangePassword::class)->add(new \App\Middleware\Validation\MyProfile\ChangePassword());
+        $app->post('/update', MyProfile\Update::class)->add(new \App\Middleware\Validation\MyProfile\Update());
+
+    })->add(Token::class);
 
     $app->group('/users', function (RouteCollectorProxy $app) {
 
