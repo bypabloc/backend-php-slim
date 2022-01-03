@@ -47,8 +47,6 @@ class Create
                 'width' => ['string', 'min:0'],
                 'length' => ['string', 'min:0'],
 
-                'likes' => ['integer', 'min:0'],
-
                 'state' => ['integer', 'between:0,10'],
 
                 'user_id' => ['integer', new Exist('users', 'id')],

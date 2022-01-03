@@ -75,6 +75,10 @@ class Product extends Model
     public function updatingCustom()
     {
         $this->slug = Slug::make($this->name);
+        if(isset($this->image)){
+            $name_file = time() . bin2hex(random_bytes(50));
+            $this->image = $this->save_base64_image($this->image, $name_file ,'product_images');
+        }
     }
 
     public function save_base64_image($base64_image_string, $output_file_without_extension, $path_with_end_slash="" ) {

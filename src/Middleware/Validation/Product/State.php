@@ -24,8 +24,8 @@ class State
             $validator = new Validator();
 
             $validator->validate($body, [
-                'id' => ['required', 'integer', new Exist('Product', 'id')],
-                'state' => ['required', 'boolean'],
+                'id' => ['required', 'integer', new Exist('products', 'id')],
+                'state' => ['integer', 'between:0,10'],
             ], );
     
             if(!$validator->isValid()){

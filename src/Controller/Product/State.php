@@ -21,8 +21,10 @@ final class State
         $body = $request->getAttribute('body');
 
         $product = Product::find($body['id']);
-        $product->is_active = $body['state'];
+        $product->state = $body['state'];
+        
         // $product->updatingCustom();
+
         $product->save();
 
         $res = [

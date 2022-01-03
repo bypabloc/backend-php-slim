@@ -44,6 +44,10 @@ class Unique implements Rule, DataAwareRule
         $query = Capsule::table($this->table)->where([
             $this->column => $value,
         ]);
+
+        if(isset($this->data['id'])){
+            $query->where('id', '!=', $this->data['id']);
+        }
         
         $row = $query->first();
 
