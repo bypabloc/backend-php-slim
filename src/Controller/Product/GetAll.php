@@ -18,9 +18,15 @@ final class GetAll
     public function __invoke(Request $request, Response $response): Response
     {
         $params = $request->getAttribute('params');
-        $session = $params['session'];
-        
-        $products = Product::pagination((int) $params['page'], (int) $params['per_page']);
+
+        $check_permission_admin = $request->getAttribute('check_permission_admin');
+        $products = new Product;
+        if (!$check_permission_admin) {
+            $session = $request->getAttribute('session');
+            $user_id = $session->user_id;
+            $products = $products->where('user_id', $user_id);
+        }
+        $products = $products->pagination((int) $params['page'], (int) $params['per_page']);
         
         $res = [
             'data' => [
