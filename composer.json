@@ -12,7 +12,8 @@
         "illuminate/support": "^8.77",
         "ramsey/uuid": "^4.2",
         "doctrine/dbal": "^3.2",
-        "php-di/php-di": "^6.3"
+        "php-di/php-di": "^6.3",
+        "illuminate/http": "^8.77"
     },
     "config": {
     },

@@ -33,6 +33,8 @@ class Validator
             'max' => 'The :attribute field must less than :max.',
             'same' => 'The :attribute field must same :size.',
             'in' => 'The :attribute must be one of the following types: :values',
+            'file.image' => 'The :attribute must be an image.',
+            'file.max' => 'The :attribute must be less than :max kilobytes.',
         ]);
 
         if(!$validator->fails()){

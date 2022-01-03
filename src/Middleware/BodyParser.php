@@ -20,6 +20,13 @@ class BodyParser
 
         $params = (array) $request->getQueryParams() ?: [];
 
+        foreach ($bodyPrev as $key => $value) {
+            if(( strstr( $value, 'data' )) && ( strstr( $value, 'base64' ))){
+                // $bodyPrev[$key] = base64_decode($value);
+                // $this->save_base64_image($value,'test','product_images');
+            }
+        }
+
         $request = $request->withAttribute('body', $bodyPrev);
         $request = $request->withAttribute('params', $params);
         $request = $request->withAttribute('headers', $headers_list);

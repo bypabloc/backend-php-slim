@@ -14,6 +14,7 @@ use App\Services\Validator;
 use App\Middleware\Validation\Rule\Unique;
 use App\Middleware\Validation\Rule\Exist;
 use App\Middleware\Validation\Rule\OnlyLetters;
+use App\Middleware\Validation\Rule\IsBase64;
 
 class Create
 {
@@ -36,7 +37,10 @@ class Create
 
                 'stock' => ['required', 'numeric', 'min:1'],
 
-                'image' => ['string','max:500'],
+                'image' => [new IsBase64(
+                    types: ['png','jpg', 'jpeg', 'gif'],
+                    size: 2048
+                ,)],
 
                 'weight' => ['string', 'min:0'],
                 'height' => ['string', 'min:0'],
