@@ -17,6 +17,9 @@ class ProductCategory
 
                 $table->boolean('is_active')->default(1);
 
+                $table->unsignedBigInteger('parent_id')->nullable();
+                $table->foreign('parent_id')->references('id')->on('products_categories');
+
                 $table->unsignedBigInteger('user_id')->nullable();
                 $table->foreign('user_id')->references('id')->on('users');
 
