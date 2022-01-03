@@ -17,11 +17,12 @@ class User
                 $table->bigIncrements('id');
                 $table->string('nickname')->unique();
                 $table->string('email')->unique();
-
-                // $table->boolean('is_super')->default(false);
                 
                 $table->uuid('uuid')->unique();
                 $table->string('password');
+
+                $table->boolean('is_active')->default(1);
+                
                 $table->timestamps();
             });
 

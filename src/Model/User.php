@@ -23,6 +23,7 @@ class User extends Model
         'nickname',
         'password',
         'uuid',
+        'is_active',
     ];
 
     /**
