@@ -77,7 +77,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->get('/get_all', User\GetAll::class)->add(new \App\Middleware\Pagination());
         $app->get('/find', User\Find::class)->add(new \App\Middleware\Validation\User\Find());
         $app->post('/create', User\Create::class)->add(new \App\Middleware\Validation\User\Create());
-        // $app->post('/update', User\Update::class)->add(new \App\Middleware\Validation\User\Update());
+        $app->post('/update', User\Update::class)->add(new \App\Middleware\Validation\User\Update());
         // $app->post('/state', User\State::class)->add(new \App\Middleware\Validation\User\State());
 
     })->add(new CanPermission('users'))->add(Token::class);

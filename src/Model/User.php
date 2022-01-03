@@ -54,6 +54,13 @@ class User extends Model
         $this->token = JWT::GenerateToken($this->uuid, $this->id);
     }
 
+    public function updatingCustom()
+    {
+        if(!empty($this->password)){
+            $this->password = Hash::make($this->password);
+        }
+    }
+
     public function generateToken()
     {
         $this->token = JWT::GenerateToken($this->uuid, $this->id);
