@@ -7,31 +7,24 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Psr7\Response;
 
 use App\Serializer\JsonResponse;
-use App\Serializer\RequestValidatorErrors;
 
 use App\Services\Validator;
 
-use App\Middleware\Validation\Rule\Unique;
 use App\Middleware\Validation\Rule\Exist;
 
-class Create
+class Find
 {
-    use RequestValidatorErrors;
     use JsonResponse;
     
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
-        $body = $request->getAttribute('body');
+        $params = $request->getAttribute('params');
 
         try {
             $validator = new Validator();
 
-            $validator->validate($body, [
-                'email' => ['required', 'string', 'email', new Unique('users', 'email')],
-                'nickname' => ['required', 'string', new Unique('users', 'nickname')],
-                'password' => ['required', 'string', 'min:6', 'max:50'],
-                'passwordConfirmation' => ['required', 'string', 'min:6', 'max:50', 'same:password'],
-                'role_id' => ['required', 'integer', new Exist('roles', 'id')],
+            $validator->validate($params, [
+                'id' => ['required', 'integer', new Exist('users', 'id')],
             ]);
     
             if(!$validator->isValid()){
@@ -40,8 +33,8 @@ class Create
                     'errors' => $validator->errors,
                 ]);
             }
-
-            $request = $request->withAttribute('body', $validator->data);
+            
+            $request = $request->withAttribute('params', $validator->data);
             
             return $handler->handle($request);
 

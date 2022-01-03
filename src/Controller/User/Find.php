@@ -11,32 +11,20 @@ use App\Services\Hash;
 
 use App\Model\User;
 
-final class Create
+final class Find
 {
     use JsonResponse;
 
     public function __invoke(Request $request, Response $response): Response
     {
         $session = $request->getAttribute('session');
-        $body = $request->getAttribute('body');
+        $params = $request->getAttribute('params');
 
-        $user = new User();
-        $user->nickname = $body['nickname'];
-        $user->email = $body['email'];
-        $user->password = $body['password'];
-        $user->role_id = $body['role_id'];
-
-        $user->creatingCustom();
-
-        $user->save();
+        $user = User::find($params['id']);
 
         $res = [
             'data' => [
-                'session' => $session,
-                'user' => [
-                    'nickname' => $user->nickname,
-                    'email' => $user->email,
-                ],
+                'user' => $user,
             ],
         ];
         return $this->response($response, 200, $res);
