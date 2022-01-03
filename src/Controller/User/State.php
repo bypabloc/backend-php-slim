@@ -21,7 +21,7 @@ final class State
         $body = $request->getAttribute('body');
 
         $user = User::find($body['id']);
-        $user->is_active = $body['state'];
+        $user->is_active = $body['is_active'];
 
         $user->save();
 

@@ -21,7 +21,7 @@ final class State
         $body = $request->getAttribute('body');
 
         $product_category = ProductCategory::find($body['id']);
-        $product_category->is_active = $body['state'];
+        $product_category->is_active = $body['is_active'];
         // $product_category->updatingCustom();
         $product_category->save();
 

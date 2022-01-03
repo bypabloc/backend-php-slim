@@ -21,14 +21,14 @@ final class Update
         $body = $request->getAttribute('body');
 
         $permission = Permission::find($body['id']);
-        if($body['name'] !== null){
+        if(isset($body['name'])){
             $permission->name = $body['name'];
         }
-        if($body['alias'] !== null){
+        if(isset($body['alias'])){
             $permission->alias = $body['alias'];
         }
-        if($body['state'] !== null){
-            $permission->is_active = $body['state'];
+        if(isset($body['is_active'])){
+            $permission->is_active = $body['is_active'];
         }
         // $permission->updatingCustom();
         $permission->save();

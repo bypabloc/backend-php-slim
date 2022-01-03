@@ -32,8 +32,9 @@ class Update
                 'nickname' => ['string', new Unique('users', 'nickname')],
                 
                 'password' => ['string', 'min:6', 'max:50'],
-                'passwordConfirmation' => ['string', 'min:6', 'max:50', 'same:password'],
+                'passwordConfirmation' => ['string', 'min:6', 'max:50', 'same:password', 'required_with:password'],
                 'role_id' => ['integer', new Exist('roles', 'id')],
+                'is_active' => ['boolean'],
             ], );
     
             if(!$validator->isValid()){

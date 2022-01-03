@@ -33,6 +33,9 @@ final class Update
         if(!empty($body['role_id'])){
             $user->role_id = $body['role_id'];
         }
+        if(isset($body['is_active'])){
+            $role->is_active = $body['is_active'];
+        }
         
         $user->updatingCustom();
 

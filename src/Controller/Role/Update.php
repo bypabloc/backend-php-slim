@@ -21,9 +21,11 @@ final class Update
         $body = $request->getAttribute('body');
 
         $role = Role::find($body['id']);
-        $role->name = $body['name'];
-        if($body['state'] !== null){
-            $role->is_active = $body['state'];
+        if(isset($body['name'])){
+            $role->name = $body['name'];
+        }
+        if(isset($body['is_active'])){
+            $role->is_active = $body['is_active'];
         }
         // $role->updatingCustom();
         $role->save();

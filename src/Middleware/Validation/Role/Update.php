@@ -25,8 +25,8 @@ class Update
 
             $validator->validate($body, [
                 'id' => ['required', 'integer', new Exist('roles', 'id')],
-                'name' => ['required', 'string', 'min:3', 'max:50'],
-                'state' => ['boolean'],
+                'name' => ['string', 'min:3', 'max:50'],
+                'is_active' => ['boolean'],
             ], );
     
             if(!$validator->isValid()){

@@ -22,8 +22,8 @@ final class State
 
         $role = Role::find($body['id']);
 
-        $role->is_active = $body['state'];
-        // $role->updatingCustom();
+        $role->is_active = $body['is_active'];
+        
         $role->save();
 
         $res = [

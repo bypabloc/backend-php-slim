@@ -24,6 +24,9 @@ final class Create
         $permission->name = $body['name'];
         $permission->alias = strtolower($body['alias']);
         $permission->created_by = $session->user_id;
+        if(isset($body['is_active'])){
+            $permission->is_active = $body['is_active'];
+        }
 
         // $permission->creatingCustom();
 

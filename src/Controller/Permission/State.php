@@ -21,7 +21,7 @@ final class State
         $body = $request->getAttribute('body');
 
         $permission = Permission::find($body['id']);
-        $permission->is_active = $body['state'];
+        $permission->is_active = $body['is_active'];
         // $permission->updatingCustom();
         $permission->save();
 

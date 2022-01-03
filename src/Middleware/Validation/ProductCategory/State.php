@@ -25,7 +25,7 @@ class State
 
             $validator->validate($body, [
                 'id' => ['required', 'integer', new Exist('products_categories', 'id')],
-                'state' => ['required', 'boolean'],
+                'is_active' => ['required', 'boolean'],
             ], );
     
             if(!$validator->isValid()){

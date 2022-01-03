@@ -29,6 +29,7 @@ class Create
             $validator->validate($body, [
                 'name' => ['required', 'string', new Unique('permissions', 'name')],
                 'alias' => ['required', 'string', new Unique('permissions', 'alias'), new OnlyLetters()],
+                'is_active' => ['boolean'],
             ]);
     
             if(!$validator->isValid()){
