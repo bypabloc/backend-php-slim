@@ -10,9 +10,12 @@ use Ramsey\Uuid\Uuid;
 
 use App\Services\JWT;
 
+use App\Services\Storage;
+
 class User extends Model
 {
     use Pagination;
+    use Storage;
     /**
      * The attributes that are mass assignable.
      *
@@ -49,6 +52,13 @@ class User extends Model
     {
         $this->password = Hash::make($this->password);
         $this->uuid = Uuid::uuid4()->toString();
+
+        if(isset($this->image)){
+            $this->image = self::saveProfileImage($this->image);
+        }
+        if(!isset($this->role_id)){
+            $this->role_id = Role::where('name', 'user')->first()->id;
+        }
     }
 
     public function createdCustom()
@@ -61,11 +71,19 @@ class User extends Model
         if(!empty($this->password)){
             $this->password = Hash::make($this->password);
         }
+        if(isset($this->image)){
+            $this->image = self::saveProfileImage($this->image);
+        }
     }
 
     public function generateToken()
     {
         $this->token = JWT::GenerateToken($this->uuid, $this->id);
+    }
+
+    public function fileToDelete()
+    {
+        $this->deleteProfileImage($this->image);
     }
 
     public function role()

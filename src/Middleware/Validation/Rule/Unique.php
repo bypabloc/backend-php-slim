@@ -9,9 +9,6 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 class Unique implements Rule, DataAwareRule
 {
-    public $table = '';
-    public $column = '';
-
     protected $data = [];
 
     /**
@@ -19,10 +16,12 @@ class Unique implements Rule, DataAwareRule
      *
      * @return void
      */
-    public function __construct($table, $column)
+    public function __construct(
+        protected $table,
+        protected $column = 'id',
+        protected $id = null,
+    )
     {
-        $this->table = $table;
-        $this->column = $column;
     }
 
     public function setData($data)
@@ -41,11 +40,16 @@ class Unique implements Rule, DataAwareRule
      */
     public function passes($attribute, $value)
     {
+        if ($this->id) {
+            $this->data['id'] = $this->id;
+        }
+
         $query = Capsule::table($this->table)->where([
             $this->column => $value,
         ]);
 
         if(isset($this->data['id'])){
+
             $query->where('id', '!=', $this->data['id']);
         }
         

@@ -22,14 +22,24 @@ class Update
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
         $body = $request->getAttribute('body');
+        $session = $request->getAttribute('session');
+
+        $user_id = $session->user->id;
 
         try {
             $validator = new Validator();
 
             $validator->validate($body, [
-                'id' => ['required', 'integer', new Exist('users', 'id')],
-                'email' => ['string', 'email', new Unique('users', 'email')],
-                'nickname' => ['string', new Unique('users', 'nickname')],
+                'email' => ['string', 'email', new Unique(
+                    table: 'users',
+                    column: 'email',
+                    id: $user_id,
+                )],
+                'nickname' => ['string', new Unique(
+                    table: 'users',
+                    column: 'nickname',
+                    id: $user_id,
+                )],
                 
                 'is_active' => ['boolean'],
                 'image' => [new IsBase64(

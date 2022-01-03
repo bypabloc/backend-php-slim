@@ -20,16 +20,24 @@ final class Update
         $session = $request->getAttribute('session');
         $body = $request->getAttribute('body');
 
-        $user = User::find($body['id']);
+        $user = $session->user;
         if(!empty($body['nickname'])){
             $user->nickname = $body['nickname'];
         }
         if(!empty($body['email'])){
             $user->email = $body['email'];
         }
+        if(!empty($body['image'])){
+            if(!empty($user->image)){
+                $user->fileToDelete();
+            }
+            $user->image = $body['image'];
+        }
         if(isset($body['is_active'])){
             $role->is_active = $body['is_active'];
         }
+
+        $user->updatingCustom();
         
         $user->save();
 

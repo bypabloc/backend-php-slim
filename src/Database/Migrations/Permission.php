@@ -36,6 +36,11 @@ class Permission
                         'created_by' => 1,
                     ],
                     [
+                        'name' => 'cart',
+                        'alias' => 'cart',
+                        'created_by' => 1,
+                    ],
+                    [
                         'name' => 'users',
                         'alias' => 'users',
                         'created_by' => 1,
@@ -50,7 +55,7 @@ class Permission
                         'alias' => 'permissions',
                         'created_by' => 1,
                     ],
-                ]
+                ],
             );
         }
     }

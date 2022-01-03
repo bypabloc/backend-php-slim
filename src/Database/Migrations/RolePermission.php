@@ -33,6 +33,14 @@ class RolePermission
                 'role_id' => 2,
                 'permission_id' => 1,
             ];
+            $roles_permissions[] = [
+                'role_id' => 2,
+                'permission_id' => 2,
+            ];
+            $roles_permissions[] = [
+                'role_id' => 2,
+                'permission_id' => 3,
+            ];
             Capsule::table('roles_permissions')->insert($roles_permissions);
         }
     }

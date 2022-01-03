@@ -27,7 +27,7 @@ class Role
                         'created_by' => 1,
                     ],
                     [
-                        'name' => 'buyer',
+                        'name' => 'user',
                         'created_by' => 1,
                     ],
                 ]

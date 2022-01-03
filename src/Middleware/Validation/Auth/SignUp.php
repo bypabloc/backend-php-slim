@@ -26,8 +26,14 @@ class SignUp
             $validator = new Validator();
 
             $validator->validate($body, [
-                'email' => ['required', 'string', 'email', new Unique('users', 'email')],
-                'nickname' => ['required', 'string', new Unique('users', 'nickname')],
+                'email' => ['required', 'string', 'email', 'max:50', new Unique(
+                    table: 'users',
+                    column: 'email',
+                )],
+                'nickname' => ['required', 'string', 'max:50', new Unique(
+                    table: 'users',
+                    column: 'email',
+                )],
                 'password' => ['required', 'string', 'min:6', 'max:50'],
                 'passwordConfirmation' => ['required', 'string', 'min:6', 'max:50', 'same:password'],
             ]);
