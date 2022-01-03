@@ -11,6 +11,7 @@ use App\Services\Storage;
 class Product extends Model
 {
     use Pagination;
+    use Storage;
 
     /**
      * The attributes that are mass assignable.
@@ -68,8 +69,7 @@ class Product extends Model
         $this->slug = Slug::make($this->name);
 
         if(isset($this->image)){
-            $name_file = time() . bin2hex(random_bytes(50));
-            $this->image = $this->save_base64_image($this->image, $name_file ,'product_images');
+            $this->image = self::saveProductImage($this->image);
         }
     }
 
@@ -77,8 +77,7 @@ class Product extends Model
     {
         $this->slug = Slug::make($this->name);
         if(isset($this->image)){
-            $name_file = time() . bin2hex(random_bytes(50));
-            $this->image = $this->save_base64_image($this->image, $name_file ,'product_images');
+            $this->image = self::saveProductImage($this->image);
         }
     }
 }

@@ -28,7 +28,7 @@ trait Storage
         return self::save_base64_image($base64, $name_file ,$path);
     }
 
-    public static function deleteProfileImage($path){
+    public static function deleteFile($path){
         if(file_exists($path)){
             unlink($path);
         }

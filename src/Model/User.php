@@ -16,6 +16,7 @@ class User extends Model
 {
     use Pagination;
     use Storage;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -79,11 +80,6 @@ class User extends Model
     public function generateToken()
     {
         $this->token = JWT::GenerateToken($this->uuid, $this->id);
-    }
-
-    public function fileToDelete()
-    {
-        $this->deleteProfileImage($this->image);
     }
 
     public function role()

@@ -40,6 +40,9 @@ final class Update
             $product->stock = $body['stock'];
         }
         if(!empty($body['image'])){
+            if(!empty($product->image)){
+                $product->deleteFile($product->image);
+            }
             $product->image = $body['image'];
         }
         if(!empty($body['weight'])){

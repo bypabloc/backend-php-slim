@@ -29,7 +29,7 @@ final class Update
         }
         if(!empty($body['image'])){
             if(!empty($user->image)){
-                $user->fileToDelete();
+                $user->deleteFile($user->image);
             }
             $user->image = $body['image'];
         }
