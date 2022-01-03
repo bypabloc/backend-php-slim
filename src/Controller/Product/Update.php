@@ -63,6 +63,9 @@ final class Update
         if(!empty($body['state'])){
             $product->state = $body['state'];
         }
+        if(!empty($body['product_category_id'])){
+            $product->product_category_id = $body['product_category_id'];
+        }
         
         $product->updatingCustom();
 

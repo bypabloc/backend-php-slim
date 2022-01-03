@@ -47,6 +47,7 @@ class Update
                 'length' => ['string', 'min:0'],
 
                 'state' => ['integer', 'between:0,10'],
+                'product_category_id' => ['integer', new Exist('products_categories', 'id')],
             ], );
     
             if(!$validator->isValid()){

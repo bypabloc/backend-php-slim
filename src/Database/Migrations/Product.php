@@ -36,7 +36,7 @@ class Product
 
                 $table->smallInteger('state')->default(1);
 
-                $table->unsignedBigInteger('product_category_id')->nullable();
+                $table->unsignedBigInteger('product_category_id');
                 $table->foreign('product_category_id')->references('id')->on('products_categories');
 
                 $table->unsignedBigInteger('user_id')->nullable();

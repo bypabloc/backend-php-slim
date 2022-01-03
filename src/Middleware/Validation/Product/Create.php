@@ -50,6 +50,7 @@ class Create
                 'state' => ['integer', 'between:0,10'],
 
                 'user_id' => ['integer', new Exist('users', 'id')],
+                'product_category_id' => ['required', 'integer', new Exist('products_categories', 'id')],
             ]);
 
             if(!$validator->isValid()){
