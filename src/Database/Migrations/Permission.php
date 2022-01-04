@@ -6,10 +6,12 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 class Permission
 {
+    private static $table = 'permissions';
+
     public static function up()
     {
-        if (!Capsule::schema()->hasTable('permissions')) {
-            Capsule::schema()->create('permissions', function ($table) {
+        if (!Capsule::schema()->hasTable(self::$table)) {
+            Capsule::schema()->create(self::$table, function ($table) {
                 $table->bigIncrements('id');
 
                 $table->string('name')->unique(); // Ex: Crear productos
@@ -23,7 +25,7 @@ class Permission
                 $table->timestamps();
             });
 
-            Capsule::table('permissions')->insert(
+            Capsule::table(self::$table)->insert(
                 [
                     [
                         'name' => 'products_categories',
@@ -113,6 +115,6 @@ class Permission
 
     public static function down()
     {
-        Capsule::schema()->dropIfExists('permissions');
+        Capsule::schema()->dropIfExists(self::$table);
     }
 }

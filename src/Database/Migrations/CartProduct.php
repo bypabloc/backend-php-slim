@@ -4,12 +4,14 @@ namespace App\Database\Migrations;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-class CartUser
+class CartProduct
 {
+    private static $table = 'carts_products';
+
     public static function up()
     {
-        if (!Capsule::schema()->hasTable('carts_users')) {
-            Capsule::schema()->create('carts_users', function ($table) {
+        if (!Capsule::schema()->hasTable(self::$table)) {
+            Capsule::schema()->create(self::$table, function ($table) {
                 $table->bigIncrements('id');
 
                 $table->unsignedBigInteger('cart_id');
@@ -28,6 +30,8 @@ class CartUser
 
     public static function down()
     {
-        Capsule::schema()->dropIfExists('carts_users');
+        if (Capsule::schema()->hasTable(self::$table)) {
+            Capsule::schema()->dropIfExists(self::$table);
+        }
     }
 }

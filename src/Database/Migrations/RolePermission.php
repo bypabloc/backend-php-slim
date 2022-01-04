@@ -6,10 +6,12 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 class RolePermission
 {
+    private static $table = 'roles_permissions';
+
     public static function up()
     {
-        if (!Capsule::schema()->hasTable('roles_permissions')) {
-            Capsule::schema()->create('roles_permissions', function ($table) {
+        if (!Capsule::schema()->hasTable(self::$table)) {
+            Capsule::schema()->create(self::$table, function ($table) {
                 $table->bigIncrements('id');
 
                 $table->unsignedBigInteger('role_id');
@@ -41,12 +43,12 @@ class RolePermission
                 'role_id' => 2,
                 'permission_id' => 3,
             ];
-            Capsule::table('roles_permissions')->insert($roles_permissions);
+            Capsule::table(self::$table)->insert($roles_permissions);
         }
     }
 
     public static function down()
     {
-        Capsule::schema()->dropIfExists('roles_permissions');
+        Capsule::schema()->dropIfExists(self::$table);
     }
 }

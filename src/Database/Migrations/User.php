@@ -10,10 +10,12 @@ use App\Services\Hash;
 
 class User
 {
+    private static $table = 'users';
+
     public static function up()
     {
-        if (!Capsule::schema()->hasTable('users')) {
-            Capsule::schema()->create('users', function ($table) {
+        if (!Capsule::schema()->hasTable(self::$table)) {
+            Capsule::schema()->create(self::$table, function ($table) {
                 $table->bigIncrements('id');
                 $table->string('nickname')->unique();
                 $table->string('email')->unique();
@@ -28,7 +30,7 @@ class User
                 $table->timestamps();
             });
 
-            Capsule::table('users')->insert(
+            Capsule::table(self::$table)->insert(
                 [
                     [
                         'nickname' => 'admin',
@@ -56,6 +58,6 @@ class User
 
     public static function down()
     {
-        Capsule::schema()->dropIfExists('users');
+        Capsule::schema()->dropIfExists(self::$table);
     }
 }

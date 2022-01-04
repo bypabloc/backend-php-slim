@@ -6,10 +6,12 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 class Role
 {
+    private static $table = 'roles';
+
     public static function up()
     {
-        if (!Capsule::schema()->hasTable('roles')) {
-            Capsule::schema()->create('roles', function ($table) {
+        if (!Capsule::schema()->hasTable(self::$table)) {
+            Capsule::schema()->create(self::$table, function ($table) {
                 $table->bigIncrements('id');
                 $table->string('name')->unique();
                 $table->boolean('is_active')->default(1);
@@ -20,7 +22,7 @@ class Role
                 $table->timestamps();
             });
 
-            Capsule::table('roles')->insert(
+            Capsule::table(self::$table)->insert(
                 [
                     [
                         'name' => 'admin',
@@ -37,6 +39,6 @@ class Role
 
     public static function down()
     {
-        Capsule::schema()->dropIfExists('roles');
+        Capsule::schema()->dropIfExists(self::$table);
     }
 }

@@ -7,14 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 use App\Serializer\JsonResponse;
 
-use App\Database\Migrations\User;
-use App\Database\Migrations\Session;
-use App\Database\Migrations\Role;
-use App\Database\Migrations\Permission;
-use App\Database\Migrations\RolePermission;
-use App\Database\Migrations\AlterTableUser;
-use App\Database\Migrations\ProductCategory;
-use App\Database\Migrations\Product;
+use App\Database\Migrations;
 
 final class Up
 {
@@ -22,14 +15,19 @@ final class Up
 
     public function __invoke(Request $request, Response $response): Response
     {
-        User::up();
-        Session::up();
-        Role::up();
-        Permission::up();
-        RolePermission::up();
-        AlterTableUser::up();
-        ProductCategory::up();
-        Product::up();
+        Migrations\User::up();
+        Migrations\Session::up();
+        Migrations\Role::up();
+        Migrations\Permission::up();
+        Migrations\RolePermission::up();
+        Migrations\AlterTableUser::up();
+        Migrations\ProductCategory::up();
+        Migrations\Product::up();
+
+        Migrations\Cart::up();
+        Migrations\CartProduct::up();
+        Migrations\ProductReview::up();
+
 
         return $this->response($response, 200, []);
     }

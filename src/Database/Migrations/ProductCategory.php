@@ -6,10 +6,12 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 class ProductCategory
 {
+    private static $table = 'products_categories';
+
     public static function up()
     {
-        if (!Capsule::schema()->hasTable('products_categories')) {
-            Capsule::schema()->create('products_categories', function ($table) {
+        if (!Capsule::schema()->hasTable(self::$table)) {
+            Capsule::schema()->create(self::$table, function ($table) {
                 $table->bigIncrements('id');
 
                 $table->string('name',20)->unique();
@@ -18,7 +20,7 @@ class ProductCategory
                 $table->boolean('is_active')->default(1);
 
                 $table->unsignedBigInteger('parent_id')->nullable();
-                $table->foreign('parent_id')->references('id')->on('products_categories');
+                $table->foreign('parent_id')->references('id')->on(self::$table);
 
                 $table->unsignedBigInteger('user_id')->nullable();
                 $table->foreign('user_id')->references('id')->on('users');
@@ -28,13 +30,11 @@ class ProductCategory
                 
                 $table->timestamps();
             });
-
-            // products_categories_users
         }
     }
 
     public static function down()
     {
-        Capsule::schema()->dropIfExists('products_categories');
+        Capsule::schema()->dropIfExists(self::$table);
     }
 }

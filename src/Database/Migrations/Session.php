@@ -6,10 +6,12 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 class Session
 {
+    private static $table = 'sessions';
+
     public static function up()
     {
-        if (!Capsule::schema()->hasTable('sessions')) {
-            Capsule::schema()->create('sessions', function ($table) {
+        if (!Capsule::schema()->hasTable(self::$table)) {
+            Capsule::schema()->create(self::$table, function ($table) {
                 $table->string('token');
                 $table->primary('token');
 
@@ -25,6 +27,6 @@ class Session
 
     public static function down()
     {
-        Capsule::schema()->dropIfExists('sessions');
+        Capsule::schema()->dropIfExists(self::$table);
     }
 }

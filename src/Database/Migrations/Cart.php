@@ -6,10 +6,12 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 class Cart
 {
+    private static $table = 'carts';
+
     public static function up()
     {
-        if (!Capsule::schema()->hasTable('carts')) {
-            Capsule::schema()->create('carts', function ($table) {
+        if (!Capsule::schema()->hasTable(self::$table)) {
+            Capsule::schema()->create(self::$table, function ($table) {
                 $table->bigIncrements('id');
 
                 $table->unsignedBigInteger('user_id');
@@ -30,6 +32,6 @@ class Cart
 
     public static function down()
     {
-        Capsule::schema()->dropIfExists('carts');
+        Capsule::schema()->dropIfExists(self::$table);
     }
 }
