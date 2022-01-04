@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\ProductCategory;
+namespace App\Controller\Cart;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -9,7 +9,7 @@ use App\Serializer\JsonResponse;
 
 use App\Services\Hash;
 
-use App\Model\ProductCategory;
+use App\Model\Cart;
 
 final class Create
 {
@@ -20,26 +20,26 @@ final class Create
         $session = $request->getAttribute('session');
         $body = $request->getAttribute('body');
 
-        $product_category = new ProductCategory();
-        $product_category->name = $body['name'];
+        $cart = new Cart();
+
+        $cart->user_id = $body['user_id'];
+        if(!empty($body['observation'])){
+            $cart->observation = $body['observation'];
+        }
+        if(!empty($body['address'])){
+            $cart->address = $body['address'];
+        }
         if(!empty($body['state'])){
-            $product_category->is_active = $body['state'];
+            $cart->state = $body['state'];
         }
-        if(!empty($body['parent_id'])){
-            $product_category->parent_id = $body['parent_id'];
-        }
-        if(!empty($body['user_id'])){
-            $product_category->user_id = $body['user_id'];
-        }
-        $product_category->created_by = $session->user_id;
 
-        $product_category->creatingCustom();
+        $cart->creatingCustom();
 
-        $product_category->save();
+        $cart->save();
 
         $res = [
             'data' => [
-                'product_category' => $product_category,
+                'cart' => $cart,
             ],
         ];
         return $this->response($response, 200, $res);

@@ -7,10 +7,11 @@ use Illuminate\Contracts\Validation\DataAwareRule;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
+use App\Services\Validator;
+use App\Middleware\Validation\Rule\Exist;
+
 class ListContent implements Rule, DataAwareRule
 {
-    public $type = '';
-
     protected $data = [];
 
     /**
@@ -18,9 +19,11 @@ class ListContent implements Rule, DataAwareRule
      *
      * @return void
      */
-    public function __construct($type)
+    public function __construct(
+        protected $type,
+        protected $validations = null,
+    )
     {
-        $this->type = $type;
     }
 
     public function setData($data)
@@ -45,26 +48,71 @@ class ListContent implements Rule, DataAwareRule
         if (empty($value)) {
             return true;
         }
-        
-        foreach($value as $key => $v){
-            switch ($this->type) {
-                case 'integer':
+
+        $this->data['message_error'] = [];
+
+        switch ($this->type) {
+            case 'integer':
+                foreach($value as $key => $v){
                     if (filter_var($v, FILTER_VALIDATE_INT)) {
                         unset($value[$key]);
                     }
-                    break;
-                
-                default:
-                    if (filter_var($v, FILTER_VALIDATE_INT)) {
-                        unset($value[$key]);
+                }
+                $this->data['message_error'] = $value;
+                break;
+            /*
+            case 'object':
+                $list_validations = $this->validations;
+                $items = $value;
+
+                $validations = [];
+
+                foreach($list_validations as $list_validations_key => $list_validation){
+                    // print_r("\n");
+                    // print_r($key);
+                    // print_r("\n");
+                    // print_r($list_validation);
+                    
+                    foreach ($list_validation as $list_validation_key => $validation) {
+                        $list_validation[$list_validation_key] = $validation;
+                        $validation_splited = explode(":", $validation);
+                        if (count($validation_splited) > 1) {
+                            print_r("\n");
+                            print_r($validation_splited);
+                            switch ($validation_splited[0]) {
+                                case 'exist':
+                                    $list_validation[$list_validation_key] = new Exist('users', 'id');
+                                    break;
+                                
+                                default:
+                                    unset($list_validation[$list_validation_key]);
+                                    break;
+                            }
+                        }
+                        // print_r("\n");
+                        // print_r($validation);
                     }
-                    break;
-            }
+                }
+
+                $body = [];
+                foreach($items as $key => $item){
+                }
+
+                // $validator = new Validator();
+                // $validator->validate($body, $validators);
+
+                $this->data['message_error'] = ['1'];
+                $value = ['1'];
+
+                break;
+            */
+            
+            default:
+                $value = [];
+                break;
         }
 
-        $this->data['value'] = $value;
-
-        return $value === [];
+        return count($value) === 0;
     }
 
     /**
@@ -74,6 +122,6 @@ class ListContent implements Rule, DataAwareRule
      */
     public function message()
     {
-        return 'The :attribute must be list of ' . $this->type . ', the items with errors are: ' . implode(', ', $this->data['value'] );
+        return 'The :attribute must be list of ' . $this->type . ', the items with errors are: ' . isset($this->data['message_error']) ? implode(', ', $this->data['message_error'] ) : "";
     }
 }
