@@ -27,7 +27,6 @@ final class GetAll
             $products_categories = $products_categories->where('user_id', $user_id);
         }
         $products_categories = $products_categories->whereNull('parent_id')->with('children')->pagination((int) $params['page'], (int) $params['per_page']);
-        // print_r($products_categories['list']);
         foreach ($products_categories['list'] as $key => $value) {
             $products_categories['list'][$key]['hasChildren'] = $value['children']->count() > 0 ? true : false;
             unset($products_categories['list'][$key]['children']);
