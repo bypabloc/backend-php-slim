@@ -4,6 +4,10 @@ namespace App\Database\Migrations;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
+use App\Model\ProductCategory as ProductCategoryModel;
+use App\Model\Product as ProductModel;
+use App\Model\User;
+
 class Product
 {
     private static $table = 'products';
@@ -46,6 +50,60 @@ class Product
                 
                 $table->timestamps();
             });
+
+            $users = User::pluck('id')->all();
+            $products_categories = ProductCategoryModel::pluck('id')->all();
+
+            $items = [
+                [
+                    'name' => 'Pizza Americana',
+                    'price' => rand(30, 15000),
+                    'stock' => rand(1, 100),
+                    'user_id' => $users[array_rand($users)],
+                    'product_category_id' => $products_categories[array_rand($products_categories)],
+                ],
+                [
+                    'name' => 'Pizzas',
+                    'price' => rand(30, 15000),
+                    'stock' => rand(1, 100),
+                    'user_id' => $users[array_rand($users)],
+                    'product_category_id' => $products_categories[array_rand($products_categories)],
+                ],
+                [
+                    'name' => 'Pepitos',
+                    'price' => rand(30, 15000),
+                    'stock' => rand(1, 100),
+                    'user_id' => $users[array_rand($users)],
+                    'product_category_id' => $products_categories[array_rand($products_categories)],
+                ],
+                [
+                    'name' => 'Perros calientes',
+                    'price' => rand(30, 15000),
+                    'stock' => rand(1, 100),
+                    'user_id' => $users[array_rand($users)],
+                    'product_category_id' => $products_categories[array_rand($products_categories)],
+                ],
+                [
+                    'name' => 'Chaufas',
+                    'price' => rand(30, 15000),
+                    'stock' => rand(1, 100),
+                    'user_id' => $users[array_rand($users)],
+                    'product_category_id' => $products_categories[array_rand($products_categories)],
+                ],
+            ];
+
+            foreach ($items as $key => $item) {
+                $product = new ProductModel();
+                $product->name = $item['name'];
+                $product->price = $item['price'];
+                $product->stock = $item['stock'];
+                $product->user_id = $item['user_id'];
+                $product->product_category_id = $item['product_category_id'];
+                
+                $product->creatingCustom();
+
+                $product->save();
+            }
         }
     }
 

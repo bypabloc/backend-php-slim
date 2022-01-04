@@ -107,7 +107,16 @@ class Permission
                         'alias' => 'products.state.admin',
                         'created_by' => 1,
                     ],
-                    
+                    [
+                        'name' => 'carts',
+                        'alias' => 'carts',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'carts.get_all.admin',
+                        'alias' => 'carts.get_all.admin',
+                        'created_by' => 1,
+                    ],
                 ],
             );
         }

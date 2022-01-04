@@ -15,6 +15,7 @@ use App\Controller\Permission;
 use App\Controller\ProductCategory;
 use App\Controller\Product;
 use App\Controller\MyProfile;
+use App\Controller\Cart;
 
 use App\Middleware\Token;
 use App\Middleware\BodyParser;
@@ -48,11 +49,16 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
      * Consulta de un producto por SEO friendly URLs (slugs)
      */
 
-    $app->get('/cart', function ($request, $response, array $args) {
-        $response->getBody()->write('cart');
-        
-        return $response;
-    })->add(new CanPermission('cart'))->add(Token::class);
+    $app->group('/carts', function (RouteCollectorProxy $app) {
+
+        $app->get('/get_all', Cart\GetAll::class)->add(new \App\Middleware\Pagination())->add(new CheckPermissionAdmin('carts.get_all.admin'));
+        $app->get('/active', Cart\Active::class);
+        // $app->get('/find', Product\Find::class)->add(new \App\Middleware\Validation\Product\Find())->add(new CheckPermissionAdmin('products.find.admin'));
+        // $app->post('/create', Product\Create::class)->add(new \App\Middleware\Validation\Product\Create())->add(new CheckPermissionAdmin('products.create.admin'));
+        // $app->post('/update', Product\Update::class)->add(new \App\Middleware\Validation\Product\Update())->add(new CheckPermissionAdmin('products.update.admin'));
+        // $app->post('/state', Product\State::class)->add(new \App\Middleware\Validation\Product\State())->add(new CheckPermissionAdmin('products.state.admin'));
+
+    })->add(new CanPermission('carts'))->add(Token::class);
 
     $app->group('/products', function (RouteCollectorProxy $app) {
         

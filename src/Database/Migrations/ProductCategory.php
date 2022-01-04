@@ -4,6 +4,9 @@ namespace App\Database\Migrations;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
+use App\Model\ProductCategory as ProductCategoryModel;
+use App\Model\User;
+
 class ProductCategory
 {
     private static $table = 'products_categories';
@@ -30,6 +33,44 @@ class ProductCategory
                 
                 $table->timestamps();
             });
+
+            $users = User::pluck('id')->all();
+
+            $items = [
+                [
+                    'name' => 'Hamburguesas',
+                    'user_id' => $users[array_rand($users)],
+                ],
+                [
+                    'name' => 'Pizzas',
+                    'user_id' => $users[array_rand($users)],
+                ],
+                [
+                    'name' => 'Pepitos',
+                    'user_id' => $users[array_rand($users)],
+                ],
+                [
+                    'name' => 'Perros calientes',
+                    'user_id' => $users[array_rand($users)],
+                ],
+                [
+                    'name' => 'Chaufas',
+                    'user_id' => $users[array_rand($users)],
+                ],
+            ];
+
+            foreach ($items as $key => $item) {
+                $product_category = new ProductCategoryModel();
+                $product_category->name = $item['name'];
+                $product_category->is_active = 1;
+                // $product_category->parent_id = $item['parent_id'];
+                $product_category->user_id = $item['user_id'];
+                $product_category->created_by = 1;
+
+                $product_category->creatingCustom();
+
+                $product_category->save();
+            }
         }
     }
 

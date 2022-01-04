@@ -17,10 +17,13 @@ final class Up
     {
         Migrations\User::up();
         Migrations\Session::up();
+
         Migrations\Role::up();
         Migrations\Permission::up();
         Migrations\RolePermission::up();
+
         Migrations\AlterTableUser::up();
+
         Migrations\ProductCategory::up();
         Migrations\Product::up();
 
