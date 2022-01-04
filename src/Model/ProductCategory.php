@@ -54,18 +54,8 @@ class ProductCategory extends Model
         $this->slug = Slug::make($this->name);
     }
 
-    public function parent()
-    {
-        return $this->belongsTo(ProductCategory::class,'parent_id')->whereNull('parent_id')->with('parent');
-    }
-
     public function children()
     {
         return $this->hasMany(ProductCategory::class, 'parent_id', 'id');
-    }
-
-    public function hasChildren()
-    {
-        return $this->hasMany(ProductCategory::class, 'parent_id', 'id')->count() > 0;
     }
 }
