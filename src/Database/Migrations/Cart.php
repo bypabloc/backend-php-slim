@@ -4,6 +4,9 @@ namespace App\Database\Migrations;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
+use App\Model\User;
+use App\Model\Cart as CartModel;
+
 class Cart
 {
     private static $table = 'carts';
@@ -27,6 +30,18 @@ class Cart
                 
                 $table->timestamps();
             });
+
+            $users = User::pluck('id')->all();
+
+            $items = [];
+            for ($i=0; $i < 100; $i++) {
+                array_push($items, [
+                    'price' => rand(1, 10),
+                    'user_id' => $users[array_rand($users)],
+                ]);
+            }
+            CartModel::insert($items);
+
         }
     }
 

@@ -4,6 +4,10 @@ namespace App\Database\Migrations;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
+use App\Model\Cart as CartModel;
+use App\Model\CartProduct as CartProductModel;
+use App\Model\Product as ProductModel;
+
 class CartProduct
 {
     private static $table = 'carts_products';
@@ -25,6 +29,25 @@ class CartProduct
 
                 $table->timestamps();
             });
+
+            $carts = CartModel::select('id')->get()->toArray();
+            $products = ProductModel::select('id','price','stock')->get()->toArray();
+            
+            $carts_products = [];
+            foreach ($carts as $cart) {
+                $count = rand(1, count($products));
+                for ($i=0; $i < $count; $i++) { 
+                    $product = $products[$i];
+                    array_push($carts_products,[
+                        'cart_id' => $cart['id'],
+                        'product_id' => $product['id'],
+                        'price' => rand(1, $product['price']),
+                        'qty' => rand(1, $product['stock']),
+                    ]);
+                }
+            }
+            CartProductModel::insert($carts_products);
+
         }
     }
 
