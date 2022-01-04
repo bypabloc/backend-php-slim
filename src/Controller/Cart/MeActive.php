@@ -9,7 +9,7 @@ use App\Serializer\JsonResponse;
 
 use App\Model\Cart;
 
-final class Active
+final class MeActive
 {
     use JsonResponse;
 
@@ -18,8 +18,7 @@ final class Active
         $session = $request->getAttribute('session');
         $user_id = $session->user->id;
 
-        $cart = new Cart;
-        $cart = $carts->where('user_id',$user_id)->where('state',1)->get();
+        $cart = Cart::where('user_id',$user_id)->where('state',1)->with('products')->latest()->first();
         
         $res = [
             'data' => [

@@ -28,23 +28,23 @@ class Permission
             Capsule::table(self::$table)->insert(
                 [
                     [
-                        'name' => 'products_categories',
-                        'alias' => 'products_categories',
-                        'created_by' => 1,
-                    ],
-                    [
                         'name' => 'products',
                         'alias' => 'products',
                         'created_by' => 1,
                     ],
                     [
-                        'name' => 'cart',
-                        'alias' => 'cart',
+                        'name' => 'carts',
+                        'alias' => 'carts',
                         'created_by' => 1,
                     ],
                     [
                         'name' => 'users',
                         'alias' => 'users',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'products_categories',
+                        'alias' => 'products_categories',
                         'created_by' => 1,
                     ],
                     [
@@ -55,6 +55,11 @@ class Permission
                     [
                         'name' => 'permissions',
                         'alias' => 'permissions',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'carts.get_all.admin',
+                        'alias' => 'carts.get_all.admin',
                         'created_by' => 1,
                     ],
                     [
@@ -105,16 +110,6 @@ class Permission
                     [
                         'name' => 'products.state.admin',
                         'alias' => 'products.state.admin',
-                        'created_by' => 1,
-                    ],
-                    [
-                        'name' => 'carts',
-                        'alias' => 'carts',
-                        'created_by' => 1,
-                    ],
-                    [
-                        'name' => 'carts.get_all.admin',
-                        'alias' => 'carts.get_all.admin',
                         'created_by' => 1,
                     ],
                 ],
