@@ -25,6 +25,9 @@ final class Create
         if(!empty($body['state'])){
             $product_category->is_active = $body['state'];
         }
+        if(!empty($body['parent_id'])){
+            $product_category->parent_id = $body['parent_id'];
+        }
         if(!empty($body['user_id'])){
             $product_category->user_id = $body['user_id'];
         }

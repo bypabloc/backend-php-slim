@@ -22,6 +22,9 @@ final class Update
 
         $product_category = ProductCategory::find($body['id']);
         $product_category->name = $body['name'];
+        if(!empty($body['parent_id'])){
+            $product_category->parent_id = $body['parent_id'];
+        }
         if(!empty($body['is_active'])){
             $product_category->is_active = $body['is_active'];
         }

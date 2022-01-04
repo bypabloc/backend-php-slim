@@ -20,7 +20,11 @@ final class Find
         $session = $request->getAttribute('session');
         $params = $request->getAttribute('params');
 
-        $product_category = ProductCategory::find($params['id']);
+        // $product_category = ProductCategory::find($params['id'])->with('children');
+        $product_category = ProductCategory::where('id',$params['id'])->with('children')->get();
+        foreach ($product_category as $key => $value) {
+            $product_category[$key]['hasChildren'] = $value->children->count() > 0 ? true : false;
+        }
 
         $res = [
             'data' => [

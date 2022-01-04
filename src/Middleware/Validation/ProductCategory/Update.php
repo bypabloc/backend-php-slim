@@ -27,6 +27,7 @@ class Update
         $validators = [
             'id' => ['required', 'integer', new Exist('products_categories', 'id')],
             'name' => ['string', 'min:3', 'max:20'],
+            'parent_id' => ['integer', new Exist('products_categories', 'id')],
             'is_active' => ['boolean'],
         ];
         if ($check_permission_admin) {

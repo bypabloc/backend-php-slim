@@ -26,7 +26,7 @@ final class GetAll
             $user_id = $session->user_id;
             $products_categories = $products_categories->where('user_id', $user_id);
         }
-        $products_categories = $products_categories->pagination((int) $params['page'], (int) $params['per_page']);
+        $products_categories = $products_categories->whereNull('parent_id')->pagination((int) $params['page'], (int) $params['per_page']);
         
         $res = [
             'data' => [

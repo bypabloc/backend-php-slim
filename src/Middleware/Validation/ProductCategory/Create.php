@@ -29,6 +29,7 @@ class Create
         $validators = [
             'name' => ['required', 'string', 'max:20', new Unique('products_categories', 'name')],
             'is_active' => ['boolean'],
+            'parent_id' => ['integer', new Exist('products_categories', 'id')],
             'user_id' => ['integer', new Exist('users', 'id')],
         ];
         if (!$check_permission_admin) {

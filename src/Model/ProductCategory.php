@@ -23,6 +23,7 @@ class ProductCategory extends Model
         'slug',
         'is_active',
         'user_id',
+        'parent_id',
         'created_by',
     ];
 
@@ -51,5 +52,20 @@ class ProductCategory extends Model
     public function updatingCustom()
     {
         $this->slug = Slug::make($this->name);
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(ProductCategory::class,'parent_id')->whereNull('parent_id')->with('parent');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(ProductCategory::class, 'parent_id', 'id');
+    }
+
+    public function hasChildren()
+    {
+        return $this->hasMany(ProductCategory::class, 'parent_id', 'id')->count() > 0;
     }
 }

@@ -23,7 +23,7 @@ class Find
         $check_permission_admin = $request->getAttribute('check_permission_admin');
 
         $validators = [
-            'id' => ['required', 'integer', new Exist('products', 'id')],
+            'id' => ['required', 'integer', new Exist('products_categories', 'id')],
         ];
         if (!$check_permission_admin) {
             $user_id = $session->user_id;
