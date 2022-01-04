@@ -63,6 +63,26 @@ class Permission
                         'created_by' => 1,
                     ],
                     [
+                        'name' => 'carts.find.admin',
+                        'alias' => 'carts.find.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'carts.create.admin',
+                        'alias' => 'carts.create.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'carts.update.admin',
+                        'alias' => 'carts.update.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'carts.state.admin',
+                        'alias' => 'carts.state.admin',
+                        'created_by' => 1,
+                    ],
+                    [
                         'name' => 'products_categories.get_all.admin',
                         'alias' => 'products_categories.get_all.admin',
                         'created_by' => 1,

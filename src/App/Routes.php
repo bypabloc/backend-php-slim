@@ -53,7 +53,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
 
         $app->get('/get_all', Cart\GetAll::class)->add(new \App\Middleware\Pagination())->add(new CheckPermissionAdmin('carts.get_all.admin'));
         $app->get('/me_active', Cart\MeActive::class);
-        // $app->get('/find', Product\Find::class)->add(new \App\Middleware\Validation\Product\Find())->add(new CheckPermissionAdmin('products.find.admin'));
+        $app->get('/find', Cart\Find::class)->add(new \App\Middleware\Validation\Cart\Find())->add(new CheckPermissionAdmin('carts.find.admin'));
         // $app->post('/create', Product\Create::class)->add(new \App\Middleware\Validation\Product\Create())->add(new CheckPermissionAdmin('products.create.admin'));
         // $app->post('/update', Product\Update::class)->add(new \App\Middleware\Validation\Product\Update())->add(new CheckPermissionAdmin('products.update.admin'));
         // $app->post('/state', Product\State::class)->add(new \App\Middleware\Validation\Product\State())->add(new CheckPermissionAdmin('products.state.admin'));

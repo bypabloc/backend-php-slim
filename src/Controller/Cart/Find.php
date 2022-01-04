@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\ProductCategory;
+namespace App\Controller\Cart;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -9,7 +9,7 @@ use App\Serializer\JsonResponse;
 
 use App\Services\Hash;
 
-use App\Model\ProductCategory;
+use App\Model\Cart;
 
 final class Find
 {
@@ -20,15 +20,11 @@ final class Find
         $session = $request->getAttribute('session');
         $params = $request->getAttribute('params');
 
-        // $product_category = ProductCategory::find($params['id'])->with('children');
-        $product_category = ProductCategory::where('id',$params['id'])->with('children')->get();
-        foreach ($product_category as $key => $value) {
-            $product_category[$key]['hasChildren'] = $value->children->count() > 0 ? true : false;
-        }
-
+        $cart = Cart::where('id',$params['id'])->with('products')->get()->first();
+        
         $res = [
             'data' => [
-                'product_category' => $product_category,
+                'cart' => $cart,
             ],
         ];
         return $this->response($response, 200, $res);
