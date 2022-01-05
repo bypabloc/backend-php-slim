@@ -77,13 +77,16 @@ class Create
                 foreach ($products as $key => $product) {
                     array_push($products_ids, $product['id']);
                 }
-                $db_products = Product::whereIn('id',$products_ids)->where('user_id',$validator->data['user_id'])->select('id','stock')
+                $db_products = Product::whereIn('id',$products_ids)->where('user_id',$validator->data['user_id'])->select('id','stock','price')
                     ->get()
                     ->toArray();
                 
                 $db_products_object = [];
                 foreach ($db_products as $key => $product) {
-                    $db_products_object[$product['id']] = $product['stock'];
+                    $db_products_object[$product['id']] = [
+                        'stock' => $product['stock'],
+                        'price' => $product['price'],
+                    ];
                 }
 
                 $errors = [];
@@ -101,8 +104,11 @@ class Create
 
                 foreach ($products as $key => $product) {
                     $item_from_db = $db_products_object[$product['id']];
-                    if($product['qty'] > $item_from_db){
+                    if($product['qty'] > $item_from_db['stock']){
                         $errors["products.".$key.".qty"] = ["The indicated quantity exceeds the quantity in stock", "The quantity in stock is: $item_from_db"];
+                    }else{
+                        $products[$key]['stock'] = $item_from_db['stock'];
+                        $products[$key]['price'] = $item_from_db['price'];
                     }
                 }
                 if(!empty($errors)){
@@ -111,6 +117,8 @@ class Create
                         'errors' => $errors,
                     ]);
                 }
+
+                $validator->data['products'] = $products;
                 
             }
 

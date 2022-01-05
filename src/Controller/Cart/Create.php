@@ -32,10 +32,19 @@ final class Create
         if(!empty($body['state'])){
             $cart->state = $body['state'];
         }
+        if(empty($body['products'])){
+            $cart->price = 0;
+        }
 
         $cart->creatingCustom();
 
         $cart->save();
+
+        if(!empty($body['products'])){
+            $cart->addProducts($body['products']);
+        }
+
+        $cart = Cart::where('id',$cart->id)->with('products')->first();
 
         $res = [
             'data' => [

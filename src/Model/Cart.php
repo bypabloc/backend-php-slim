@@ -39,6 +39,34 @@ class Cart extends Model
     protected $hidden = [
     ];
 
+    public function creatingCustom()
+    {
+    }
+
+    public function addProducts($products): void
+    {
+        $carts_products = [];
+        $products_to_update = [];
+        $total = 0;
+        foreach ($products as $key => $product) {
+            array_push($carts_products,[
+                'cart_id' => $this->id,
+                'product_id' => $product['id'],
+                'qty' => $product['qty'],
+                'price' => $product['price'],
+            ]);
+            $products_to_update[$product['id']] = [
+                'stock' => (float) $product['stock'] - $product['qty'],
+            ];
+            $total += (int) $product['qty'] * (float) $product['price'];
+        }
+        CartProduct::insert($carts_products);
+        Product::updateValues($products_to_update);
+        
+
+        Cart::where('id',$this->id)->update(['price' => $total]);
+    }
+
     public function products()
     {
         return $this->belongsToMany(Product::class, 'carts_products', 'cart_id', 'product_id');

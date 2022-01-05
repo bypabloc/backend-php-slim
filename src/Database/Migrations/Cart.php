@@ -20,7 +20,7 @@ class Cart
                 $table->unsignedBigInteger('user_id');
                 $table->foreign('user_id')->references('id')->on('users');
 
-                $table->double('price', 8, 2);
+                $table->double('price', 8, 2)->nullable();
 
                 $table->string('observation')->nullable();
 

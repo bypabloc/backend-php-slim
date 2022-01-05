@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Log;
 use App\Services\Slug;
 use App\Services\Storage;
 
+use Illuminate\Database\Capsule\Manager as Capsule;
+
 class Product extends Model
 {
     use Pagination;
@@ -54,6 +56,7 @@ class Product extends Model
      * @var array
      */
     protected $casts = [
+        'stock' => 'float',
     ];
 
     /**
@@ -78,6 +81,13 @@ class Product extends Model
         $this->slug = Slug::make($this->name);
         if(isset($this->image)){
             $this->image = self::saveProductImage($this->image);
+        }
+    }
+
+    public static function updateValues(array $values)
+    {
+        foreach ($values as $key => $value) {
+            Product::find($key)->update($value);
         }
     }
 }

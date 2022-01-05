@@ -24,6 +24,16 @@ class CartProduct extends Model
     ];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'price' => 'float',
+        'qty' => 'float',
+    ];
+
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
