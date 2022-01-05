@@ -54,6 +54,7 @@ class Cart extends Model
                 'cart_id' => $this->id,
                 'product_id' => $product['id'],
                 'qty' => $product['qty'],
+                'price_old' => $product['price'],
                 'price' => $product['price'],
                 'observation' => $product['observation'],
             ]);
@@ -63,7 +64,7 @@ class Cart extends Model
             $total += (int) $product['qty'] * (float) $product['price'];
         }
         CartProduct::insert($carts_products);
-        Product::updateValues($products_to_update);
+        // Product::updateValues($products_to_update);
         
         Cart::where('id',$this->id)->update(['price' => $total]);
     }

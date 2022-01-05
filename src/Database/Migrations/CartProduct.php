@@ -24,6 +24,7 @@ class CartProduct
                 $table->unsignedBigInteger('product_id');
                 $table->foreign('product_id')->references('id')->on('products');
 
+                $table->double('price_old', 8, 2);
                 $table->double('price', 8, 2);
                 $table->double('qty', 8, 2);
 

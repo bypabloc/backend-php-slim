@@ -19,6 +19,7 @@ class CartProduct extends Model
     protected $fillable = [
         'cart_id',
         'product_id',
+        'price_old',
         'price',
         'qty',
         'observation',
@@ -31,6 +32,7 @@ class CartProduct extends Model
      * @var array
      */
     protected $casts = [
+        'price_old' => 'float',
         'price' => 'float',
         'qty' => 'float',
         'state' => 'integer',
