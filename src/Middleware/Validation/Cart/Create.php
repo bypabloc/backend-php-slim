@@ -43,6 +43,7 @@ class Create
             ],
             'products.*.id' => ['required', 'integer'],
             'products.*.qty' => ['required', 'numeric'],
+            'products.*.observation' => ['string', 'max:250'],
         ];
         if (!$check_permission_admin) {
             $body['user_id'] = $session->user_id;

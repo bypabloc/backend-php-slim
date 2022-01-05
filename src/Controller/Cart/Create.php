@@ -32,9 +32,6 @@ final class Create
         if(!empty($body['state'])){
             $cart->state = $body['state'];
         }
-        if(empty($body['products'])){
-            $cart->price = 0;
-        }
 
         $cart->creatingCustom();
 

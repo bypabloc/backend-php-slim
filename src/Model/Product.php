@@ -56,7 +56,9 @@ class Product extends Model
      * @var array
      */
     protected $casts = [
-        'stock' => 'float',
+        'price' => 'float',
+        'price' => 'float',
+        'discount_type' => 'integer',
     ];
 
     /**

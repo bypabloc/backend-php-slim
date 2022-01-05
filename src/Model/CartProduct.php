@@ -21,6 +21,8 @@ class CartProduct extends Model
         'product_id',
         'price',
         'qty',
+        'observation',
+        'state',
     ];
 
     /**
@@ -31,6 +33,7 @@ class CartProduct extends Model
     protected $casts = [
         'price' => 'float',
         'qty' => 'float',
+        'state' => 'integer',
     ];
 
     /**

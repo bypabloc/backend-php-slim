@@ -27,6 +27,9 @@ class CartProduct
                 $table->double('price', 8, 2);
                 $table->double('qty', 8, 2);
 
+                $table->string('observation')->nullable();
+                $table->smallInteger('state')->default(1);
+
                 $table->timestamps();
             });
 

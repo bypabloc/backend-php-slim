@@ -28,6 +28,7 @@ class Cart extends Model
      * @var array
      */
     protected $casts = [
+        'price' => 'float',
         'state' => 'integer',
     ];
 
@@ -54,6 +55,7 @@ class Cart extends Model
                 'product_id' => $product['id'],
                 'qty' => $product['qty'],
                 'price' => $product['price'],
+                'observation' => $product['observation'],
             ]);
             $products_to_update[$product['id']] = [
                 'stock' => (float) $product['stock'] - $product['qty'],
@@ -63,12 +65,19 @@ class Cart extends Model
         CartProduct::insert($carts_products);
         Product::updateValues($products_to_update);
         
-
         Cart::where('id',$this->id)->update(['price' => $total]);
     }
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'carts_products', 'cart_id', 'product_id');
+        return 
+            $this->belongsToMany(Product::class, 'carts_products', 'cart_id', 'product_id')
+            ->withPivot(
+                'id',
+                'price',
+                'qty',
+                'observation',
+                'state',
+            );
     }
 }
