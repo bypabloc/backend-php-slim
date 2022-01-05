@@ -51,6 +51,9 @@ class RegisterActive implements Rule, DataAwareRule
             $this->column => $this->state,
             $this->column_owner => $value,
         ]);
+        if(isset($this->data['id'])){
+            $query->where('id', '!=', $this->data['id']);
+        }
 
         return !$query->count();
     }

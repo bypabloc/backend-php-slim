@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Middleware\Validation\Product;
+namespace App\Middleware\Validation\Cart;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
@@ -10,10 +10,13 @@ use App\Serializer\JsonResponse;
 
 use App\Services\Validator;
 
+use App\Model\Product;
+
 use App\Middleware\Validation\Rule\Unique;
 use App\Middleware\Validation\Rule\Exist;
 use App\Middleware\Validation\Rule\OnlyLetters;
 use App\Middleware\Validation\Rule\IsBase64;
+use App\Middleware\Validation\Rule\RegisterActive;
 
 class Update
 {
@@ -26,27 +29,17 @@ class Update
         $check_permission_admin = $request->getAttribute('check_permission_admin');
 
         $validators = [
-            'id' => ['required', 'integer', new Exist('products', 'id')],
-            'name' => ['string', 'max:255', new Unique('products', 'name')],
-            'description' => ['string', 'max:250'],
-            'price' => ['numeric', 'min:0'],
-            'discount_type' => ['integer', 'in:0,1,2'],
-            'discount_quantity' => ['numeric', 'min:0', 'required_with:discount_type'],
-
-            'stock' => ['numeric', 'min:1'],
-
-            'image' => [new IsBase64(
-                types: ['png','jpg', 'jpeg', 'gif'],
-                size: 2048
-            ,)],
-
-            'weight' => ['string', 'min:0'],
-            'height' => ['string', 'min:0'],
-            'width' => ['string', 'min:0'],
-            'length' => ['string', 'min:0'],
-
+            'id' => ['required', 'integer', new Exist('carts', 'id')],
+            'user_id' => ['integer', new Exist('users', 'id'),],
+            'observation' => ['string', 'max:250'],
+            'address' => ['string', 'max:250'],
             'state' => ['integer', 'between:0,10'],
-            'product_category_id' => ['integer', new Exist('products_categories', 'id')],
+            'products' => [ 'array' ],
+            'products.*.id' => ['integer'],
+            'products.*.cart_product_id' => ['integer'],
+            'products.*.qty' => ['numeric'],
+            'products.*.observation' => ['string', 'max:250'],
+            'products.*.state' => ['integer'],
         ];
         if ($check_permission_admin) {
             $validators['user_id'] = ['integer', new Exist('users', 'id')];
@@ -54,22 +47,80 @@ class Update
             $user_id = $session->user_id;
             $body['user_id'] = $user_id;
             $validators['id'] = [new Exist(
-                table: 'products',
+                table: 'carts',
                 column: 'id',
                 owner: 'user_id',
             )];
         }
+        array_push(
+            $validators['user_id'], 
+            new RegisterActive(
+                table: 'carts',
+                column: 'state',
+                state: 1,
+            )
+        );
 
         try {
             $validator = new Validator();
 
             $validator->validate($body, $validators);
-    
+
             if(!$validator->isValid()){
                 $response = new Response();
                 return $this->response($response, 422, [
                     'errors' => $validator->errors,
                 ]);
+            }
+
+            if($products = $validator->data['products']){
+
+                $products_ids = [];
+                foreach ($products as $key => $product) {
+                    array_push($products_ids, $product['id']);
+                }
+                $db_products = Product::whereIn('id',$products_ids)->where('user_id',$validator->data['user_id'])->select('id','stock','price')
+                    ->get()
+                    ->toArray();
+                
+                $db_products_object = [];
+                foreach ($db_products as $key => $product) {
+                    $db_products_object[$product['id']] = [
+                        'stock' => $product['stock'],
+                        'price' => $product['price'],
+                    ];
+                }
+
+                $errors = [];
+                foreach ($products as $key => $product) {
+                    if(!isset($db_products_object[$product['id']])){
+                        $errors["products.".$key.".id"] = ["The id not found."];
+                    }
+                }
+                if(!empty($errors)){
+                    $response = new Response();
+                    return $this->response($response, 422, [
+                        'errors' => $errors,
+                    ]);
+                }
+
+                foreach ($products as $key => $product) {
+                    $item_from_db = $db_products_object[$product['id']];
+                    if($product['qty'] > $item_from_db['stock']){
+                        $errors["products.".$key.".qty"] = ["The indicated quantity exceeds the quantity in stock", "The quantity in stock is: $item_from_db"];
+                    }else{
+                        $products[$key]['stock'] = $item_from_db['stock'];
+                        $products[$key]['price'] = $item_from_db['price'];
+                    }
+                }
+                if(!empty($errors)){
+                    $response = new Response();
+                    return $this->response($response, 422, [
+                        'errors' => $errors,
+                    ]);
+                }
+
+                $validator->data['products'] = $products;
             }
             
             $request = $request->withAttribute('body', $validator->data);

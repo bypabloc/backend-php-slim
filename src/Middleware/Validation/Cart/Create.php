@@ -103,10 +103,25 @@ class Create
                     ]);
                 }
 
+                $products_qty_uniqued = [];
+                foreach ($products as $key => $product) {
+                    $item_from_db = $db_products_object[$product['id']];
+                    if(!isset($products_qty_uniqued[$product['id']])){
+                        $products_qty_uniqued[$product['id']] = [
+                            'qty' => (float) $product['qty'],
+                            'sum' => $product['qty'],
+                            'stock' => $item_from_db['stock'],
+                        ];
+                    }else{
+                        $products_qty_uniqued[$product['id']]['sum'] = $products_qty_uniqued[$product['id']]['sum'] . ' + ' . $product['qty'];
+                        $products_qty_uniqued[$product['id']]['qty'] = $products_qty_uniqued[$product['id']]['qty'] + $product['qty'];
+                    }
+                }
+
                 foreach ($products as $key => $product) {
                     $item_from_db = $db_products_object[$product['id']];
                     if($product['qty'] > $item_from_db['stock']){
-                        $errors["products.".$key.".qty"] = ["The indicated quantity exceeds the quantity in stock", "The quantity in stock is: $item_from_db"];
+                        $errors["products.".$key.".qty"] = ["The indicated quantity exceeds the quantity in stock", "The quantity in stock is: ". $item_from_db['stock']];
                     }else{
                         $products[$key]['stock'] = $item_from_db['stock'];
                         $products[$key]['price'] = $item_from_db['price'];
@@ -119,8 +134,41 @@ class Create
                     ]);
                 }
 
+                foreach ($products as $key => $product) {
+                    $item_from_db = $db_products_object[$product['id']];
+                    if($product['qty'] > $item_from_db['stock']){
+                        $errors["products.".$key.".qty"] = ["The indicated quantity exceeds the quantity in stock", "The quantity in stock is: ". $item_from_db['stock']];
+                    }else{
+                        $products[$key]['stock'] = $item_from_db['stock'];
+                        $products[$key]['price'] = $item_from_db['price'];
+                    }
+                }
+                if(!empty($errors)){
+                    $response = new Response();
+                    return $this->response($response, 422, [
+                        'errors' => $errors,
+                    ]);
+                }
+
+                foreach ($products as $key => $product) {
+                    $item_from_db = $products_qty_uniqued[$product['id']];
+                    if($item_from_db['qty'] > $item_from_db['stock']){
+                        $errors["products.".$key.".qty"] = [
+                            "The indicated quantity exceeds the quantity in stock", 
+                            "The amounts indicated were: " . $item_from_db['sum'], 
+                            "The sum is: " . $item_from_db['qty'], 
+                            "The quantity in stock is: ". $item_from_db['stock'],
+                        ];
+                    }
+                }
+                if(!empty($errors)){
+                    $response = new Response();
+                    return $this->response($response, 422, [
+                        'errors' => $errors,
+                    ]);
+                }
+
                 $validator->data['products'] = $products;
-                
             }
 
             $request = $request->withAttribute('body', $validator->data);

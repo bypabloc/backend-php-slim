@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\ProductCategory;
+namespace App\Controller\Cart;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -9,7 +9,7 @@ use App\Serializer\JsonResponse;
 
 use App\Services\Hash;
 
-use App\Model\ProductCategory;
+use App\Model\Cart;
 
 final class Update
 {
@@ -20,22 +20,10 @@ final class Update
         $session = $request->getAttribute('session');
         $body = $request->getAttribute('body');
 
-        $product_category = ProductCategory::find($body['id']);
-        $product_category->name = $body['name'];
-        if(!empty($body['parent_id'])){
-            $product_category->parent_id = $body['parent_id'];
-        }
-        if(!empty($body['is_active'])){
-            $product_category->is_active = $body['is_active'];
-        }
-
-        $product_category->updatingCustom();
-
-        $product_category->save();
-
         $res = [
             'data' => [
-                'product_category' => $product_category,
+                'cart' => [],
+                'body' => $body,
             ],
         ];
         return $this->response($response, 200, $res);
