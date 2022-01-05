@@ -16,7 +16,7 @@ use App\Middleware\Validation\Rule\Unique;
 use App\Middleware\Validation\Rule\Exist;
 use App\Middleware\Validation\Rule\OnlyLetters;
 use App\Middleware\Validation\Rule\IsBase64;
-use App\Middleware\Validation\Rule\RegisterActive;
+use App\Middleware\Validation\Rule\RegisterState;
 
 class Update
 {
@@ -54,10 +54,11 @@ class Update
         }
         array_push(
             $validators['user_id'], 
-            new RegisterActive(
+            new RegisterState(
                 table: 'carts',
                 column: 'state',
                 state: 1,
+                equals: false,
             )
         );
 
@@ -75,28 +76,80 @@ class Update
 
             if($products = $validator->data['products']){
                 
-                $products_news = [];
-                $products_update = [];
-                $products_delete = [];
+                $products_ids = [];
+                $carts_products_ids = [];
+                $carts_products_counts = [];
+
+                $products_new = [];
+                $products_upd = [];
+                $products_del = [];
+
                 foreach ($products as $key => $product) {
-                    if(!isset($product['cart_product_id']) || empty($product['cart_product_id'])){
-                        array_push($products_news, $product);
-                    }elseif (isset($product['product_id'])) {
+                    if(isset($product['cart_product_id']) || !empty($product['cart_product_id'])){
+                        array_push($carts_products_ids, $product['cart_product_id']);
                         if(isset($product['state']) && $product['state'] === 0){
-                            array_push($products_delete, $product);
+                            $products_del[$product['cart_product_id']] = [
+                                'key' => $key,
+                                'state' => 0,
+                            ];
                         }else{
-                            array_push($products_update, $product);
+                            $products_upd[$product['cart_product_id']] = [
+                                'key' => $key,
+                                'product' => $product,
+                            ];
+                        }
+                        if(isset($carts_products_counts[$product['cart_product_id']])){
+                            $carts_products_counts[$product['cart_product_id']] = [
+                                'keys' => [ ...$carts_products_counts[$product['cart_product_id']]['keys'], $key ],
+                                'count' => $carts_products_counts[$product['cart_product_id']]['count'] + 1,
+                            ];
+                        }else{
+                            $carts_products_counts[$product['cart_product_id']] = [
+                                'keys' => [ $key ],
+                                'count' => $carts_products_counts[$product['cart_product_id']] + 1,
+                            ];
+                        }
+                    }elseif (isset($product['product_id'])) {
+                        array_push($products_ids, $product['product_id']);
+                        $products_new[$product['product_id']] = [
+                            'key' => $key,
+                            'product' => $product,
+                        ];
+                    }
+                }
+
+                
+                if( count($carts_products_ids) !== count(array_unique($carts_products_ids)) ){
+
+                    $errors = [];
+
+                    foreach ($carts_products_counts as $count_data) {
+                        if ($count_data['count'] > 1) {
+                            foreach ($count_data['keys'] as $key) {
+                                $errors["products.".$key.".cart_product_id"] = ["This item is repeated"];
+                            }
                         }
                     }
+
+                    $response = new Response();
+                    return $this->response($response, 422, [
+                        'errors' => $errors,
+                    ]);
+                }
+
+                if ($products_new !== []) {
+                    
                 }
 
                 $errors = [];
                 $response = new Response();
                 return $this->response($response, 422, [
                     'errors' => $errors,
-                    'products_update' => $products_update,
-                    'products_news' => $products_news,
-                    'products_delete' => $products_delete,
+                    'products_ids' => $products_ids,
+                    'carts_products_ids' => $carts_products_ids,
+                    'products_upd' => $products_upd,
+                    'products_new' => $products_new,
+                    'products_del' => $products_del,
                 ]);
 
                 $validator->data['products'] = $products;

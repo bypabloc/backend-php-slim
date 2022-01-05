@@ -19,7 +19,7 @@ use App\Middleware\Validation\Rule\OnlyLetters;
 use App\Middleware\Validation\Rule\IsBase64;
 use App\Middleware\Validation\Rule\ListContent;
 use App\Middleware\Validation\Rule\ListNotRepeat;
-use App\Middleware\Validation\Rule\RegisterActive;
+use App\Middleware\Validation\Rule\OtherRegisterState;
 use App\Middleware\Validation\Rule\ArrayOfObjects;
 
 class Create
@@ -53,7 +53,7 @@ class Create
         }
         array_push(
             $validators['user_id'], 
-            new RegisterActive(
+            new OtherRegisterState(
                 table: 'carts',
                 column: 'state',
                 state: 1,
