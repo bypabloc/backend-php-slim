@@ -90,8 +90,17 @@ class Update
                         array_push($carts_products_ids, $product['cart_product_id']);
                         if(isset($product['state']) && $product['state'] === 0){
                             $products_del[$key] = $product;
+                            $products_del[$key] = [
+                                'cart_product_id' => $product['cart_product_id'],
+                                'observation' => $product['observation'],
+                                'state' => 0,
+                            ];
                         }else{
-                            $products_upd[$key] = $product;
+                            $products_upd[$key] = [
+                                'cart_product_id' => $product['cart_product_id'],
+                                'observation' => $product['observation'],
+                                'qty' => $product['qty'],
+                            ];
                         }
                         if(isset($carts_products_counts[$product['cart_product_id']])){
                             $carts_products_counts[$product['cart_product_id']] = [
