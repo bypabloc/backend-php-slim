@@ -39,6 +39,8 @@ final class Update
             $cart->updateProducts($body['products_upd']);
         }
 
+        $cart->updateProductsPrices();
+
         $cart->updateTotal();
 
         $cart = Cart::where('id',$cart->id)->with('products')->first();
