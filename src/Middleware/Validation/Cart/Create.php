@@ -19,7 +19,7 @@ use App\Middleware\Validation\Rule\OnlyLetters;
 use App\Middleware\Validation\Rule\IsBase64;
 use App\Middleware\Validation\Rule\ListContent;
 use App\Middleware\Validation\Rule\ListNotRepeat;
-use App\Middleware\Validation\Rule\RegisterActive;
+use App\Middleware\Validation\Rule\OtherRegisterState;
 use App\Middleware\Validation\Rule\ArrayOfObjects;
 
 class Create
@@ -53,7 +53,7 @@ class Create
         }
         array_push(
             $validators['user_id'], 
-            new RegisterActive(
+            new OtherRegisterState(
                 table: 'carts',
                 column: 'state',
                 state: 1,
@@ -78,7 +78,9 @@ class Create
                 foreach ($products as $key => $product) {
                     array_push($products_ids, $product['id']);
                 }
-                $db_products = Product::whereIn('id',$products_ids)->where('user_id',$validator->data['user_id'])->select('id','stock','price')
+                $db_products = Product::whereIn('id',$products_ids)
+                    ->where('user_id',$validator->data['user_id'])
+                    ->select('id','stock','price')
                     ->get()
                     ->toArray();
                 

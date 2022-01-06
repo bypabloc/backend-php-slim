@@ -20,9 +20,34 @@ final class Update
         $session = $request->getAttribute('session');
         $body = $request->getAttribute('body');
 
+        $cart = Cart::find($body['id']);
+        if(!empty($body['observation'])){
+            $cart->observation = $body['observation'];
+        }
+        if(!empty($body['address'])){
+            $cart->address = $body['address'];
+        }
+        if(!empty($body['state'])){
+            $cart->state = $body['state'];
+        }
+        $cart->save();
+
+        if(!empty($body['products_new'])){
+            $cart->addProducts($body['products_new']);
+        }
+        if(!empty($body['products_upd'])){
+            $cart->updateProducts($body['products_upd']);
+        }
+
+        $cart->updateProductsPrices();
+
+        $cart->updateTotal();
+
+        $cart = Cart::where('id',$cart->id)->with('products')->first();
+
         $res = [
             'data' => [
-                'cart' => [],
+                'cart' => $cart,
                 'body' => $body,
             ],
         ];

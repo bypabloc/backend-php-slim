@@ -47,26 +47,69 @@ class Cart extends Model
     public function addProducts($products): void
     {
         $carts_products = [];
-        $products_to_update = [];
-        $total = 0;
         foreach ($products as $key => $product) {
             array_push($carts_products,[
                 'cart_id' => $this->id,
+                'user_id' => $this->user_id,
                 'product_id' => $product['id'],
                 'qty' => $product['qty'],
                 'price_old' => $product['price'],
                 'price' => $product['price'],
                 'observation' => $product['observation'],
             ]);
-            $products_to_update[$product['id']] = [
-                'stock' => (float) $product['stock'] - $product['qty'],
-            ];
-            $total += (int) $product['qty'] * (float) $product['price'];
         }
         CartProduct::insert($carts_products);
-        // Product::updateValues($products_to_update);
-        
-        Cart::where('id',$this->id)->update(['price' => $total]);
+    }
+
+    public function updateProducts($carts_products): void
+    {
+        foreach ($carts_products as $key => $cart_product_item) {
+            $cart_product = CartProduct::find($cart_product_item['cart_product_id']);
+            if($cart_product_item['qty']){
+                $cart_product->qty = $cart_product_item['qty'];
+            }
+            if($cart_product_item['observation']){
+                $cart_product->observation = $cart_product_item['observation'];
+            }
+            if(isset($cart_product_item['state'])){
+                $cart_product->state = $cart_product_item['state'];
+            }
+            $cart_product->save();
+        }
+    }
+    
+    public function updateProductsPrices(): void
+    {
+        $cart = Cart::where('id',$this->id)->with('products')->first();
+        if(!empty($cart->products)){
+            $total = 0;
+            $products = $cart->products;
+            foreach ($products as $key => $product) {
+                $cart_product = CartProduct::find($product['pivot']['id']);
+                $cart_product->price = (float) $product['price'];
+                $cart_product->save();
+            }
+        }
+    }
+
+    public function updateTotal(): void
+    {
+        $cart = Cart::where('id',$this->id)->with('products')->first();
+
+        if(!empty($cart->products)){
+            $total = 0;
+            $products = $cart->products;
+            foreach ($products as $key => $product) {
+                $price = (float) $product['price'];
+                $qty = (float) $product['pivot']['qty'];
+                $state = (int) $product['pivot']['state'];
+                if($state > 0){
+                    $total += $price * $qty;
+                }
+            }
+            $cart->price = $total;
+            $cart->save();
+        }
     }
 
     public function products()
@@ -79,6 +122,8 @@ class Cart extends Model
                 'qty',
                 'observation',
                 'state',
+                'created_at',
+                'updated_at',
             );
     }
 }

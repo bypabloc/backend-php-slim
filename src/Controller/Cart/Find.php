@@ -21,6 +21,10 @@ final class Find
         $params = $request->getAttribute('params');
 
         $cart = Cart::where('id',$params['id'])->with('products')->get()->first();
+
+        $cart->updateProductsPrices();
+
+        $cart = Cart::where('id',$cart->id)->with('products')->first();
         
         $res = [
             'data' => [
