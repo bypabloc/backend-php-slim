@@ -11,6 +11,7 @@ use App\Serializer\JsonResponse;
 use App\Services\Validator;
 
 use App\Model\Product;
+use App\Model\CartProduct;
 
 use App\Middleware\Validation\Rule\Unique;
 use App\Middleware\Validation\Rule\Exist;
@@ -88,15 +89,9 @@ class Update
                     if(isset($product['cart_product_id']) || !empty($product['cart_product_id'])){
                         array_push($carts_products_ids, $product['cart_product_id']);
                         if(isset($product['state']) && $product['state'] === 0){
-                            $products_del[$product['cart_product_id']] = [
-                                'key' => $key,
-                                'state' => 0,
-                            ];
+                            $products_del[$key] = $product;
                         }else{
-                            $products_upd[$product['cart_product_id']] = [
-                                'key' => $key,
-                                'product' => $product,
-                            ];
+                            $products_upd[$key] = $product;
                         }
                         if(isset($carts_products_counts[$product['cart_product_id']])){
                             $carts_products_counts[$product['cart_product_id']] = [
@@ -111,14 +106,14 @@ class Update
                         }
                     }elseif (isset($product['product_id'])) {
                         array_push($products_ids, $product['product_id']);
-                        $products_new[$product['product_id']] = [
-                            'key' => $key,
-                            'product' => $product,
-                        ];
+
+                        $product['id'] = $product['product_id'];
+                        unset($product['product_id']);
+
+                        $products_new[$key] = $product;
                     }
                 }
 
-                
                 if( count($carts_products_ids) !== count(array_unique($carts_products_ids)) ){
 
                     $errors = [];
@@ -137,22 +132,174 @@ class Update
                     ]);
                 }
 
+                $products_qty_uniqued = [];
+                $errors = [];
                 if ($products_new !== []) {
+                    $db_products = Product::whereIn('id',$products_ids)
+                        ->where('user_id',$validator->data['user_id'])
+                        ->select('id','stock','price')
+                        ->get()
+                        ->toArray();
+
+                    $db_products_object = [];
+                    foreach ($db_products as $key => $product) {
+                        $db_products_object[$product['id']] = [
+                            'stock' => $product['stock'],
+                            'price' => $product['price'],
+                        ];
+                    }
                     
+                    foreach ($products_new as $key => $product) {
+                        if(!isset($db_products_object[$product['id']])){
+                            $errors["products.".$key.".id"] = ["The id not found."];
+                        }
+                    }
+                    if(!empty($errors)){
+                        $response = new Response();
+                        return $this->response($response, 422, [
+                            'errors' => $errors,
+                        ]);
+                    }
+
+                    foreach ($products_new as $key => $product) {
+                        $item_from_db = $db_products_object[$product['id']];
+                        if(!isset($products_qty_uniqued[$product['id']])){
+                            $products_qty_uniqued[$product['id']] = [
+                                'qty' => (float) $product['qty'],
+                                'sum' => (string) $product['qty'],
+                                'stock' => $item_from_db['stock'],
+                            ];
+                        }else{
+                            $products_qty_uniqued[$product['id']]['sum'] = $products_qty_uniqued[$product['id']]['sum'] . ' + ' . $product['qty'];
+                            $products_qty_uniqued[$product['id']]['qty'] = $products_qty_uniqued[$product['id']]['qty'] + $product['qty'];
+                        }
+                    }
                 }
 
-                $errors = [];
-                $response = new Response();
-                return $this->response($response, 422, [
-                    'errors' => $errors,
-                    'products_ids' => $products_ids,
-                    'carts_products_ids' => $carts_products_ids,
-                    'products_upd' => $products_upd,
-                    'products_new' => $products_new,
-                    'products_del' => $products_del,
-                ]);
+                $products_upd_db = [];
+                if ($products_upd !== []) {
+                    $products_upd_db = CartProduct::whereIn('id',$carts_products_ids)
+                        ->where('user_id',$validator->data['user_id'])
+                        ->with('product')
+                        ->get()
+                        ->toArray();
 
-                $validator->data['products'] = $products;
+                    $db_update_products_object = [];
+                    foreach ($products_upd_db as $key => $product) {
+                        $db_update_products_object[$product['id']] = [
+                            'stock' => $product['stock'],
+                            'price' => $product['price'],
+                            'product' => $product['product'],
+                        ];
+                    }
+
+                    foreach ($products_upd as $key => $product) {
+                        if(!isset($db_update_products_object[$product['cart_product_id']])){
+                            $errors["products.".$key.".id"] = ["The id not found."];
+                        }
+                    }
+                    if(!empty($errors)){
+                        $response = new Response();
+                        return $this->response($response, 422, [
+                            'errors' => $errors,
+                        ]);
+                    }
+
+                    foreach ($products_upd as $key => $product) {
+                        $item_from_db = $db_update_products_object[$product['cart_product_id']];
+                        if(!empty($product['qty'])){
+                            $product_db = $item_from_db['product'];
+                            if(!isset($products_qty_uniqued[$product_db['id']])){
+                                $products_qty_uniqued[$product_db['id']] = [
+                                    'qty' => (float) $product['qty'],
+                                    'sum' => $product['qty'],
+                                    // 'stock' => $item_from_db['stock'],
+                                ];
+                            }else{
+                                $products_qty_uniqued[$product_db['id']]['sum'] = $products_qty_uniqued[$product_db['id']]['sum'] . ' + ' . $product['qty'];
+                                $products_qty_uniqued[$product_db['id']]['qty'] = $products_qty_uniqued[$product_db['id']]['qty'] + $product['qty'];
+                            }
+                        }
+                    }
+                }
+                if(!empty($errors)){
+                    $response = new Response();
+                    return $this->response($response, 422, [
+                        'errors' => $errors,
+                    ]);
+                }
+
+                if ($products_new !== []) {
+                    foreach ($products_new as $key => $product) {
+                        $item_from_db = $db_products_object[$product['id']];
+                        if($product['qty'] > $item_from_db['stock']){
+                            $errors["products.".$key.".qty"] = ["The indicated quantity exceeds the quantity in stock", "The quantity in stock is: ". $item_from_db['stock']];
+                        }else{
+                            $products_new[$key]['stock'] = $item_from_db['stock'];
+                            $products_new[$key]['price'] = $item_from_db['price'];
+                        }
+                    }
+                }
+                if ($products_upd !== []) {
+                    foreach ($products_upd as $key => $product) {
+                        if(!empty($product['qty'])){
+                            $item_from_db = $db_update_products_object[$product['cart_product_id']];
+                            $item_from_db = $item_from_db['product'];
+                            if($product['qty'] > $item_from_db['stock']){
+                                $errors["products.".$key.".qty"] = ["The indicated quantity exceeds the quantity in stock", "The quantity in stock is: ". $item_from_db['stock']];
+                            }else{
+                                $products_upd[$key]['stock'] = $item_from_db['stock'];
+                                $products_upd[$key]['price'] = $item_from_db['price'];
+                            }
+                        }
+                    }
+                }
+                if(!empty($errors)){
+                    $response = new Response();
+                    return $this->response($response, 422, [
+                        'errors' => $errors,
+                    ]);
+                }
+
+                if ($products_new !== []) {
+                    foreach ($products_new as $key => $product) {
+                        $item_from_db = $db_products_object[$product['id']];
+                        if($item_from_db['qty'] > $item_from_db['stock']){
+                            $errors["products.".$key.".qty"] = [
+                                "The indicated quantity exceeds the quantity in stock", 
+                                "The amounts indicated were: " . $item_from_db['sum'], 
+                                "The sum is: " . $item_from_db['qty'], 
+                                "The quantity in stock is: ". $item_from_db['stock'],
+                            ];
+                        }
+                    }
+                }
+                if ($products_upd !== []) {
+                    foreach ($products_upd as $key => $product) {
+                        if(!empty($product['qty'])){
+                            $item_from_db = $db_update_products_object[$product['cart_product_id']];
+                            $item_from_db = $item_from_db['product'];
+                            if($item_from_db['qty'] > $item_from_db['stock']){
+                                $errors["products.".$key.".qty"] = [
+                                    "The indicated quantity exceeds the quantity in stock", 
+                                    "The amounts indicated were: " . $item_from_db['sum'], 
+                                    "The sum is: " . $item_from_db['qty'], 
+                                    "The quantity in stock is: ". $item_from_db['stock'],
+                                ];
+                            }
+                        }
+                    }
+                }
+                if(!empty($errors)){
+                    $response = new Response();
+                    return $this->response($response, 422, [
+                        'errors' => $errors,
+                    ]);
+                }
+
+                $validator->data['products_new'] = $products_new;
+                $validator->data['products_upd'] = $products_upd;
+                unset($validator->data['products']);
             }
             
             $request = $request->withAttribute('body', $validator->data);

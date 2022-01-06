@@ -78,7 +78,9 @@ class Create
                 foreach ($products as $key => $product) {
                     array_push($products_ids, $product['id']);
                 }
-                $db_products = Product::whereIn('id',$products_ids)->where('user_id',$validator->data['user_id'])->select('id','stock','price')
+                $db_products = Product::whereIn('id',$products_ids)
+                    ->where('user_id',$validator->data['user_id'])
+                    ->select('id','stock','price')
                     ->get()
                     ->toArray();
                 

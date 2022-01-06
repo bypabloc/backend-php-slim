@@ -24,6 +24,7 @@ class CartProduct extends Model
         'qty',
         'observation',
         'state',
+        'user_id',
     ];
 
     /**
@@ -32,10 +33,13 @@ class CartProduct extends Model
      * @var array
      */
     protected $casts = [
+        'cart_id' => 'integer',
+        'product_id' => 'integer',
         'price_old' => 'float',
         'price' => 'float',
         'qty' => 'float',
         'state' => 'integer',
+        'user_id' => 'integer',
     ];
 
     /**
@@ -45,4 +49,9 @@ class CartProduct extends Model
      */
     protected $hidden = [
     ];
+
+    public function product()
+    {
+        return $this->hasOne(Product::class, 'id', 'product_id');
+    }
 }

@@ -52,6 +52,7 @@ class Cart extends Model
         foreach ($products as $key => $product) {
             array_push($carts_products,[
                 'cart_id' => $this->id,
+                'user_id' => $this->user_id,
                 'product_id' => $product['id'],
                 'qty' => $product['qty'],
                 'price_old' => $product['price'],
