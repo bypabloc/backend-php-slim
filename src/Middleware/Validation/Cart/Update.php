@@ -297,8 +297,22 @@ class Update
                     ]);
                 }
 
-                $validator->data['products_new'] = $products_new;
-                $validator->data['products_upd'] = $products_upd;
+                $products_new_array = [];
+                $products_upd_array = [];
+                foreach ($products_new as $key => $value) {
+                    unset($value['stock']);
+                    array_push($products_new_array, $value);
+                }
+                foreach ($products_upd as $key => $value) {
+                    unset($value['stock']);
+                    array_push($products_upd_array, $value);
+                }
+                foreach ($products_del as $key => $value) {
+                    array_push($products_upd_array, $value);
+                }
+
+                $validator->data['products_new'] = $products_new_array;
+                $validator->data['products_upd'] = $products_upd_array;
                 unset($validator->data['products']);
             }
             

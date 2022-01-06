@@ -40,6 +40,8 @@ final class Create
         if(!empty($body['products'])){
             $cart->addProducts($body['products']);
         }
+        
+        $cart->updateTotal();
 
         $cart = Cart::where('id',$cart->id)->with('products')->first();
 
