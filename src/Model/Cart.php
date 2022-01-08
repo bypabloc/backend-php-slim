@@ -102,13 +102,13 @@ class Cart extends Model
         int $state,
     ): void
     {
-        $cart = Cart::where('id',$this->id)->with('products')->first();
-        if(!empty($cart->products)){
-            $products = $cart->products;
+        $products = $this->products;
+
+        if(!empty($products)){
             foreach ($products as $key => $product) {
 
                 $product_model = Product::find($product['id']);
-                $product_model->qty = $product_model->qty - $product['pivot']['qty'];
+                $product_model->stock = $product_model->stock - $product['pivot']['qty'];
                 $product_model->save();
 
                 $cart_product = CartProduct::find($product['pivot']['id']);

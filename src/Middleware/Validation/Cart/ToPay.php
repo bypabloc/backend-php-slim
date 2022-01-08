@@ -30,9 +30,9 @@ class ToPay
         $session = $request->getAttribute('session');
         $check_permission_admin = $request->getAttribute('check_permission_admin');
 
-        $cart = Cart::find($body['id']);
-        $cart->state = 1;
-        $cart->save();
+        // $cart = Cart::find($body['id']);
+        // $cart->state = 1;
+        // $cart->save();
 
         $validators = [
             'id' => ['required', 'integer', new Exist('carts', 'id')],
@@ -68,6 +68,39 @@ class ToPay
                 $response = new Response();
                 return $this->response($response, 422, [
                     'errors' => $validator->errors,
+                ]);
+            }
+
+            $cart_id = $validator->data['id'];
+            $cart = Cart::where('id',$cart_id)->with('products')->first();
+            if($cart['products']){
+                $products = $cart['products'];
+                
+                $errors = [];
+                $products_object = [];
+                foreach ($products as $key => $product) {
+                    if(isset($products_object[$product['id']])){
+                        $products_object[$product['id']]['qty'] += $product['pivot']['qty'];
+                    }else{
+                        $products_object[$product['id']] = [
+                            'key' => $key,
+                            'qty' => $product['pivot']['qty'],
+                            'stock' => $product['stock'],
+                            'name' => $product['name'],
+                        ];
+                    }
+                }
+                foreach ($products_object as $key => $product) {
+                    if($product['qty'] > $product['stock']){
+                        $errors["products.".$key.".qty"] = ['The product ' . $product['name'] . ' does not have enough stock.'];
+                    }
+                }
+            }
+
+            if(!empty($errors)){
+                $response = new Response();
+                return $this->response($response, 422, [
+                    'errors' => $errors,
                 ]);
             }
 
