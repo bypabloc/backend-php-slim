@@ -56,7 +56,8 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->get('/find', Cart\Find::class)->add(new \App\Middleware\Validation\Cart\Find())->add(new CheckPermissionAdmin('carts.find.admin'));
         $app->post('/create', Cart\Create::class)->add(new \App\Middleware\Validation\Cart\Create())->add(new CheckPermissionAdmin('products.create.admin'));
         $app->post('/update', Cart\Update::class)->add(new \App\Middleware\Validation\Cart\Update())->add(new CheckPermissionAdmin('products.update.admin'));
-        $app->post('/request', Cart\Find::class)->add(new \App\Middleware\Validation\Cart\Update())->add(new CheckPermissionAdmin('products.request.admin'));
+        $app->post('/request', Cart\Request::class)->add(new \App\Middleware\Validation\Cart\Request())->add(new CheckPermissionAdmin('products.request.admin'));
+        $app->post('/to_pay', Cart\ToPay::class)->add(new \App\Middleware\Validation\Cart\ToPay())->add(new CheckPermissionAdmin('products.to_pay.admin'));
 
     })->add(new CanPermission('carts'))->add(Token::class);
 

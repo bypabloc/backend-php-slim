@@ -22,6 +22,12 @@ class Cart extends Model
         'state',
     ];
 
+    const STATES = [
+        0 => 'anulado',
+        1 => 'solicitado',
+        2 => 'finalizado',
+    ];
+
     /**
      * The attributes that should be cast.
      *
@@ -87,6 +93,26 @@ class Cart extends Model
             foreach ($products as $key => $product) {
                 $cart_product = CartProduct::find($product['pivot']['id']);
                 $cart_product->price = (float) $product['price'];
+                $cart_product->save();
+            }
+        }
+    }
+    
+    public function updateProductsDiscountAmount(
+        int $state,
+    ): void
+    {
+        $cart = Cart::where('id',$this->id)->with('products')->first();
+        if(!empty($cart->products)){
+            $products = $cart->products;
+            foreach ($products as $key => $product) {
+
+                $product_model = Product::find($product['id']);
+                $product_model->qty = $product_model->qty - $product['pivot']['qty'];
+                $product_model->save();
+
+                $cart_product = CartProduct::find($product['pivot']['id']);
+                $cart_product->state = $state;
                 $cart_product->save();
             }
         }

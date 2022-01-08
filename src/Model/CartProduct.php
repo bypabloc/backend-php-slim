@@ -27,6 +27,15 @@ class CartProduct extends Model
         'user_id',
     ];
 
+    const STATES = [
+        0 => 'anulado',
+        1 => 'solicitado',
+        2 => 'pagado',
+        3 => 'enviado',
+        4 => 'recibido',
+        5 => 'finalizado',
+    ];
+
     /**
      * The attributes that should be cast.
      *

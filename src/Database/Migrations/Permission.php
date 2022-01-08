@@ -132,6 +132,16 @@ class Permission
                         'alias' => 'products.state.admin',
                         'created_by' => 1,
                     ],
+                    [
+                        'name' => 'products.request.admin',
+                        'alias' => 'products.request.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'products.to_pay.admin',
+                        'alias' => 'products.to_pay.admin',
+                        'created_by' => 1,
+                    ],
                 ],
             );
         }

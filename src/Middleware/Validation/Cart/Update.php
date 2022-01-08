@@ -189,6 +189,7 @@ class Update
                 if ($products_upd !== []) {
                     $products_upd_db = CartProduct::whereIn('id',$carts_products_ids)
                         ->where('user_id',$validator->data['user_id'])
+                        ->where('cart_id',$validator->data['id'])
                         ->with('product')
                         ->get()
                         ->toArray();

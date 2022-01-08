@@ -48,7 +48,6 @@ final class Update
         $res = [
             'data' => [
                 'cart' => $cart,
-                'body' => $body,
             ],
         ];
         return $this->response($response, 200, $res);
