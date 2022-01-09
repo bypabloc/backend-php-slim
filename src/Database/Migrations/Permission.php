@@ -48,6 +48,11 @@ class Permission
                         'created_by' => 1,
                     ],
                     [
+                        'name' => 'products_reviews',
+                        'alias' => 'products_reviews',
+                        'created_by' => 1,
+                    ],
+                    [
                         'name' => 'roles',
                         'alias' => 'roles',
                         'created_by' => 1,
@@ -105,6 +110,21 @@ class Permission
                     [
                         'name' => 'products_categories.state.admin',
                         'alias' => 'products_categories.state.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'products_reviews.create.admin',
+                        'alias' => 'products_reviews.create.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'products_reviews.update.admin',
+                        'alias' => 'products_reviews.update.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'products_reviews.state.admin',
+                        'alias' => 'products_reviews.state.admin',
                         'created_by' => 1,
                     ],
                     [

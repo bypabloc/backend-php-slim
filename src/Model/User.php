@@ -77,9 +77,9 @@ class User extends Model
         }
     }
 
-    public function generateToken()
+    public function generateToken($remember_me)
     {
-        $this->token = JWT::GenerateToken($this->uuid, $this->id);
+        $this->token = JWT::GenerateToken($this->uuid, $this->id,$remember_me);
     }
 
     public function role()

@@ -16,6 +16,9 @@
         "illuminate/http": "^8.77"
     },
     "config": {
+        "allow-plugins": {
+            "composer/package-versions-deprecated": false
+        }
     },
     "autoload": {
         "psr-4": {

@@ -19,9 +19,14 @@ class JWT
         $this->key = getenv("SECRET_KEY");
     }
 
-    public static function TimeExpired() : object
+    public static function TimeExpired($remember_me=false) : object
     {
+        
         $expirationInSeconds = 60 * 60; // one hour
+     
+        if($remember_me){
+            $expirationInSeconds = 60 * 60 * 24 * 7;
+        }
         $dateTokenExpiration = time() + $expirationInSeconds;
         $dateTokenFormat = date('Y-m-d H:i:s', $dateTokenExpiration);
 
@@ -36,9 +41,12 @@ class JWT
     public static function GenerateToken(
         string $uuid,
         int $user_id,
+        bool $remember_me,
     ) : string
     {
-        $timeExpired = self::TimeExpired();
+
+
+        $timeExpired = self::TimeExpired($remember_me);
 
         $dateTokenExpiration = $timeExpired->dateTokenExpiration;
         $dateTokenFormat = $timeExpired->dateTokenFormat;
