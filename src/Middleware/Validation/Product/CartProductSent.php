@@ -18,7 +18,7 @@ use App\Middleware\Validation\Rule\Exist;
 use App\Middleware\Validation\Rule\OnlyLetters;
 use App\Middleware\Validation\Rule\IsBase64;
 
-class CartProductPaid
+class CartProductSent
 {
     use RequestValidatorErrors;
     use JsonResponse;
@@ -27,6 +27,11 @@ class CartProductPaid
     {
         $body = $request->getAttribute('body');
         $session = $request->getAttribute('session');
+
+        $cart_product = CartProduct::find($body['cart_product_id']);
+        $cart_product->state = 2;
+        $cart_product->save();
+
 
         $validators = [
             'cart_product_id' => ['required', 'integer', new Exist('carts_products', 'id')],
@@ -60,23 +65,14 @@ class CartProductPaid
                 }
             }
 
-            if ($cart_product['state'] != 1) {
+            if ($cart_product['state'] != 2) {
                 $response = new Response();
                 return $this->response($response, 422, [
                     'errors' => [
                         'cart_product_id' => [
-                            'State product must be: ' . CartProduct::STATES[1],
+                            'State product must be: ' . CartProduct::STATES[2],
                             'State current is: ' . CartProduct::STATES[$cart_product['state']],
                         ],
-                    ],
-                ]);
-            }
-
-            if ($cart_product['qty'] > $cart_product['product']['stock']) {
-                $response = new Response();
-                return $this->response($response, 422, [
-                    'errors' => [
-                        'cart_product_id' => ['The product stock is not enough.'],
                     ],
                 ]);
             }

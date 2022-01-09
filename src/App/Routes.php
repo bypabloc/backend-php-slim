@@ -77,6 +77,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->post('/state', Product\State::class)->add(new \App\Middleware\Validation\Product\State())->add(new CheckPermissionAdmin('products.state.admin'));
         
         $app->post('/cart_product_paid', Product\CartProductPaid::class)->add(new \App\Middleware\Validation\Product\CartProductPaid())->add(new CheckPermissionAdmin('products.state.admin'));
+        $app->post('/cart_product_sent', Product\CartProductSent::class)->add(new \App\Middleware\Validation\Product\CartProductSent())->add(new CheckPermissionAdmin('products.state.admin'));
 
     })->add(new CanPermission('products'))->add(Token::class);
 
