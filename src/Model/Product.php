@@ -92,4 +92,112 @@ class Product extends Model
             Product::find($key)->update($value);
         }
     }
+
+    public function salesCanceled()
+    {
+        return 
+            $this->belongsToMany(Cart::class, 'carts_products', 'product_id', 'cart_id')
+                ->withPivot(
+                    'id',
+                    'price_old',
+                    'price',
+                    'qty',
+                    'observation',
+                    'state',
+                    'created_at',
+                    'updated_at',
+                )
+                ->as('product')
+                ->where('carts_products.state', 0)
+                ->where('carts.state', 2);
+    }
+    public function salesRequest()
+    {
+        return 
+            $this->belongsToMany(Cart::class, 'carts_products', 'product_id', 'cart_id')
+                ->withPivot(
+                    'id',
+                    'price_old',
+                    'price',
+                    'qty',
+                    'observation',
+                    'state',
+                    'created_at',
+                    'updated_at',
+                )
+                ->as('product')
+                ->where('carts_products.state', 1)
+                ->where('carts.state', 2);
+    }
+    public function salesPaid()
+    {
+        return 
+            $this->belongsToMany(Cart::class, 'carts_products', 'product_id', 'cart_id')
+                ->withPivot(
+                    'id',
+                    'price_old',
+                    'price',
+                    'qty',
+                    'observation',
+                    'state',
+                    'created_at',
+                    'updated_at',
+                )
+                ->as('product')
+                ->where('carts_products.state', 2)
+                ->where('carts.state', 2);
+    }
+    public function salesSent()
+    {
+        return 
+            $this->belongsToMany(Cart::class, 'carts_products', 'product_id', 'cart_id')
+                ->withPivot(
+                    'id',
+                    'price',
+                    'qty',
+                    'observation',
+                    'state',
+                    'created_at',
+                    'updated_at',
+                )
+                ->as('product')
+                ->where('carts_products.state', 3)
+                ->where('carts.state', 2);
+    }
+    public function salesDelivered()
+    {
+        return 
+            $this->belongsToMany(Cart::class, 'carts_products', 'product_id', 'cart_id')
+                ->withPivot(
+                    'id',
+                    'price_old',
+                    'price',
+                    'qty',
+                    'observation',
+                    'state',
+                    'created_at',
+                    'updated_at',
+                )
+                ->as('product')
+                ->where('carts_products.state', 4)
+                ->where('carts.state', 2);
+    }
+    public function salesFinalized()
+    {
+        return 
+            $this->belongsToMany(Cart::class, 'carts_products', 'product_id', 'cart_id')
+                ->withPivot(
+                    'id',
+                    'price_old',
+                    'price',
+                    'qty',
+                    'observation',
+                    'state',
+                    'created_at',
+                    'updated_at',
+                )
+                ->as('product')
+                ->where('carts_products.state', 5)
+                ->where('carts.state', 2);
+    }
 }

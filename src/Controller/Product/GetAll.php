@@ -24,8 +24,15 @@ final class GetAll
         if (!$check_permission_admin) {
             $session = $request->getAttribute('session');
             $user_id = $session->user_id;
-            $products = $products->where('user_id', $user_id);
+            $products = $products->where('user_id', '!=',$user_id);
         }
+        $products = $products->with('salesCanceled');
+        $products = $products->with('salesRequest');
+        $products = $products->with('salesPaid');
+        $products = $products->with('salesSent');
+        $products = $products->with('salesDelivered');
+        $products = $products->with('salesFinalized');
+
         $products = $products->pagination((int) $params['page'], (int) $params['per_page']);
         
         $res = [
