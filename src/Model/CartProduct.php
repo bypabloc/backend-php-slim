@@ -28,12 +28,12 @@ class CartProduct extends Model
     ];
 
     const STATES = [
-        0 => 'anulado',
-        1 => 'solicitado',
-        2 => 'pagado',
-        3 => 'enviado',
-        4 => 'recibido',
-        5 => 'finalizado',
+        0 => 'anulado', // seller y buyer -> only has been sent (step 3)
+        1 => 'solicitado', // buyer
+        2 => 'pagado', // seller
+        3 => 'enviado', // seller
+        4 => 'recibido', // buyer
+        5 => 'finalizado', // seller
     ];
 
     /**

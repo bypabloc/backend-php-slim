@@ -61,6 +61,13 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
 
     })->add(new CanPermission('carts'))->add(Token::class);
 
+    // 0 => 'anulado', // seller y buyer -> only has been sent (step 3)
+    // 1 => 'solicitado', // buyer
+    // 2 => 'pagado', // seller
+    // 3 => 'enviado', // seller
+    // 4 => 'recibido', // buyer
+    // 5 => 'finalizado', // seller
+
     $app->group('/products', function (RouteCollectorProxy $app) {
         
         $app->get('/get_all', Product\GetAll::class)->add(new \App\Middleware\Pagination())->add(new CheckPermissionAdmin('products.get_all.admin'));
@@ -68,6 +75,8 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->post('/create', Product\Create::class)->add(new \App\Middleware\Validation\Product\Create())->add(new CheckPermissionAdmin('products.create.admin'));
         $app->post('/update', Product\Update::class)->add(new \App\Middleware\Validation\Product\Update())->add(new CheckPermissionAdmin('products.update.admin'));
         $app->post('/state', Product\State::class)->add(new \App\Middleware\Validation\Product\State())->add(new CheckPermissionAdmin('products.state.admin'));
+        
+        $app->post('/cart_product_', Product\State::class)->add(new \App\Middleware\Validation\Product\State())->add(new CheckPermissionAdmin('products.state.admin'));
 
     })->add(new CanPermission('products'))->add(Token::class);
 

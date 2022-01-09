@@ -27,7 +27,7 @@ final class Update
         if(!empty($body['address'])){
             $cart->address = $body['address'];
         }
-        if(!empty($body['state'])){
+        if(isset($body['state'])){
             $cart->state = $body['state'];
         }
         $cart->save();
