@@ -73,4 +73,9 @@ class CartProduct extends Model
     {
         $this->product->discountStock($this->qty);
     }
+
+    public function productRestoreStock(): void
+    {
+        $this->product->restoreStock($this->qty);
+    }
 }

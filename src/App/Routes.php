@@ -60,15 +60,9 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->post('/to_pay', Cart\ToPay::class)->add(new \App\Middleware\Validation\Cart\ToPay())->add(new CheckPermissionAdmin('carts.to_pay.admin'));
 
         $app->post('/cart_product_delivered', Cart\CartProductDelivered::class)->add(new \App\Middleware\Validation\Cart\CartProductDelivered())->add(new CheckPermissionAdmin('carts.cart_product_delivered.admin'));
+        $app->post('/cart_product_canceled', Cart\CartProductCanceled::class)->add(new \App\Middleware\Validation\Cart\CartProductCanceled())->add(new CheckPermissionAdmin('carts.cart_product_canceled.admin'));
 
     })->add(new CanPermission('carts'))->add(Token::class);
-
-    // 0 => 'anulado', // seller y buyer -> only has been sent (step 3)
-    // 1 => 'solicitado', // buyer
-    // 2 => 'pagado', // seller
-    // 3 => 'enviado', // seller
-    // 4 => 'recibido', // buyer
-    // 5 => 'finalizado', // seller
 
     $app->group('/products', function (RouteCollectorProxy $app) {
         

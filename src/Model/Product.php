@@ -96,6 +96,15 @@ class Product extends Model
         $this->save();
     }
 
+    public function restoreStock(
+        int $qty,
+    )
+    {
+        $this->stock += $qty;
+        $this->save();
+    }
+    
+
     public static function updateValues(array $values)
     {
         foreach ($values as $key => $value) {
