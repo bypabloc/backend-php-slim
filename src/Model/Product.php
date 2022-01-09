@@ -15,6 +15,8 @@ class Product extends Model
     use Pagination;
     use Storage;
 
+    public $user_id;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -149,20 +151,19 @@ class Product extends Model
     }
     public function salesSent()
     {
-        return 
-            $this->belongsToMany(Cart::class, 'carts_products', 'product_id', 'cart_id')
-                ->withPivot(
-                    'id',
-                    'price',
-                    'qty',
-                    'observation',
-                    'state',
-                    'created_at',
-                    'updated_at',
-                )
-                ->as('product')
-                ->where('carts_products.state', 3)
-                ->where('carts.state', 2);
+        return $this->belongsToMany(Cart::class, 'carts_products', 'product_id', 'cart_id')
+            ->withPivot(
+                'id',
+                'price',
+                'qty',
+                'observation',
+                'state',
+                'created_at',
+                'updated_at',
+            )
+            ->as('product')
+            ->where('carts_products.state', 3)
+            ->where('carts.state', 2);
     }
     public function salesDelivered()
     {

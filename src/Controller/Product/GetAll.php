@@ -20,18 +20,32 @@ final class GetAll
         $params = $request->getAttribute('params');
 
         $check_permission_admin = $request->getAttribute('check_permission_admin');
-        $products = new Product;
+        $session = $request->getAttribute('session');
+        $user_id = $session->user_id;
+
+        $products = new Product();
         if (!$check_permission_admin) {
-            $session = $request->getAttribute('session');
-            $user_id = $session->user_id;
-            $products = $products->where('user_id', '!=',$user_id);
+            $products = $products->where('user_id', $user_id);
         }
-        $products = $products->with('salesCanceled');
-        $products = $products->with('salesRequest');
-        $products = $products->with('salesPaid');
-        $products = $products->with('salesSent');
-        $products = $products->with('salesDelivered');
-        $products = $products->with('salesFinalized');
+
+        $products = $products->with(['salesCanceled' => function ($query) use ($user_id) {
+            $query->where('carts_products.user_id', '!=', $user_id);
+        }]);
+        $products = $products->with(['salesRequest' => function ($query) use ($user_id) {
+            $query->where('carts_products.user_id', '!=', $user_id);
+        }]);
+        $products = $products->with(['salesPaid' => function ($query) use ($user_id) {
+            $query->where('carts_products.user_id', '!=', $user_id);
+        }]);
+        $products = $products->with(['salesSent' => function ($query) use ($user_id) {
+            $query->where('carts_products.user_id', '!=', $user_id);
+        }]);
+        $products = $products->with(['salesDelivered' => function ($query) use ($user_id) {
+            $query->where('carts_products.user_id', '!=', $user_id);
+        }]);
+        $products = $products->with(['salesFinalized' => function ($query) use ($user_id) {
+            $query->where('carts_products.user_id', '!=', $user_id);
+        }]);
 
         $products = $products->pagination((int) $params['page'], (int) $params['per_page']);
         
