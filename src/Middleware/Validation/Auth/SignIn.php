@@ -26,6 +26,7 @@ class SignIn
             $validator->validate($body, [
                 'user' => ['required', 'string', 'min:3', 'max:20'],
                 'password' => ['required', 'string', 'min:6', 'max:50'],
+                'remember_me'=>['boolean'],
             ]);
     
             if(!$validator->isValid()){

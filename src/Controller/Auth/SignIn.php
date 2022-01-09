@@ -38,7 +38,7 @@ final class SignIn
             ]);
         }
 
-        $user->generateToken();
+        $user->generateToken($body['remember_me']);
 
         $data = [
             'user' => [
