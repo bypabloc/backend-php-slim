@@ -54,10 +54,12 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->get('/get_all', Cart\GetAll::class)->add(new \App\Middleware\Pagination())->add(new CheckPermissionAdmin('carts.get_all.admin'));
         $app->get('/me_active', Cart\MeActive::class);
         $app->get('/find', Cart\Find::class)->add(new \App\Middleware\Validation\Cart\Find())->add(new CheckPermissionAdmin('carts.find.admin'));
-        $app->post('/create', Cart\Create::class)->add(new \App\Middleware\Validation\Cart\Create())->add(new CheckPermissionAdmin('products.create.admin'));
-        $app->post('/update', Cart\Update::class)->add(new \App\Middleware\Validation\Cart\Update())->add(new CheckPermissionAdmin('products.update.admin'));
-        $app->post('/request', Cart\Request::class)->add(new \App\Middleware\Validation\Cart\Request())->add(new CheckPermissionAdmin('products.request.admin'));
-        $app->post('/to_pay', Cart\ToPay::class)->add(new \App\Middleware\Validation\Cart\ToPay())->add(new CheckPermissionAdmin('products.to_pay.admin'));
+        $app->post('/create', Cart\Create::class)->add(new \App\Middleware\Validation\Cart\Create())->add(new CheckPermissionAdmin('carts.create.admin'));
+        $app->post('/update', Cart\Update::class)->add(new \App\Middleware\Validation\Cart\Update())->add(new CheckPermissionAdmin('carts.update.admin'));
+        $app->post('/request', Cart\Request::class)->add(new \App\Middleware\Validation\Cart\Request())->add(new CheckPermissionAdmin('carts.request.admin'));
+        $app->post('/to_pay', Cart\ToPay::class)->add(new \App\Middleware\Validation\Cart\ToPay())->add(new CheckPermissionAdmin('carts.to_pay.admin'));
+
+        $app->post('/cart_product_delivered', Cart\CartProductDelivered::class)->add(new \App\Middleware\Validation\Cart\CartProductDelivered())->add(new CheckPermissionAdmin('carts.cart_product_delivered.admin'));
 
     })->add(new CanPermission('carts'))->add(Token::class);
 

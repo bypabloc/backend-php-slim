@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Middleware\Validation\Product;
+namespace App\Middleware\Validation\Cart;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
@@ -18,7 +18,7 @@ use App\Middleware\Validation\Rule\Exist;
 use App\Middleware\Validation\Rule\OnlyLetters;
 use App\Middleware\Validation\Rule\IsBase64;
 
-class CartProductSent
+class CartProductDelivered
 {
     use RequestValidatorErrors;
     use JsonResponse;
@@ -54,7 +54,7 @@ class CartProductSent
             $cart_product->product;
 
             if (!$check_permission_admin) {
-                if ($cart_product['product']['user_id'] != $session->user_id) {
+                if ($cart_product['user_id'] != $session->user_id) {
                     $response = new Response();
                     return $this->response($response, 422, [
                         'errors' => [
@@ -64,12 +64,12 @@ class CartProductSent
                 }
             }
 
-            if ($cart_product['state'] != 2) {
+            if ($cart_product['state'] != 3) {
                 $response = new Response();
                 return $this->response($response, 422, [
                     'errors' => [
                         'cart_product_id' => [
-                            'State product must be: ' . CartProduct::STATES[2],
+                            'State product must be: ' . CartProduct::STATES[3],
                             'State current is: ' . CartProduct::STATES[$cart_product['state']],
                         ],
                     ],

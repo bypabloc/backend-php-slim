@@ -27,7 +27,7 @@ class CartProduct extends Model
         'user_id',
     ];
 
-    public const STATES = [
+    const STATES = [
         0 => 'Canceled', // seller y buyer -> only has been sent (step 3)
         1 => 'Request', // buyer
         2 => 'Paid', // seller
