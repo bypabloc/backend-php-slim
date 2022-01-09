@@ -88,6 +88,14 @@ class Product extends Model
         }
     }
 
+    public function discountStock(
+        int $qty,
+    )
+    {
+        $this->stock -= $qty;
+        $this->save();
+    }
+
     public static function updateValues(array $values)
     {
         foreach ($values as $key => $value) {

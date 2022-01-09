@@ -27,13 +27,13 @@ class CartProduct extends Model
         'user_id',
     ];
 
-    const STATES = [
-        0 => 'anulado', // seller y buyer -> only has been sent (step 3)
-        1 => 'solicitado', // buyer
-        2 => 'pagado', // seller
-        3 => 'enviado', // seller
-        4 => 'recibido', // buyer
-        5 => 'finalizado', // seller
+    public const STATES = [
+        0 => 'Canceled', // seller y buyer -> only has been sent (step 3)
+        1 => 'Request', // buyer
+        2 => 'Paid', // seller
+        3 => 'Sent', // seller
+        4 => 'Delivered', // buyer
+        5 => 'Finalized', // seller
     ];
 
     /**
@@ -62,5 +62,15 @@ class CartProduct extends Model
     public function product()
     {
         return $this->hasOne(Product::class, 'id', 'product_id');
+    }
+
+    public function cart()
+    {
+        return $this->hasOne(Cart::class, 'id', 'product_id');
+    }
+
+    public function productDiscountStock(): void
+    {
+        $this->product->discountStock($this->qty);
     }
 }
