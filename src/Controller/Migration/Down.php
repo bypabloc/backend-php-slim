@@ -21,6 +21,7 @@ final class Down
 
         Migrations\Product::down();
         Migrations\ProductCategory::down();
+        Migrations\Image::down();
         Migrations\AlterTableUser::down();
         Migrations\RolePermission::down();
         Migrations\Permission::down();
