@@ -66,8 +66,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->get('/get_all', ProductReview\GetAll::class)->add(new \App\Middleware\Pagination());
         $app->get('/find', ProductReview\Find::class)->add(new \App\Middleware\Validation\ProductReview\Find());
         $app->post('/create', ProductReview\Create::class)->add(new \App\Middleware\Validation\ProductReview\Create())->add(new CheckPermissionAdmin('products_reviews.create.admin'));
-        // $app->post('/update', Cart\Update::class)->add(new \App\Middleware\Validation\Cart\Update())->add(new CheckPermissionAdmin('products_reviews.update.admin'));
-        // // $app->post('/state', Cart\State::class)->add(new \App\Middleware\Validation\Cart\State())->add(new CheckPermissionAdmin('products_reviews.state.admin'));
+        $app->post('/update', ProductReview\Update::class)->add(new \App\Middleware\Validation\ProductReview\Update())->add(new CheckPermissionAdmin('products_reviews.update.admin'));
 
     })->add(new CanPermission('products_reviews'))->add(Token::class);
 
