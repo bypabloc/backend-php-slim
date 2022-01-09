@@ -20,7 +20,7 @@ class ProductReview
                 $table->unsignedBigInteger('parent_id')->nullable();
                 $table->foreign('parent_id')->references('id')->on(self::$table);
 
-                $table->string('content')->nullable();
+                $table->string('content');
 
                 $table->smallInteger('rating')->default(5);
 
