@@ -48,6 +48,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
      * Consulta de todos los productos en general
      * Consulta de un producto por SEO friendly URLs (slugs)
      */
+    
 
     $app->group('/carts', function (RouteCollectorProxy $app) {
 
@@ -75,7 +76,8 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->post('/cart_product_paid', Product\CartProductPaid::class)->add(new \App\Middleware\Validation\Product\CartProductPaid())->add(new CheckPermissionAdmin('products.state.admin'));
         $app->post('/cart_product_sent', Product\CartProductSent::class)->add(new \App\Middleware\Validation\Product\CartProductSent())->add(new CheckPermissionAdmin('products.state.admin'));
         $app->post('/cart_product_finalized', Product\CartProductFinalized::class)->add(new \App\Middleware\Validation\Product\CartProductFinalized())->add(new CheckPermissionAdmin('products.state.admin'));
-
+        $app->post('/cart_product_canceled', Cart\CartProductCanceled::class)->add(new \App\Middleware\Validation\Cart\CartProductCanceled())->add(new CheckPermissionAdmin('carts.cart_product_canceled.admin'));
+        
     })->add(new CanPermission('products'))->add(Token::class);
 
     $app->group('/products_categories', function (RouteCollectorProxy $app) {
