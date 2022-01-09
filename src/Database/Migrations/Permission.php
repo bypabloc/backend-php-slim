@@ -43,6 +43,11 @@ class Permission
                         'created_by' => 1,
                     ],
                     [
+                        'name' => 'products_reviews',
+                        'alias' => 'products_reviews',
+                        'created_by' => 1,
+                    ],
+                    [
                         'name' => 'products_categories',
                         'alias' => 'products_categories',
                         'created_by' => 1,
