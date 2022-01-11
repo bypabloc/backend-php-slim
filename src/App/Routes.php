@@ -14,6 +14,7 @@ use App\Controller\Auth;
 use App\Controller\Permission;
 use App\Controller\ProductCategory;
 use App\Controller\Product;
+use App\Controller\ProductReview;
 use App\Controller\MyProfile;
 use App\Controller\Cart;
 
@@ -70,8 +71,19 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
 
     })->add(new CanPermission('carts'))->add(Token::class);
 
+    $app->group('/products_reviews', function (RouteCollectorProxy $app) {
+
+        $app->get('/get_all', ProductReview\GetAll::class)->add(new \App\Middleware\Pagination());
+        $app->get('/find', ProductReview\Find::class)->add(new \App\Middleware\Validation\ProductReview\Find());
+        $app->post('/create', ProductReview\Create::class)->add(new \App\Middleware\Validation\ProductReview\Create())->add(new CheckPermissionAdmin('products_reviews.create.admin'));
+        $app->post('/update', ProductReview\Update::class)->add(new \App\Middleware\Validation\ProductReview\Update())->add(new CheckPermissionAdmin('products_reviews.update.admin'));
+
+    })->add(new CanPermission('products_reviews'))->add(Token::class);
+
+
+
     $app->group('/products', function (RouteCollectorProxy $app) {
-        
+    
         $app->get('/get_all', Product\GetAll::class)->add(new \App\Middleware\Pagination())->add(new CheckPermissionAdmin('products.get_all.admin'));
         $app->get('/find', Product\Find::class)->add(new \App\Middleware\Validation\Product\Find())->add(new CheckPermissionAdmin('products.find.admin'));
         $app->post('/create', Product\Create::class)->add(new \App\Middleware\Validation\Product\Create())->add(new CheckPermissionAdmin('products.create.admin'));

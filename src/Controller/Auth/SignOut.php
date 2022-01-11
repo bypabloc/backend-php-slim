@@ -22,7 +22,7 @@ final class SignOut
 
             $body = $params['data'] ?? [];
 
-            $session = $params['session'];
+            $session = $request->getAttribute('session');
             JWT::DestroySession($session);
     
             $data = [

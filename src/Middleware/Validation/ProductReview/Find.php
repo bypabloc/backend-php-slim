@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Middleware\Validation\Auth;
+namespace App\Middleware\Validation\ProductReview;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
@@ -10,24 +10,35 @@ use App\Serializer\JsonResponse;
 
 use App\Services\Validator;
 
-use App\Middleware\Validation\Rule\Unique;
+use App\Middleware\Validation\Rule\Exist;
 
-class SignIn
+class Find
 {
     use JsonResponse;
     
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
-        $body = $request->getAttribute('body');
+        $params = $request->getAttribute('params');
+        $session = $request->getAttribute('session');
+        
+        $check_permission_admin = $request->getAttribute('check_permission_admin');
+        $validators = [
+            'id' => ['required', 'integer', new Exist('products_reviews', 'id')],
+        ];
+        if (!$check_permission_admin) {
+            $user_id = $session->user_id;
+            $params['user_id'] = $user_id;
+            $validators['id'] = ['required', 'integer', new Exist(
+                table: 'products_reviews',
+                column: 'id',
+                owner: 'user_id',
+            )];
+        }
 
         try {
             $validator = new Validator();
 
-            $validator->validate($body, [
-                'user' => ['required', 'string', 'min:3', 'max:20'],
-                'password' => ['required', 'string', 'min:6', 'max:50'],
-                'remember_me'=>['boolean'],
-            ]);
+            $validator->validate($params, $validators);
     
             if(!$validator->isValid()){
                 $response = new Response();
@@ -36,7 +47,7 @@ class SignIn
                 ]);
             }
             
-            $request = $request->withAttribute('body', $validator->data);
+            $request = $request->withAttribute('params', $validator->data);
             
             return $handler->handle($request);
 
