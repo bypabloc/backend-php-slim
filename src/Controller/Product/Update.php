@@ -21,49 +21,51 @@ final class Update
         $body = $request->getAttribute('body');
 
         $product = Product::find($body['id']);
-        if(!empty($body['name'])){
+        if(isset($body['name'])){
             $product->name = $body['name'];
         }
-        if(!empty($body['description'])){
+        if(isset($body['description'])){
             $product->description = $body['description'];
         }
-        if(!empty($body['price'])){
+        if(isset($body['price'])){
             $product->price = $body['price'];
         }
-        if(!empty($body['discount_type'])){
+        if(isset($body['discount_type'])){
             $product->discount_type = $body['discount_type'];
         }
-        if(!empty($body['discount_quantity'])){
+        if(isset($body['discount_quantity'])){
             $product->discount_quantity = $body['discount_quantity'];
         }
-        if(!empty($body['stock'])){
+        if(isset($body['stock'])){
             $product->stock = $body['stock'];
         }
-        if(!empty($body['image'])){
-            if(!empty($product->image)){
+        if(isset($body['image'])){
+            if($product->image){
                 $product->deleteFile($product->image);
             }
             $product->image = $body['image'];
+        }else{
+            unset($product->image);
         }
-        if(!empty($body['weight'])){
+        if(isset($body['weight'])){
             $product->weight = $body['weight'];
         }
-        if(!empty($body['height'])){
+        if(isset($body['height'])){
             $product->height = $body['height'];
         }
-        if(!empty($body['width'])){
+        if(isset($body['width'])){
             $product->width = $body['width'];
         }
-        if(!empty($body['length'])){
+        if(isset($body['length'])){
             $product->length = $body['length'];
         }
-        if(!empty($body['likes'])){
+        if(isset($body['likes'])){
             $product->likes = $body['likes'];
         }
-        if(!empty($body['state'])){
+        if(isset($body['state'])){
             $product->state = $body['state'];
         }
-        if(!empty($body['product_category_id'])){
+        if(isset($body['product_category_id'])){
             $product->product_category_id = $body['product_category_id'];
         }
         

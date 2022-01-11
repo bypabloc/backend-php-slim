@@ -22,43 +22,36 @@ final class Create
 
         $product = new Product();
         $product->name = $body['name'];
-        if(!empty($body['description'])){
+        if(isset($body['description'])){
             $product->description = $body['description'];
         }
         $product->price = $body['price'];
-        if(!empty($body['discount_type'])){
+        if(isset($body['discount_type'])){
             $product->discount_type = $body['discount_type'];
         }
-        if(!empty($body['discount_quantity'])){
+        if(isset($body['discount_quantity'])){
             $product->discount_quantity = $body['discount_quantity'];
         }
         $product->stock = $body['stock'];
-        if(!empty($body['image'])){
+        if(isset($body['image'])){
             $product->image = $body['image'];
         }
-        if(!empty($body['weight'])){
+        if(isset($body['weight'])){
             $product->weight = $body['weight'];
         }
-        if(!empty($body['height'])){
+        if(isset($body['height'])){
             $product->height = $body['height'];
         }
-        if(!empty($body['width'])){
+        if(isset($body['width'])){
             $product->width = $body['width'];
         }
-        if(!empty($body['length'])){
+        if(isset($body['length'])){
             $product->length = $body['length'];
         }
-        if(!empty($body['likes'])){
-            $product->likes = $body['likes'];
-        }
-        if(!empty($body['state'])){
+        if(isset($body['state'])){
             $product->state = $body['state'];
         }
-        if(!empty($body['user_id'])){
-            $product->user_id = $body['user_id'];
-        }else{
-            $product->user_id = $session->user_id;
-        }
+        $product->user_id = $body['user_id'];
         $product->product_category_id = $body['product_category_id'];
 
         $product->creatingCustom();

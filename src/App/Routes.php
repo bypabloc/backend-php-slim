@@ -44,11 +44,16 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
     });
 
     /**
-     * Consulta de todos los productos por usuario
-     * Consulta de todos los productos en general
-     * Consulta de un producto por SEO friendly URLs (slugs)
+     * Consulta todas las categorias que contengan productos activos y que sean padres principales
+     * Consulta todos los usuarios que tengan productos activos para vender
+     * 
+     * Consulta de un producto por SEO friendly URLs "/{productSlug}"
+     * 
+     * /product/{slug-name}
+     * 
+     * Consulta de todos los productos por usuario "/{userNickname}"
+     * Consulta de todos los productos de una categoria "/{categoryName}"
      */
-    
 
     $app->group('/carts', function (RouteCollectorProxy $app) {
 
@@ -77,7 +82,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->post('/cart_product_sent', Product\CartProductSent::class)->add(new \App\Middleware\Validation\Product\CartProductSent())->add(new CheckPermissionAdmin('products.state.admin'));
         $app->post('/cart_product_finalized', Product\CartProductFinalized::class)->add(new \App\Middleware\Validation\Product\CartProductFinalized())->add(new CheckPermissionAdmin('products.state.admin'));
         $app->post('/cart_product_canceled', Cart\CartProductCanceled::class)->add(new \App\Middleware\Validation\Cart\CartProductCanceled())->add(new CheckPermissionAdmin('carts.cart_product_canceled.admin'));
-        
+
     })->add(new CanPermission('products'))->add(Token::class);
 
     $app->group('/products_categories', function (RouteCollectorProxy $app) {

@@ -15,8 +15,6 @@ class Product extends Model
     use Pagination;
     use Storage;
 
-    public $user_id;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -42,8 +40,6 @@ class Product extends Model
         'height',
         'width',
         'length',
-
-        'likes',
 
         'state',
 
@@ -73,16 +69,17 @@ class Product extends Model
 
     public function creatingCustom()
     {
-        $this->slug = Slug::make($this->name);
-
-        if(isset($this->image)){
+        $this->slug = rand(1, 999999999) . "-" . Slug::make($this->name);
+        if(!empty($this->image)){
             $this->image = self::saveProductImage($this->image);
         }
     }
 
     public function updatingCustom()
     {
-        $this->slug = Slug::make($this->name);
+        if ($this->name != $this->getOriginal('name')) {
+            $this->slug = explode("-", $this->getOriginal('slug'))[0] . "-" . Slug::make($this->name);
+        }
         if(isset($this->image)){
             $this->image = self::saveProductImage($this->image);
         }
