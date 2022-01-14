@@ -17,10 +17,39 @@ final class Find
 
     public function __invoke(Request $request, Response $response): Response
     {
-        $session = $request->getAttribute('session');
         $params = $request->getAttribute('params');
 
-        $product = Product::find($params['id']);
+        $check_permission_admin = $request->getAttribute('check_permission_admin');
+        $session = $request->getAttribute('session');
+        $user_id = $session->user_id;
+
+        $product = new Product();
+        $product = $product->where('id', $params['id']);
+        if (!$check_permission_admin) {
+            $product = $product->where('user_id', $user_id);
+        }
+
+        $product = $product->with(['salesCanceled' => function ($query) use ($user_id) {
+            $query->where('carts_products.user_id', '!=', $user_id);
+        }]);
+        $product = $product->with(['salesRequest' => function ($query) use ($user_id) {
+            $query->where('carts_products.user_id', '!=', $user_id);
+        }]);
+        $product = $product->with(['salesPaid' => function ($query) use ($user_id) {
+            $query->where('carts_products.user_id', '!=', $user_id);
+        }]);
+        $product = $product->with(['salesSent' => function ($query) use ($user_id) {
+            $query->where('carts_products.user_id', '!=', $user_id);
+        }]);
+        $product = $product->with(['salesDelivered' => function ($query) use ($user_id) {
+            $query->where('carts_products.user_id', '!=', $user_id);
+        }]);
+        $product = $product->with(['salesFinalized' => function ($query) use ($user_id) {
+            $query->where('carts_products.user_id', '!=', $user_id);
+        }]);
+
+        $product = $product->first();
+        
 
         $res = [
             'data' => [

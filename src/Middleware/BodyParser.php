@@ -5,6 +5,7 @@ namespace App\Middleware;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Psr7\Response;
+use Slim\Routing\RouteContext;
 
 class BodyParser
 {
@@ -20,6 +21,9 @@ class BodyParser
 
         $params = (array) $request->getQueryParams() ?: [];
 
+        $args = RouteContext::fromRequest($request)->getRoute()->getArguments();
+
+        $request = $request->withAttribute('args', $args);
         $request = $request->withAttribute('body', $bodyPrev);
         $request = $request->withAttribute('params', $params);
         $request = $request->withAttribute('headers', $headers_list);

@@ -1,0 +1,16 @@
+# Descripción? (Máximo de 40 caracteres)
+# > En la linea en blanco luego de esta se debe escribir una 
+# > breve descripción de los cambios y/o adecuaciones realizadas
+
+# > Nombre de las APPs inmersas en los cambios o adecuaciones (destacame, accounts, etc).
+- [MODULE] 
+
+# > Nombre del producto inmersos en el cambio (Ejm: Casos, PAD, Ofertas, etc)
+- [SECTION] 
+
+# Tipo de tarea realizada [Add/Fix/Remove/Update/Refactor/Document/Test] [summary]
+- [TYPE] 
+
+# En la linea blanca luego de ese texto, agrega una descripción detallata
+# de los trabajos realizados, empezando con un descriptor en corchetes
+# (Bug fix, feature, improvements, test?)

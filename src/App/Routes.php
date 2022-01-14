@@ -14,6 +14,7 @@ use App\Controller\Auth;
 use App\Controller\Permission;
 use App\Controller\ProductCategory;
 use App\Controller\Product;
+use App\Controller\ProductReview;
 use App\Controller\MyProfile;
 use App\Controller\Cart;
 
@@ -44,29 +45,69 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
     });
 
     /**
-     * Consulta de todos los productos por usuario
-     * Consulta de todos los productos en general
-     * Consulta de un producto por SEO friendly URLs (slugs)
+     * Consulta todas las categorias que contengan productos activos y que sean padres principales
+     * Consulta todos los usuarios que tengan productos activos para vender
+     * 
+     * Consulta de un producto por SEO friendly URLs "/{productSlug}"
+     * 
+     * /product/{slug-name}
+     * 
+     * Consulta de todos los productos por usuario "/{userNickname}"
+     * Consulta de todos los productos de una categoria "/{categoryName}"
      */
+
+    $app->get('/product/{slug}', Product\GetBySlug::class)->add(new \App\Middleware\Validation\Product\GetBySlug());
+
+    // $app->get('/product/{slug}', function ($request, $response, array $args) {
+
+    //     print_r('------------------');
+    //     print_r('$args: ');
+    //     print_r($args);
+    //     print_r('------------------');
+
+    //     $response->getBody()->write('Prueba');
+        
+    //     return $response;
+    // });
 
     $app->group('/carts', function (RouteCollectorProxy $app) {
 
         $app->get('/get_all', Cart\GetAll::class)->add(new \App\Middleware\Pagination())->add(new CheckPermissionAdmin('carts.get_all.admin'));
         $app->get('/me_active', Cart\MeActive::class);
         $app->get('/find', Cart\Find::class)->add(new \App\Middleware\Validation\Cart\Find())->add(new CheckPermissionAdmin('carts.find.admin'));
-        $app->post('/create', Cart\Create::class)->add(new \App\Middleware\Validation\Cart\Create())->add(new CheckPermissionAdmin('products.create.admin'));
-        $app->post('/update', Cart\Update::class)->add(new \App\Middleware\Validation\Cart\Update())->add(new CheckPermissionAdmin('products.update.admin'));
-        // $app->post('/state', Cart\State::class)->add(new \App\Middleware\Validation\Cart\State())->add(new CheckPermissionAdmin('products.state.admin'));
+        $app->post('/create', Cart\Create::class)->add(new \App\Middleware\Validation\Cart\Create())->add(new CheckPermissionAdmin('carts.create.admin'));
+        $app->post('/update', Cart\Update::class)->add(new \App\Middleware\Validation\Cart\Update())->add(new CheckPermissionAdmin('carts.update.admin'));
+        $app->post('/request', Cart\Request::class)->add(new \App\Middleware\Validation\Cart\Request())->add(new CheckPermissionAdmin('carts.request.admin'));
+        $app->post('/to_pay', Cart\ToPay::class)->add(new \App\Middleware\Validation\Cart\ToPay())->add(new CheckPermissionAdmin('carts.to_pay.admin'));
+
+        $app->post('/cart_product_delivered', Cart\CartProductDelivered::class)->add(new \App\Middleware\Validation\Cart\CartProductDelivered())->add(new CheckPermissionAdmin('carts.cart_product_delivered.admin'));
+        $app->post('/cart_product_canceled', Cart\CartProductCanceled::class)->add(new \App\Middleware\Validation\Cart\CartProductCanceled())->add(new CheckPermissionAdmin('carts.cart_product_canceled.admin'));
 
     })->add(new CanPermission('carts'))->add(Token::class);
 
+    $app->group('/products_reviews', function (RouteCollectorProxy $app) {
+
+        $app->get('/get_all', ProductReview\GetAll::class)->add(new \App\Middleware\Pagination());
+        $app->get('/find', ProductReview\Find::class)->add(new \App\Middleware\Validation\ProductReview\Find());
+        $app->post('/create', ProductReview\Create::class)->add(new \App\Middleware\Validation\ProductReview\Create())->add(new CheckPermissionAdmin('products_reviews.create.admin'));
+        $app->post('/update', ProductReview\Update::class)->add(new \App\Middleware\Validation\ProductReview\Update())->add(new CheckPermissionAdmin('products_reviews.update.admin'));
+
+    })->add(new CanPermission('products_reviews'))->add(Token::class);
+
+
+
     $app->group('/products', function (RouteCollectorProxy $app) {
-        
+    
         $app->get('/get_all', Product\GetAll::class)->add(new \App\Middleware\Pagination())->add(new CheckPermissionAdmin('products.get_all.admin'));
         $app->get('/find', Product\Find::class)->add(new \App\Middleware\Validation\Product\Find())->add(new CheckPermissionAdmin('products.find.admin'));
         $app->post('/create', Product\Create::class)->add(new \App\Middleware\Validation\Product\Create())->add(new CheckPermissionAdmin('products.create.admin'));
         $app->post('/update', Product\Update::class)->add(new \App\Middleware\Validation\Product\Update())->add(new CheckPermissionAdmin('products.update.admin'));
         $app->post('/state', Product\State::class)->add(new \App\Middleware\Validation\Product\State())->add(new CheckPermissionAdmin('products.state.admin'));
+        
+        $app->post('/cart_product_paid', Product\CartProductPaid::class)->add(new \App\Middleware\Validation\Product\CartProductPaid())->add(new CheckPermissionAdmin('products.state.admin'));
+        $app->post('/cart_product_sent', Product\CartProductSent::class)->add(new \App\Middleware\Validation\Product\CartProductSent())->add(new CheckPermissionAdmin('products.state.admin'));
+        $app->post('/cart_product_finalized', Product\CartProductFinalized::class)->add(new \App\Middleware\Validation\Product\CartProductFinalized())->add(new CheckPermissionAdmin('products.state.admin'));
+        $app->post('/cart_product_canceled', Cart\CartProductCanceled::class)->add(new \App\Middleware\Validation\Cart\CartProductCanceled())->add(new CheckPermissionAdmin('carts.cart_product_canceled.admin'));
 
     })->add(new CanPermission('products'))->add(Token::class);
 

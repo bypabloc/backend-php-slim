@@ -31,6 +31,9 @@ class CartProduct
                 $table->string('observation')->nullable();
                 $table->smallInteger('state')->default(1);
 
+                $table->unsignedBigInteger('user_id');
+                $table->foreign('user_id')->references('id')->on('users');
+
                 $table->timestamps();
             });
 
@@ -45,8 +48,10 @@ class CartProduct
                     array_push($carts_products,[
                         'cart_id' => $cart['id'],
                         'product_id' => $product['id'],
+                        'price_old' => rand(1, $product['price']),
                         'price' => rand(1, $product['price']),
                         'qty' => rand(1, $product['stock']),
+                        'user_id' => 1,
                     ]);
                 }
             }

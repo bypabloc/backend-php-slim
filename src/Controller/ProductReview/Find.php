@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Cart;
+namespace App\Controller\ProductReview;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -9,7 +9,7 @@ use App\Serializer\JsonResponse;
 
 use App\Services\Hash;
 
-use App\Model\Cart;
+use App\Model\ProductReview;
 
 final class Find
 {
@@ -20,16 +20,16 @@ final class Find
         $session = $request->getAttribute('session');
         $params = $request->getAttribute('params');
 
-        $cart = Cart::find($params['id']);
-        $cart->updateProductsPrices();
+        $product_review = ProductReview::where('id',$params['id'])->with('children')->get();
+        foreach ($product_review as $key => $value) {
+            $product_review[$key]['hasChildren'] = $value->children->count() > 0 ? true : false;
+        }
 
-        $cart = Cart::where('id',$cart->id)->with('products')->first();
-        
         $res = [
             'data' => [
-                'cart' => $cart,
+                'product_review' => $product_review,
             ],
         ];
         return $this->response($response, 200, $res);
-    }
+}
 }

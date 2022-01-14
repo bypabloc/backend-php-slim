@@ -24,6 +24,16 @@ class CartProduct extends Model
         'qty',
         'observation',
         'state',
+        'user_id',
+    ];
+
+    const STATES = [
+        0 => 'Canceled', // seller y buyer -> only has been sent (step 3)
+        1 => 'Request', // buyer
+        2 => 'Paid', // seller
+        3 => 'Sent', // seller
+        4 => 'Delivered', // buyer
+        5 => 'Finalized', // seller
     ];
 
     /**
@@ -32,10 +42,13 @@ class CartProduct extends Model
      * @var array
      */
     protected $casts = [
+        'cart_id' => 'integer',
+        'product_id' => 'integer',
         'price_old' => 'float',
         'price' => 'float',
         'qty' => 'float',
         'state' => 'integer',
+        'user_id' => 'integer',
     ];
 
     /**
@@ -45,4 +58,24 @@ class CartProduct extends Model
      */
     protected $hidden = [
     ];
+
+    public function product()
+    {
+        return $this->hasOne(Product::class, 'id', 'product_id');
+    }
+
+    public function cart()
+    {
+        return $this->hasOne(Cart::class, 'id', 'product_id');
+    }
+
+    public function productDiscountStock(): void
+    {
+        $this->product->discountStock($this->qty);
+    }
+
+    public function productRestoreStock(): void
+    {
+        $this->product->restoreStock($this->qty);
+    }
 }

@@ -9,25 +9,26 @@ use App\Serializer\JsonResponse;
 
 use App\Services\Hash;
 
-use App\Model\Cart;
+use App\Model\CartProduct;
 
-final class Find
+final class CartProductDelivered
 {
     use JsonResponse;
 
     public function __invoke(Request $request, Response $response): Response
     {
         $session = $request->getAttribute('session');
-        $params = $request->getAttribute('params');
+        $body = $request->getAttribute('body');
 
-        $cart = Cart::find($params['id']);
-        $cart->updateProductsPrices();
+        $cart_product = CartProduct::find($body['cart_product_id']);
+        $cart_product->state = 4;
+        $cart_product->save();
 
-        $cart = Cart::where('id',$cart->id)->with('products')->first();
-        
+        $cart_product->product;
+
         $res = [
             'data' => [
-                'cart' => $cart,
+                'cart_product' => $cart_product,
             ],
         ];
         return $this->response($response, 200, $res);

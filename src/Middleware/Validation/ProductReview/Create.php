@@ -1,33 +1,49 @@
 <?php
 
-namespace App\Middleware\Validation\Auth;
+namespace App\Middleware\Validation\ProductReview;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Psr7\Response;
 
 use App\Serializer\JsonResponse;
+use App\Serializer\RequestValidatorErrors;
 
 use App\Services\Validator;
 
-use App\Middleware\Validation\Rule\Unique;
+use App\Model\Product;
 
-class SignIn
+use App\Middleware\Validation\Rule\Exist;
+
+class Create
 {
+    use RequestValidatorErrors;
     use JsonResponse;
     
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
         $body = $request->getAttribute('body');
+        $session = $request->getAttribute('session');
+        $check_permission_admin = $request->getAttribute('check_permission_admin');
+
+        $validators = [
+            'product_id' => ['required','integer', new Exist('products', 'id')],
+            'parent_id' => ['integer', new Exist('products_reviews', 'id')],
+            'content' => ['required','string', 'max:250'], 
+            'rating' => ['required', 'integer'],
+            'user_id' => ['integer', new Exist('users', 'id')],
+        ];
+        if (!$check_permission_admin) {
+            $body['user_id'] = $session->user_id;
+            $validators['user_id'] = ['integer'];
+        }else{
+            array_push($validators['user_id'],'required');
+        }
 
         try {
             $validator = new Validator();
 
-            $validator->validate($body, [
-                'user' => ['required', 'string', 'min:3', 'max:20'],
-                'password' => ['required', 'string', 'min:6', 'max:50'],
-                'remember_me'=>['boolean'],
-            ]);
+            $validator->validate($body, $validators);
     
             if(!$validator->isValid()){
                 $response = new Response();
@@ -35,7 +51,7 @@ class SignIn
                     'errors' => $validator->errors,
                 ]);
             }
-            
+
             $request = $request->withAttribute('body', $validator->data);
             
             return $handler->handle($request);

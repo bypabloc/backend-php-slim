@@ -48,6 +48,11 @@ class Permission
                         'created_by' => 1,
                     ],
                     [
+                        'name' => 'products_reviews',
+                        'alias' => 'products_reviews',
+                        'created_by' => 1,
+                    ],
+                    [
                         'name' => 'roles',
                         'alias' => 'roles',
                         'created_by' => 1,
@@ -108,6 +113,21 @@ class Permission
                         'created_by' => 1,
                     ],
                     [
+                        'name' => 'products_reviews.create.admin',
+                        'alias' => 'products_reviews.create.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'products_reviews.update.admin',
+                        'alias' => 'products_reviews.update.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'products_reviews.state.admin',
+                        'alias' => 'products_reviews.state.admin',
+                        'created_by' => 1,
+                    ],
+                    [
                         'name' => 'products.get_all.admin',
                         'alias' => 'products.get_all.admin',
                         'created_by' => 1,
@@ -130,6 +150,16 @@ class Permission
                     [
                         'name' => 'products.state.admin',
                         'alias' => 'products.state.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'products.request.admin',
+                        'alias' => 'products.request.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'products.to_pay.admin',
+                        'alias' => 'products.to_pay.admin',
                         'created_by' => 1,
                     ],
                 ],

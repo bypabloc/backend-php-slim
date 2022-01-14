@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\DataAwareRule;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-class RegisterActive implements Rule, DataAwareRule
+class RegisterState implements Rule, DataAwareRule
 {
     protected $data = [];
 
@@ -20,6 +20,7 @@ class RegisterActive implements Rule, DataAwareRule
         protected $table,
         protected $column = 'state',
         protected $state = 1,
+        protected $equals = true,
         protected $column_owner = 'user_id',
     )
     {
@@ -48,12 +49,18 @@ class RegisterActive implements Rule, DataAwareRule
         $value = intval($value);
 
         $query = Capsule::table($this->table)->where([
-            $this->column => $this->state,
             $this->column_owner => $value,
         ]);
         if(isset($this->data['id'])){
-            $query->where('id', '!=', $this->data['id']);
+            $query->where('id', $this->data['id']);
         }
+        $query->where($this->column, ($this->equals ? '=' : '!='), $this->state);
+
+        // print_r($query->toSql() . "\n");
+        // print_r("column: $this->column" . "\n");
+        // print_r("equals: $this->equals" . "\n");
+        // print_r("data->id: " . $this->data['id'] . "\n");
+        // print_r("value: $value" . "\n");
 
         return !$query->count();
     }
@@ -65,6 +72,6 @@ class RegisterActive implements Rule, DataAwareRule
      */
     public function message()
     {
-        return 'Active records were found, they need to be finalized in order to continue with this request.';
+        return 'The record should have the following state: ' . $this->state;
     }
 }

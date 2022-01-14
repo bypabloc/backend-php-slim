@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Cart;
+namespace App\Controller\Product;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -9,25 +9,21 @@ use App\Serializer\JsonResponse;
 
 use App\Services\Hash;
 
-use App\Model\Cart;
+use App\Model\Product;
 
-final class Find
+final class GetBySlug
 {
     use JsonResponse;
 
     public function __invoke(Request $request, Response $response): Response
     {
-        $session = $request->getAttribute('session');
-        $params = $request->getAttribute('params');
+        $args = $request->getAttribute('args');
 
-        $cart = Cart::find($params['id']);
-        $cart->updateProductsPrices();
+        $product = $args['product']->related;
 
-        $cart = Cart::where('id',$cart->id)->with('products')->first();
-        
         $res = [
             'data' => [
-                'cart' => $cart,
+                'product' => $args['product'],
             ],
         ];
         return $this->response($response, 200, $res);
