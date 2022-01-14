@@ -56,6 +56,20 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
      * Consulta de todos los productos de una categoria "/{categoryName}"
      */
 
+    $app->get('/product/{slug}', Product\GetBySlug::class)->add(new \App\Middleware\Validation\Product\GetBySlug());
+
+    // $app->get('/product/{slug}', function ($request, $response, array $args) {
+
+    //     print_r('------------------');
+    //     print_r('$args: ');
+    //     print_r($args);
+    //     print_r('------------------');
+
+    //     $response->getBody()->write('Prueba');
+        
+    //     return $response;
+    // });
+
     $app->group('/carts', function (RouteCollectorProxy $app) {
 
         $app->get('/get_all', Cart\GetAll::class)->add(new \App\Middleware\Pagination())->add(new CheckPermissionAdmin('carts.get_all.admin'));

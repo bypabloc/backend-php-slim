@@ -101,12 +101,16 @@ class Product extends Model
         $this->save();
     }
     
-
     public static function updateValues(array $values)
     {
         foreach ($values as $key => $value) {
             Product::find($key)->update($value);
         }
+    }
+
+    public function related()
+    {
+        return $this->hasMany(Product::class, 'product_category_id', 'product_category_id');
     }
 
     public function salesCanceled()
@@ -127,6 +131,7 @@ class Product extends Model
                 ->where('carts_products.state', 0)
                 ->where('carts.state', 2);
     }
+
     public function salesRequest()
     {
         return 
@@ -145,6 +150,7 @@ class Product extends Model
                 ->where('carts_products.state', 1)
                 ->where('carts.state', 2);
     }
+
     public function salesPaid()
     {
         return 
@@ -163,6 +169,7 @@ class Product extends Model
                 ->where('carts_products.state', 2)
                 ->where('carts.state', 2);
     }
+
     public function salesSent()
     {
         return $this->belongsToMany(Cart::class, 'carts_products', 'product_id', 'cart_id')
@@ -179,6 +186,7 @@ class Product extends Model
             ->where('carts_products.state', 3)
             ->where('carts.state', 2);
     }
+
     public function salesDelivered()
     {
         return 
@@ -197,6 +205,7 @@ class Product extends Model
                 ->where('carts_products.state', 4)
                 ->where('carts.state', 2);
     }
+
     public function salesFinalized()
     {
         return 
