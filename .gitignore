@@ -3,3 +3,6 @@ composer.lock
 vendor/
 public/product_images/
 public/storage/
+
+exit
+git checkout master
