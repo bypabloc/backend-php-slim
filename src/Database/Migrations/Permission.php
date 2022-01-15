@@ -63,6 +63,11 @@ class Permission
                         'created_by' => 1,
                     ],
                     [
+                        'name' => 'migrations',
+                        'alias' => 'migrations',
+                        'created_by' => 1,
+                    ],
+                    [
                         'name' => 'carts.get_all.admin',
                         'alias' => 'carts.get_all.admin',
                         'created_by' => 1,
