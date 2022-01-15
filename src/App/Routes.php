@@ -44,11 +44,6 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
 
     });
 
-    /**
-     * 
-     * Consulta de todos los productos de una categoria "/{categoryName}"
-     */
-
     /*
      * Consulta de todos los productos por usuario "/{nickname}"
      */
