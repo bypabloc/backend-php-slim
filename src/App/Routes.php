@@ -23,11 +23,6 @@ use App\Middleware\BodyParser;
 use App\Middleware\CanPermission;
 use App\Middleware\CheckPermissionAdmin;
 
-$app->group('/migrations', function (RouteCollectorProxy $app) {
-    $app->get('/up', Migration\Up::class);
-    $app->get('/down', Migration\Down::class);
-});
-
 $app->get('/test', function ($request, $response, array $args) {
     $response->getBody()->write('Prueba');
     
@@ -119,6 +114,12 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->post('/state', ProductCategory\State::class)->add(new \App\Middleware\Validation\ProductCategory\State())->add(new CheckPermissionAdmin('products_categories.state.admin'));
 
     })->add(new CanPermission('products_categories'))->add(Token::class);
+
+
+    $app->group('/migrations', function (RouteCollectorProxy $app) {
+        $app->get('/up', Migration\Up::class);
+        $app->get('/down', Migration\Down::class);
+    })->add(new CanPermission('migrations'));
 
     $app->group('/my-profile', function (RouteCollectorProxy $app) {
         
