@@ -52,7 +52,8 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
      * Consulta de todos los productos de una categoria "/{categoryName}"
      */
 
-    $app->get('/categories', ProductCategory\GetAllList::class)->add(new \App\Middleware\Pagination());
+    $app->get('/products_categories', ProductCategory\GetAllList::class)->add(new \App\Middleware\Pagination());
+    $app->get('/product_category/{slug}', ProductCategory\GetBySlug::class)->add(new \App\Middleware\Validation\ProductCategory\GetBySlug());
     $app->get('/product/{slug}', Product\GetBySlug::class)->add(new \App\Middleware\Validation\Product\GetBySlug());
 
     $app->group('/carts', function (RouteCollectorProxy $app) {

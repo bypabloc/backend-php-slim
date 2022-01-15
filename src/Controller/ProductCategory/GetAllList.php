@@ -20,7 +20,13 @@ final class GetAllList
         $params = $request->getAttribute('params');
 
         $products_categories = new ProductCategory;
-        $products_categories = $products_categories->whereNull('parent_id')->with('children')->pagination((int) $params['page'], (int) $params['per_page']);
+        
+        $products_categories = $products_categories
+            ->whereNull('parent_id')
+            ->whereNull('user_id')
+            ->with('children')
+            ->pagination((int) $params['page'], (int) $params['per_page']);
+
         foreach ($products_categories['list'] as $key => $value) {
             $products_categories['list'][$key]['hasChildren'] = $value['children']->count();
             unset($products_categories['list'][$key]['children']);
