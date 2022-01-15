@@ -45,12 +45,13 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
     });
 
     /**
-     * Consulta todas las categorias que contengan productos activos y que sean padres principales
      * Consulta todos los usuarios que tengan productos activos para vender
      * 
      * Consulta de todos los productos por usuario "/{userNickname}"
      * Consulta de todos los productos de una categoria "/{categoryName}"
      */
+
+    $app->get('/users_all', User\GetAllList::class)->add(new \App\Middleware\Pagination());
 
     $app->get('/products_categories', ProductCategory\GetAllList::class)->add(new \App\Middleware\Pagination());
     $app->get('/product_category/{slug}', ProductCategory\GetBySlug::class)->add(new \App\Middleware\Validation\ProductCategory\GetBySlug());

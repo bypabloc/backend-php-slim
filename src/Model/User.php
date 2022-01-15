@@ -90,4 +90,9 @@ class User extends Model
     {
         return $this->belongsTo(Role::class);
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }
