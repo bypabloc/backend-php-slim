@@ -45,16 +45,33 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
     });
 
     /**
-     * Consulta todos los usuarios que tengan productos activos para vender
      * 
-     * Consulta de todos los productos por usuario "/{userNickname}"
      * Consulta de todos los productos de una categoria "/{categoryName}"
      */
 
+    /*
+     * Consulta de todos los productos por usuario "/{nickname}"
+     */
+    $app->get('/user/{nickname}', User\GetByNickname::class)->add(new \App\Middleware\Validation\User\GetByNickname());
+
+    /*
+     * Consulta todos los usuarios que tengan productos activos para vender
+     */
     $app->get('/users_all', User\GetAllList::class)->add(new \App\Middleware\Pagination());
 
+    /*
+     * Consulta todas las categorias de productos
+     */
     $app->get('/products_categories', ProductCategory\GetAllList::class)->add(new \App\Middleware\Pagination());
+
+    /*
+     * Consulta una categoria de productos por su slug
+     */
     $app->get('/product_category/{slug}', ProductCategory\GetBySlug::class)->add(new \App\Middleware\Validation\ProductCategory\GetBySlug());
+
+    /*
+     * Consulta un producto por su slug
+     */
     $app->get('/product/{slug}', Product\GetBySlug::class)->add(new \App\Middleware\Validation\Product\GetBySlug());
 
     $app->group('/carts', function (RouteCollectorProxy $app) {
