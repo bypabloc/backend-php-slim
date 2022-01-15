@@ -48,27 +48,12 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
      * Consulta todas las categorias que contengan productos activos y que sean padres principales
      * Consulta todos los usuarios que tengan productos activos para vender
      * 
-     * Consulta de un producto por SEO friendly URLs "/{productSlug}"
-     * 
-     * /product/{slug-name}
-     * 
      * Consulta de todos los productos por usuario "/{userNickname}"
      * Consulta de todos los productos de una categoria "/{categoryName}"
      */
 
+    $app->get('/categories', ProductCategory\GetAllList::class)->add(new \App\Middleware\Pagination());
     $app->get('/product/{slug}', Product\GetBySlug::class)->add(new \App\Middleware\Validation\Product\GetBySlug());
-
-    // $app->get('/product/{slug}', function ($request, $response, array $args) {
-
-    //     print_r('------------------');
-    //     print_r('$args: ');
-    //     print_r($args);
-    //     print_r('------------------');
-
-    //     $response->getBody()->write('Prueba');
-        
-    //     return $response;
-    // });
 
     $app->group('/carts', function (RouteCollectorProxy $app) {
 
