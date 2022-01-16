@@ -30,6 +30,7 @@ class Update
             'content' => ['required','string', 'max:250'], 
             'rating' => ['required', 'integer'],
             'user_id' => ['integer', new Exist('users', 'id')],
+            'image' => ['array']
         ];
         if ($check_permission_admin) {
             $validators['user_id'] = ['integer', new Exist('users', 'id')];
