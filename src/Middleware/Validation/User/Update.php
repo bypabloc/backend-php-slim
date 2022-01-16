@@ -31,7 +31,7 @@ class Update
                 'id' => ['required', 'integer', new Exist('users', 'id')],
                 'email' => ['string', 'email', new Unique('users', 'email')],
                 'nickname' => ['string', new Unique('users', 'nickname')],
-                'sex'=>['required','string'],
+                'sex'=>['required','integer', 'between:1,3'],
                 'birthday'=>['required','date','before:today'],
                 'password' => ['string', 'min:6', 'max:50'],
                 'passwordConfirmation' => ['string', 'min:6', 'max:50', 'same:password', 'required_with:password'],
