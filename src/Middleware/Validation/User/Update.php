@@ -32,7 +32,7 @@ class Update
                 'email' => ['string', 'email', new Unique('users', 'email')],
                 'nickname' => ['string', new Unique('users', 'nickname')],
                 'sex'=>['required','string'],
-                'birthday'=>['required',new IsDate()],
+                'birthday'=>['required','date','before:today'],
                 'password' => ['string', 'min:6', 'max:50'],
                 'passwordConfirmation' => ['string', 'min:6', 'max:50', 'same:password', 'required_with:password'],
                 'role_id' => ['integer', new Exist('roles', 'id')],

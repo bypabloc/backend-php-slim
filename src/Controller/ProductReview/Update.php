@@ -33,7 +33,6 @@ final class Update
         $product_review->rating = $body['rating'];
         $product_review->user_id =  $session->user_id;
 
-        // $product_review->creatingCustom();
         $product_review->save();
 
         $id_product_review=$body['id'];
@@ -42,15 +41,28 @@ final class Update
             
             $image_model= new Image();
 
-            Image::where('table_id', $id_product_review)->where('table_name','products_reviews')->delete();
+            $query_images = Image::where('table_id', $id_product_review)->where('table_name','products_reviews');
+            $get_images = $query_images->get();
+
+            foreach($get_images as $image){
+                $image_model->deleteFile($image->path);            
+            }    
             
+            $query_images->delete();
+
             $images = [];
+
+            $current_time = time();
+            $current_time_format= date('Y-m-d h:i:s', $current_time);
+
             foreach ($body['image'] as $image) {
-                $image_model->creatingImage($image);
+                $image_model->creatingImageProductsReview($image);
                 array_push($images,[
                     "path" => $image_model->path,
                     "table_id" =>$id_product_review,
                     "table_name" => 'products_reviews',
+                    "created_at"=>$current_time_format,
+                    "updated_at"=>$current_time_format,
                 ]);
                 
             }
@@ -58,7 +70,7 @@ final class Update
             Image::insert($images);
         }
 
-
+        $product_review = ProductReview::where('id',$body['id'])->with('children')->with('images')->get();
 
         $res = [
             'data' => [

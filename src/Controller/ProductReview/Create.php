@@ -41,13 +41,17 @@ final class Create
             
             $image_model= new Image();
             $images = [];
+            $current_time = time();
+            $current_time_format= date('Y-m-d h:i:s', $current_time);
             foreach ($body['image'] as $image) {
-                $image_model->creatingImage($image);
+                $image_model->creatingImageProductsReview($image);
                 array_push($images,[
                     "path" => $image_model->path,
                     "table_id" =>$product_review->id,
                     "table_name" => 'products_reviews',
                     // "table_name" => $product_review->table,
+                    "created_at"=>$current_time_format,
+                    "updated_at"=>$current_time_format,
                 ]);
                 
             }
@@ -55,7 +59,7 @@ final class Create
             Image::insert($images);
         }
         
-
+        $product_review = ProductReview::where('id',$product_review->id)->with('children')->with('images')->get();
         $res = [
             'data' => [
                 'product_review' => $product_review,
