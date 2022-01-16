@@ -19,7 +19,9 @@ class User
                 $table->bigIncrements('id');
                 $table->string('nickname')->unique();
                 $table->string('email')->unique();
-                
+                $table->string('sex');
+                $table->date('birthday');
+
                 $table->uuid('uuid')->unique();
                 $table->string('password');
 
@@ -37,18 +39,21 @@ class User
                         'email' => 'admin@mail.com',
                         'uuid' => Uuid::uuid4()->toString(),
                         'password' => Hash::make('12345678'),
+                        'sex'=>'M',
                     ],
                     [
                         'nickname' => 'user1',
                         'email' => 'user1@mail.com',
                         'uuid' => Uuid::uuid4()->toString(),
                         'password' => Hash::make('12345678'),
+                        'sex'=>'F',
                     ],
                     [
                         'nickname' => 'user2',
                         'email' => 'user2@mail.com',
                         'uuid' => Uuid::uuid4()->toString(),
                         'password' => Hash::make('12345678'),
+                        'sex'=>'F',
                     ],
                 ]
             );
