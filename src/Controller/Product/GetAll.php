@@ -47,7 +47,7 @@ final class GetAll
             $query->where('carts_products.user_id', '!=', $user_id);
         }]);
 
-        $products = $products->pagination((int) $params['page'], (int) $params['per_page']);
+        $products = $products->with('images')->pagination((int) $params['page'], (int) $params['per_page']);
         
         $res = [
             'data' => [

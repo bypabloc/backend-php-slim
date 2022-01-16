@@ -24,7 +24,12 @@ class Image extends Model
         'path',
     ];
 
-    public function creatingImage($image)
+    public function creatingImageProducts($image)
+    {
+        $this->path = self::saveProductImage($image);
+    }
+
+    public function creatingImageProductsReview($image)
     {
         $this->path = self::saveProductReviewImage($image);
     }

@@ -34,8 +34,6 @@ class Product extends Model
 
         'stock',
 
-        'image',
-
         'weight',
         'height',
         'width',
@@ -83,6 +81,11 @@ class Product extends Model
         if(isset($this->image)){
             $this->image = self::saveProductImage($this->image);
         }
+    }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class, 'table_id', 'id')->where('table_name', 'products');
     }
 
     public function discountStock(

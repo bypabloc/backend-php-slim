@@ -10,6 +10,7 @@ use App\Serializer\JsonResponse;
 use App\Services\Hash;
 
 use App\Model\Product;
+use App\Model\Image;
 
 final class Update
 {
@@ -19,8 +20,9 @@ final class Update
     {
         $session = $request->getAttribute('session');
         $body = $request->getAttribute('body');
+        $id_product = $body['id'];
 
-        $product = Product::find($body['id']);
+        $product = Product::find($id_product);
         if(isset($body['name'])){
             $product->name = $body['name'];
         }
@@ -38,14 +40,6 @@ final class Update
         }
         if(isset($body['stock'])){
             $product->stock = $body['stock'];
-        }
-        if(isset($body['image'])){
-            if($product->image){
-                $product->deleteFile($product->image);
-            }
-            $product->image = $body['image'];
-        }else{
-            unset($product->image);
         }
         if(isset($body['weight'])){
             $product->weight = $body['weight'];
@@ -73,6 +67,39 @@ final class Update
 
         $product->save();
 
+        if(isset($body['image'])){
+            $image_model= new Image();
+
+            $query_images = Image::where('table_id', $id_product)->where('table_name','products');
+            $get_images = $query_images->get();
+
+            foreach($get_images as $image){
+                $image_model->deleteFile($image->path);            
+            }    
+            
+            $query_images->delete();
+            $images = [];
+
+            $current_time = time();
+            $current_time_format= date('Y-m-d h:i:s', $current_time);
+
+            foreach ($body['image'] as $image) {
+                $image_model->creatingImageProducts($image);
+                array_push($images,[
+                    "path" => $image_model->path,
+                    "table_id" =>$id_product,
+                    "table_name" => 'products',
+                    "created_at"=>$current_time_format,
+                    "updated_at"=>$current_time_format,
+                ]);
+                
+            }
+            
+            Image::insert($images);
+        }
+
+        $product = Product::where('id',$product->id)->with('images')->get();
+        
         $res = [
             'data' => [
                 'product' => $product,
