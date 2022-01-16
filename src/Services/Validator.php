@@ -35,6 +35,8 @@ class Validator
             'in' => 'The :attribute must be one of the following types: :values',
             'file.image' => 'The :attribute must be an image.',
             'file.max' => 'The :attribute must be less than :max kilobytes.',
+            'before' => 'The :attribute must be less than today.',
+            'date'=> 'The :attribute must be a valid date (Y-m-d).',
         ]);
 
         if(!$validator->fails()){

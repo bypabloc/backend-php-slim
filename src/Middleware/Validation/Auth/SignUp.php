@@ -12,6 +12,7 @@ use App\Serializer\RequestValidatorErrors;
 use App\Services\Validator;
 
 use App\Middleware\Validation\Rule\Unique;
+use App\Middleware\Validation\Rule\IsDate;
 
 class SignUp
 {
@@ -34,6 +35,8 @@ class SignUp
                     table: 'users',
                     column: 'email',
                 )],
+                'sex'=>['required','string'],
+                'birthday'=>['required','date','before:today'],
                 'password' => ['required', 'string', 'min:6', 'max:50'],
                 'passwordConfirmation' => ['required', 'string', 'min:6', 'max:50', 'same:password'],
             ]);

@@ -10,6 +10,7 @@ use App\Serializer\JsonResponse;
 use App\Services\Hash;
 
 use App\Model\Product;
+use App\Model\Image;
 
 final class Create
 {
@@ -33,9 +34,7 @@ final class Create
             $product->discount_quantity = $body['discount_quantity'];
         }
         $product->stock = $body['stock'];
-        if(isset($body['image'])){
-            $product->image = $body['image'];
-        }
+        
         if(isset($body['weight'])){
             $product->weight = $body['weight'];
         }
@@ -57,6 +56,30 @@ final class Create
         $product->creatingCustom();
 
         $product->save();
+
+        if(isset($body['image'])){
+            
+            $image_model= new Image();
+            $images = [];
+            $current_time = time();
+            $current_time_format= date('Y-m-d h:i:s', $current_time);
+            foreach ($body['image'] as $image) {
+                $image_model->creatingImageProducts($image);
+                array_push($images,[
+                    "path" => $image_model->path,
+                    "table_id" =>$product->id,
+                    "table_name" => 'products',
+                    "created_at"=>$current_time_format,
+                    "updated_at"=>$current_time_format,
+                ]);
+                
+            }
+            
+            Image::insert($images);
+        }
+        
+        $product = Product::where('id',$product->id)->with('images')->get();
+
 
         $res = [
             'data' => [

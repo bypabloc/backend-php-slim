@@ -10,6 +10,7 @@ use App\Serializer\JsonResponse;
 use App\Services\Hash;
 
 use App\Model\ProductReview;
+use App\Model\Image;
 
 final class Create
 {
@@ -35,7 +36,30 @@ final class Create
         // $product_review->creatingCustom();
 
         $product_review->save();
-
+        
+        if(isset($body['image'])){
+            
+            $image_model= new Image();
+            $images = [];
+            $current_time = time();
+            $current_time_format= date('Y-m-d h:i:s', $current_time);
+            foreach ($body['image'] as $image) {
+                $image_model->creatingImageProductsReview($image);
+                array_push($images,[
+                    "path" => $image_model->path,
+                    "table_id" =>$product_review->id,
+                    "table_name" => 'products_reviews',
+                    // "table_name" => $product_review->table,
+                    "created_at"=>$current_time_format,
+                    "updated_at"=>$current_time_format,
+                ]);
+                
+            }
+            
+            Image::insert($images);
+        }
+        
+        $product_review = ProductReview::where('id',$product_review->id)->with('children')->with('images')->get();
         $res = [
             'data' => [
                 'product_review' => $product_review,
