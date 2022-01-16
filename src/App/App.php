@@ -25,20 +25,13 @@ try {
 
     AppFactory::setContainer($container);
     $app = AppFactory::create();
+    
+    $app->add(\App\Middleware\CorsMiddleware::class);
 
     $app->addRoutingMiddleware();
     $app->addBodyParsingMiddleware();
+
     $errorMiddleware = $app->addErrorMiddleware(true, true, true);
-
-    $app->add(function ($request, $handler) {
-        $response = $handler->handle($request);
-        return $response
-                ->withHeader('Access-Control-Allow-Origin', '*')
-                ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-                ->withHeader('Access-Control-Allow-Methods', 'GET, POST');
-    });
-
-    $container = $app->getContainer();
 
 } catch (\Throwable $th) {
     echo $th->getMessage();
