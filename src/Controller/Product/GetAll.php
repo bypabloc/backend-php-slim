@@ -46,6 +46,7 @@ final class GetAll
         $products = $products->with(['salesFinalized' => function ($query) use ($user_id) {
             $query->where('carts_products.user_id', '!=', $user_id);
         }]);
+        
 
         $products = $products->with('images')->pagination((int) $params['page'], (int) $params['per_page']);
         
