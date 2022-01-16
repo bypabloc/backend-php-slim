@@ -14,7 +14,7 @@ use App\Services\Validator;
 use App\Model\Product;
 
 use App\Middleware\Validation\Rule\Exist;
-use App\Middleware\Validation\Rule\IsBase64;
+use App\Middleware\Validation\Rule\ListContent;
 
 class Create
 {
@@ -33,11 +33,7 @@ class Create
             'content' => ['required','string', 'max:250'], 
             'rating' => ['required', 'integer'],
             'user_id' => ['integer', new Exist('users', 'id')],
-            'image' => ['array'],
-            // new IsBase64(
-            //     types: ['png','jpg', 'jpeg', 'gif'],
-            //     size: 2048
-            // ,)
+            'image' => ['array',new ListContent('image')],
         ];
         if (!$check_permission_admin) {
             $body['user_id'] = $session->user_id;

@@ -40,6 +40,7 @@ class User
                         'uuid' => Uuid::uuid4()->toString(),
                         'password' => Hash::make('12345678'),
                         'sex'=>'M',
+                        'birthday'=>'1990-02-11'
                     ],
                     [
                         'nickname' => 'user1',
@@ -47,6 +48,7 @@ class User
                         'uuid' => Uuid::uuid4()->toString(),
                         'password' => Hash::make('12345678'),
                         'sex'=>'F',
+                        'birthday'=>'1990-02-11'
                     ],
                     [
                         'nickname' => 'user2',
@@ -54,6 +56,7 @@ class User
                         'uuid' => Uuid::uuid4()->toString(),
                         'password' => Hash::make('12345678'),
                         'sex'=>'F',
+                        'birthday'=>'1990-02-11'
                     ],
                 ]
             );

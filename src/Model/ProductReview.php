@@ -32,4 +32,8 @@ class ProductReview extends Model
         return $this->hasMany(ProductReview::class, 'parent_id', 'id');
     }
 
+    public function images()
+    {
+        return $this->hasMany(Image::class, 'table_id', 'id')->where('table_name', 'products_reviews');
+    }
 }

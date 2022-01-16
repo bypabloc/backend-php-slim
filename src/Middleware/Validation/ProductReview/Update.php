@@ -28,7 +28,7 @@ class Update
             'product_id' => ['required','integer', new Exist('products', 'id')],
             'parent_id' => ['integer', new Exist('products_reviews', 'id')],
             'content' => ['required','string', 'max:250'], 
-            'rating' => ['required', 'integer'],
+            'rating' => ['required_without:parent_id', 'integer'],
             'user_id' => ['integer', new Exist('users', 'id')],
             'image' => ['array']
         ];

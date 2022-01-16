@@ -20,7 +20,7 @@ final class Find
         $session = $request->getAttribute('session');
         $params = $request->getAttribute('params');
 
-        $product_review = ProductReview::where('id',$params['id'])->with('children')->get();
+        $product_review = ProductReview::where('id',$params['id'])->with('children')->with('images')->get();
         foreach ($product_review as $key => $value) {
             $product_review[$key]['hasChildren'] = $value->children->count() > 0 ? true : false;
         }

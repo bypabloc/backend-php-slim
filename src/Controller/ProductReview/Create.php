@@ -47,6 +47,7 @@ final class Create
                     "path" => $image_model->path,
                     "table_id" =>$product_review->id,
                     "table_name" => 'products_reviews',
+                    // "table_name" => $product_review->table,
                 ]);
                 
             }

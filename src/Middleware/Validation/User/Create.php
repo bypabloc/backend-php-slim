@@ -32,7 +32,7 @@ class Create
                 'email' => ['required', 'string', 'email', new Unique('users', 'email')],
                 'nickname' => ['required', 'string', new Unique('users', 'nickname')],
                 'sex'=>['required','string'],
-                'birthday'=>['required',new IsDate()],
+                'birthday'=>['required','date','before:today'],
                 'password' => ['required', 'string', 'min:6', 'max:50'],
                 'passwordConfirmation' => ['required', 'string', 'min:6', 'max:50', 'same:password'],
                 'role_id' => ['required', 'integer', new Exist('roles', 'id')],

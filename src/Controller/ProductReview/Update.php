@@ -42,7 +42,7 @@ final class Update
             
             $image_model= new Image();
 
-            Image::where('table_id', $id_product_review)->delete();
+            Image::where('table_id', $id_product_review)->where('table_name','products_reviews')->delete();
             
             $images = [];
             foreach ($body['image'] as $image) {

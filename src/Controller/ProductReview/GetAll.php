@@ -19,14 +19,13 @@ final class GetAll
     {
         $params = $request->getAttribute('params');
 
-
         $products_reviews = new ProductReview;
         
         $session = $request->getAttribute('session');
         $user_id = $session->user_id;
         $products_reviews = $products_reviews->where('user_id', $user_id);
         
-        $products_reviews = $products_reviews->pagination((int) $params['page'], (int) $params['per_page']);
+        $products_reviews = $products_reviews->with('images')->pagination((int) $params['page'], (int) $params['per_page']);
         
         $res = [
             'data' => [
