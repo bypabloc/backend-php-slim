@@ -115,11 +115,10 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
 
     })->add(new CanPermission('products_categories'))->add(Token::class);
 
-
     $app->group('/migrations', function (RouteCollectorProxy $app) {
         $app->get('/up', Migration\Up::class);
-        $app->get('/down', Migration\Down::class);
-    })->add(new CanPermission('migrations'));
+        $app->get('/down', Migration\Down::class)->add(new CanPermission('migrations'));
+    });
 
     $app->group('/my-profile', function (RouteCollectorProxy $app) {
         
