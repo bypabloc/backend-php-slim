@@ -11,37 +11,31 @@ use App\Serializer\RequestValidatorErrors;
 
 use App\Services\Validator;
 
-use App\Middleware\Validation\Rule\Unique;
-use App\Middleware\Validation\Rule\Exist;
-use App\Middleware\Validation\Rule\OnlyLetters;
+use App\Middleware\Validation\Rule;
 
-class Create
+use App\Model\ProductCategory;
+
+class GetBySlug
 {
     use RequestValidatorErrors;
     use JsonResponse;
     
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
-        $body = $request->getAttribute('body');
-        $session = $request->getAttribute('session');
-        $check_permission_admin = $request->getAttribute('check_permission_admin');
-        
+        $args = $request->getAttribute('args');
+
         $validators = [
-            'name' => ['required', 'string', 'max:20', new Unique('products_categories', 'name')],
-            'is_active' => ['boolean'],
-            'parent_id' => ['integer', new Exist('products_categories', 'id')],
-            'user_id' => ['integer', new Exist('users', 'id')],
+            'slug' => [
+                'required', 
+                'string',
+            ],
         ];
-        if (!$check_permission_admin) {
-            $body['user_id'] = $session->user_id;
-            $validators['user_id'] = ['integer'];
-        }
 
         try {
             $validator = new Validator();
 
-            $validator->validate($body, $validators);
-    
+            $validator->validate($args, $validators);
+
             if(!$validator->isValid()){
                 $response = new Response();
                 return $this->response($response, 422, [
@@ -49,7 +43,20 @@ class Create
                 ]);
             }
 
-            $request = $request->withAttribute('body', $validator->data);
+            $product_category = ProductCategory::where('slug', $validator->data['slug'])->where('is_active', 1)->first();
+
+            if(!$product_category){
+                $response = new Response();
+                return $this->response($response, 404, [
+                    'errors' => [
+                        'product_category' => 'Product not found',
+                    ],
+                ]);
+            }
+
+            $validator->data['product_category'] = $product_category;
+
+            $request = $request->withAttribute('args', $validator->data);
             
             return $handler->handle($request);
 

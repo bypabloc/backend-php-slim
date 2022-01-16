@@ -110,7 +110,7 @@ class Product extends Model
 
     public function related()
     {
-        return $this->hasMany(Product::class, 'product_category_id', 'product_category_id');
+        return $this->hasMany(Product::class, 'product_category_id', 'product_category_id')->where('id', '!=', $this->id);
     }
 
     public function salesCanceled()

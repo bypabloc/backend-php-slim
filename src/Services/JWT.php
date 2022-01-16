@@ -41,7 +41,7 @@ class JWT
     public static function GenerateToken(
         string $uuid,
         int $user_id,
-        bool $remember_me,
+        $remember_me = false,
     ) : string
     {
 
