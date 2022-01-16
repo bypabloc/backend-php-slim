@@ -14,6 +14,7 @@ use App\Services\Validator;
 use App\Model\Product;
 
 use App\Middleware\Validation\Rule\Exist;
+use App\Middleware\Validation\Rule\ListContent;
 
 class Create
 {
@@ -32,6 +33,7 @@ class Create
             'content' => ['required','string', 'max:250'], 
             'rating' => ['required', 'integer'],
             'user_id' => ['integer', new Exist('users', 'id')],
+            'image' => ['array',new ListContent('image')],
         ];
         if (!$check_permission_admin) {
             $body['user_id'] = $session->user_id;

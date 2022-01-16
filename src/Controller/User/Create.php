@@ -23,6 +23,8 @@ final class Create
         $user = new User();
         $user->nickname = $body['nickname'];
         $user->email = $body['email'];
+        $user->sex = $body['sex'];
+        $user->birthday = $body['birthday'];
         $user->password = $body['password'];
         $user->role_id = $body['role_id'];
 

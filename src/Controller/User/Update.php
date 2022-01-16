@@ -27,6 +27,12 @@ final class Update
         if(!empty($body['email'])){
             $user->email = $body['email'];
         }
+        if(!empty($body['sex'])){
+            $user->sex = $body['sex'];
+        }
+        if(!empty($body['birthday'])){
+            $user->birthday = $body['birthday'];
+        }
         if(!empty($body['password'])){
             $user->password = $body['password'];
         }
