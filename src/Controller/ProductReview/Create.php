@@ -59,7 +59,11 @@ final class Create
             Image::insert($images);
         }
         
-        $product_review = ProductReview::where('id',$product_review->id)->with('children')->with('images')->get();
+        $product_review = ProductReview::where('id',$product_review->id)
+                ->with(['images'])
+                ->with('children')
+                ->get();
+
         $res = [
             'data' => [
                 'product_review' => $product_review,

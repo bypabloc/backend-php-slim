@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use Slim\Routing\RouteCollectorProxy;
 
+use Slim\Exception\HttpNotFoundException;
+
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -162,3 +164,17 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
     })->add(new CanPermission('permissions'))->add(Token::class);
 
 })->add(BodyParser::class);
+
+/**
+ * Catch-all route to serve a 404 Not Found page if none of the routes match
+ * NOTE: make sure this route is defined last
+ */
+$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function (Request $request, Response $response) {
+    $response->getBody()->write('Not Found');
+    
+    return $response
+        ->withHeader('Content-Type', 'application/json')
+        ->withStatus(404);
+    
+    // throw new HttpNotFoundException($request);
+});
