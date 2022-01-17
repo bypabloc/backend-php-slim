@@ -27,6 +27,7 @@ class Validator
             'required' => 'The :attribute field is required.',
             'string' => 'The :attribute must be a string.',
             'integer' => 'The :attribute must be a integer.',
+            'between' => 'The :attribute must have between :min and :max',
             'array' => 'The :attribute must be a list (array).',
             'email' => 'The :attribute field must type email.',
             'min' => 'The :attribute field must greater than :min.',

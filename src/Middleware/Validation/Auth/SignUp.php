@@ -35,7 +35,7 @@ class SignUp
                     table: 'users',
                     column: 'email',
                 )],
-                'sex'=>['required','string'],
+                'sex'=>['required','integer', 'between:1,3'],
                 'birthday'=>['required','date','before:today'],
                 'password' => ['required', 'string', 'min:6', 'max:50'],
                 'passwordConfirmation' => ['required', 'string', 'min:6', 'max:50', 'same:password'],

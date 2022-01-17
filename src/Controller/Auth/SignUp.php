@@ -28,7 +28,7 @@ final class SignUp
 
         $user->save();
 
-        $user->createdCustom(); //Revisar****
+        $user->createdCustom();
 
         $data = [
             'user' => [
@@ -39,7 +39,7 @@ final class SignUp
         ];
 
         $res = [
-            'data' => $user,
+            'data' => $data,
         ];
 
         return $this->response($response, 200, $res);
