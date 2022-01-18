@@ -37,6 +37,7 @@ class Validator
             'file.max' => 'The :attribute must be less than :max kilobytes.',
             'before' => 'The :attribute must be less than today.',
             'date'=> 'The :attribute must be a valid date (Y-m-d).',
+            'regex'=> 'The :attribute must be a format valid.',
         ]);
 
         if(!$validator->fails()){

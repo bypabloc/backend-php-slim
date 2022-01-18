@@ -66,6 +66,11 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
      */
     $app->get('/product/{slug}', Product\GetBySlug::class)->add(new \App\Middleware\Validation\Product\GetBySlug());
 
+    /*
+     * Consulta todos los productos apartir del nombre indicado y que se asemeje a los slug 
+     */
+    $app->get('/products_search', Product\SearchBySlug::class)->add(new \App\Middleware\Validation\Product\SearchBySlug())->add(new \App\Middleware\Pagination());
+
     $app->group('/carts', function (RouteCollectorProxy $app) {
 
         $app->get('/get_all', Cart\GetAll::class)->add(new \App\Middleware\Pagination())->add(new CheckPermissionAdmin('carts.get_all.admin'));
