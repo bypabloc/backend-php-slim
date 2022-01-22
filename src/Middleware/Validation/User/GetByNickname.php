@@ -43,9 +43,9 @@ class GetByNickname
                 ]);
             }
 
-            $user = User::where('nickname', $validator->data['nickname'])->where('is_active', 1)->first();
+            $user = User::where('nickname', $validator->data['nickname'])->where('is_active', 1);
 
-            if(!$user){
+            if(!$user->first()){
                 $response = new Response();
                 return $this->response($response, 404, [
                     'errors' => [

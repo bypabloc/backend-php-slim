@@ -19,11 +19,13 @@ final class GetBySlug
     {
         $args = $request->getAttribute('args');
 
-        $product = $args['product']->related;
+        $product = $args['product'];
+        $args['product']->related;
+        $args['product']->rating;
 
         $res = [
             'data' => [
-                'product' => $args['product'],
+                'product' => $product,
             ],
         ];
         return $this->response($response, 200, $res);

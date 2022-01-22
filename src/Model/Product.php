@@ -90,11 +90,11 @@ class Product extends Model
         return $this->hasMany(Image::class, 'table_id', 'id')->select('id','path','table_id')->where('table_name', 'products');
     }
 
-    public function productRating()
+    public function rating()
     {
         return $this->hasMany(ProductReview::class, 'product_id', 'id')
             ->select([
-                DB::raw('AVG(rating) as rating'),
+                DB::raw('ROUND(AVG(rating),2) as rating'),
                 'product_id',
             ])
             ->groupBy('product_id');

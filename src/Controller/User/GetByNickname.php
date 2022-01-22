@@ -21,11 +21,11 @@ final class GetByNickname
         
         $user = $args['user'];
 
-        $args['user']->products;
-    
+        $args['user']->with('products.rating');
+
         $res = [
             'data' => [
-                'user' => $user,
+                'user' => $user->first(),
             ],
         ];
         return $this->response($response, 200, $res);
