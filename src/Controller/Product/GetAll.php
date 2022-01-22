@@ -48,6 +48,7 @@ final class GetAll
         }]);
         
 
+        $products = $products->with('productRating');
         $products = $products->with('images')->pagination((int) $params['page'], (int) $params['per_page']);
         
         $res = [

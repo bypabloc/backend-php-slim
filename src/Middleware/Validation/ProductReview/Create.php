@@ -31,7 +31,7 @@ class Create
             'product_id' => ['required','integer', new Exist('products', 'id')],
             'parent_id' => ['integer', new Exist('products_reviews', 'id')],
             'content' => ['required','string', 'max:250'], 
-            'rating' => ['required', 'integer'],
+            'rating' => ['required', 'integer','between:1,5'],
             'user_id' => ['integer', new Exist('users', 'id')],
             'image' => ['array',new ListContent('image')],
         ];
