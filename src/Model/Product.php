@@ -5,6 +5,8 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
+use Illuminate\Database\Capsule\Manager as DB;
+
 use App\Services\Slug;
 use App\Services\Storage;
 
@@ -90,7 +92,12 @@ class Product extends Model
 
     public function productRating()
     {
-        return $this->hasMany(ProductReview::class, 'product_id', 'id')->select('rating','product_id');
+        return $this->hasMany(ProductReview::class, 'product_id', 'id')
+            ->select([
+                DB::raw('AVG(rating) as rating'),
+                'product_id',
+            ])
+            ->groupBy('product_id');
     }
 
     public function discountStock(
