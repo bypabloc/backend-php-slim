@@ -85,7 +85,12 @@ class Product extends Model
 
     public function images()
     {
-        return $this->hasMany(Image::class, 'table_id', 'id')->where('table_name', 'products');
+        return $this->hasMany(Image::class, 'table_id', 'id')->select('id','path','table_id')->where('table_name', 'products');
+    }
+
+    public function productRating()
+    {
+        return $this->hasMany(ProductReview::class, 'product_id', 'id')->select('rating','product_id');
     }
 
     public function discountStock(
