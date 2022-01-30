@@ -17,6 +17,7 @@ final class Down
     {
         Migrations\ProductReview::down();
         Migrations\Discount::down();
+        Migrations\DiscountConfig::down();
         Migrations\CartProduct::down();
         Migrations\Cart::down();
 

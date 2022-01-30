@@ -11,26 +11,18 @@ class Discount
     {
         if (!Capsule::schema()->hasTable(self::$table)) {
             Capsule::schema()->create(self::$table, function ($table) {
+                $table->bigIncrements('id');
+
                 $table->string('coupon');
-                $table->primary('coupon');
-
-                $table->unsignedBigInteger('product_id')->nullable();
-                $table->foreign('product_id')->references('id')->on('products');
-
-                $table->unsignedBigInteger('category_id')->nullable();
-                $table->foreign('category_id')->references('id')->on('products_categories');
-
-                $table->unsignedBigInteger('user_id')->nullable();
-                $table->foreign('user_id')->references('id')->on('users');                
-
-                $table->smallInteger('discount_type')->default(0);
+                
+                $table->smallInteger('discount_type')->default(1);
                 // 1 = percentage
                 // 2 = amount
                 $table->double('discount_quantity', 8, 2);
 
-                $table->double('mount_mx_dsc', 8, 2);
+                $table->double('mount_max_discount', 8, 2)->nullable();
                                 
-                $table->smallInteger('state')->default(1);
+                $table->boolean('is_active')->default(1);
 
                 $table->unsignedBigInteger('created_by');
                 $table->foreign('created_by')->references('id')->on('users');
