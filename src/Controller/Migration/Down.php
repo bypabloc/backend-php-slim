@@ -16,6 +16,7 @@ final class Down
     public function __invoke(Request $request, Response $response): Response
     {
         Migrations\ProductReview::down();
+        Migrations\Discount::down();
         Migrations\CartProduct::down();
         Migrations\Cart::down();
 
