@@ -22,17 +22,16 @@ final class Update
         $body = $request->getAttribute('body');
 
         $product_review = ProductReview::find($body['id']);
-
-        $product_review->product_id =  $body['product_id'];
         
         if(!empty($body['parent_id'])){
             $product_review->parent_id = $body['parent_id'];
+        }else{
+            $product_review->product_id =  $body['product_id'];
+            $product_review->rating = $body['rating'];
         }
         
         $product_review->content = $body['content'];
-        $product_review->rating = $body['rating'];
         $product_review->user_id =  $session->user_id;
-
         $product_review->save();
 
         $id_product_review=$body['id'];

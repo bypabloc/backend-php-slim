@@ -23,14 +23,14 @@ final class Create
 
         $product_review = new ProductReview();
 
-        $product_review->product_id =  $body['product_id'];
-        
         if(!empty($body['parent_id'])){
             $product_review->parent_id = $body['parent_id'];
+        }else{
+            $product_review->product_id =  $body['product_id'];
+            $product_review->rating = $body['rating'];
         }
         
-        $product_review->content = $body['content'];
-        $product_review->rating = $body['rating'];
+        $product_review->content = $body['content'];        
         $product_review->user_id =  $session->user_id;
 
         // $product_review->creatingCustom();
@@ -59,7 +59,11 @@ final class Create
             Image::insert($images);
         }
         
-        $product_review = ProductReview::where('id',$product_review->id)->with('children')->with('images')->get();
+        $product_review = ProductReview::where('id',$product_review->id)
+                ->with(['images'])
+                ->with('children')
+                ->get();
+
         $res = [
             'data' => [
                 'product_review' => $product_review,

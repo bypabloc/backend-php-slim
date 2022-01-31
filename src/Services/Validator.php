@@ -37,7 +37,10 @@ class Validator
             'file.image' => 'The :attribute must be an image.',
             'file.max' => 'The :attribute must be less than :max kilobytes.',
             'before' => 'The :attribute must be less than today.',
+            'after' => 'The :attribute must be after than today.',
             'date'=> 'The :attribute must be a valid date (Y-m-d).',
+            'required_without'=> 'The :attribute field is required',
+            'required_without_all'=> 'The :attribute field is required',
         ]);
 
         if(!$validator->fails()){

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Product;
+namespace App\Controller\Discount;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

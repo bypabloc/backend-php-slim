@@ -48,6 +48,8 @@ final class Find
             $query->where('carts_products.user_id', '!=', $user_id);
         }]);
 
+        $products = $product->with('rating');
+        $product = $product->with('images');
         $product = $product->first();
         
 
