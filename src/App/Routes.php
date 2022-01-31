@@ -95,8 +95,6 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
 
     })->add(new CanPermission('products_reviews'))->add(Token::class);
 
-
-
     $app->group('/products', function (RouteCollectorProxy $app) {
     
         $app->get('/get_all', Product\GetAll::class)->add(new \App\Middleware\Pagination())->add(new CheckPermissionAdmin('products.get_all.admin'));

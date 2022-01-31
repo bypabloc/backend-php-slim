@@ -5,11 +5,10 @@ namespace App\Services;
 use Firebase\JWT\JWT as FirebaseJWT;
 use Firebase\JWT\Key;
 
-use App\Model\Session;
+use App\Model\SessionMongo;
 
 class JWT
 {
-
     private static $key;
 
     private static $session = null;
@@ -23,7 +22,7 @@ class JWT
     {
         
         $expirationInSeconds = 60 * 60; // one hour
-     
+        
         if($remember_me){
             $expirationInSeconds = 60 * 60 * 24 * 7;
         }
@@ -35,7 +34,6 @@ class JWT
             'dateTokenExpiration' => $dateTokenExpiration,
             'expirationInSeconds' => $expirationInSeconds
         ];
-        // return time() + (60 * 60 * 24 * 7);
     }
 
     public static function GenerateToken(
@@ -44,8 +42,6 @@ class JWT
         $remember_me = false,
     ) : string
     {
-
-
         $timeExpired = self::TimeExpired($remember_me);
 
         $dateTokenExpiration = $timeExpired->dateTokenExpiration;
@@ -60,7 +56,7 @@ class JWT
 
         self::DestroyTokens($user_id);
 
-        Session::create([
+        SessionMongo::create([
             'token' => $token,
             'user_id' => $user_id,
             'expired_at' => $dateTokenFormat,
@@ -73,10 +69,14 @@ class JWT
         string $token,
     ) : bool
     {
-        $session = Session::find($token);
+        $session = SessionMongo::findByPk($token);
+
         if(!$session){
             return false;
+        }else if($session->isDeleted()){
+            return false;
         }
+
         self::$session = $session;
         return true;
     }
@@ -102,7 +102,7 @@ class JWT
     }
 
     public static function RefreshToken(
-        Session $session,
+        SessionMongo $session,
     ) : void
     {
         $timeExpired = self::TimeExpired();
@@ -115,7 +115,7 @@ class JWT
     }
 
     public static function DestroySession(
-        Session $session,
+        SessionMongo $session,
     ) : void
     {
         $session->delete();
@@ -125,7 +125,9 @@ class JWT
         int $user_id,
     ) : void
     {
-        Session::where('user_id', $user_id)->delete();
+        SessionMongo::findMany([
+            'user_id' => $user_id,
+        ])->delete();
     }
 
     public static function isValid(
@@ -144,9 +146,8 @@ class JWT
     }
 
     public static function session(
-    ) : Session
+    ) : SessionMongo
     {
-
         return self::$session;
     }
 }
