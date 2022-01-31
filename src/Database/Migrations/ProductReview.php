@@ -14,7 +14,7 @@ class ProductReview
             Capsule::schema()->create(self::$table, function ($table) {
                 $table->bigIncrements('id');
 
-                $table->unsignedBigInteger('product_id');
+                $table->unsignedBigInteger('product_id')->nullable();
                 $table->foreign('product_id')->references('id')->on('products');
 
                 $table->unsignedBigInteger('parent_id')->nullable();
@@ -22,7 +22,7 @@ class ProductReview
 
                 $table->string('content');
 
-                $table->smallInteger('rating')->default(5);
+                $table->smallInteger('rating')->nullable();
 
                 $table->unsignedBigInteger('user_id');
                 $table->foreign('user_id')->references('id')->on('users');

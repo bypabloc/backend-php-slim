@@ -27,6 +27,8 @@ final class Up
         Migrations\ProductCategory::up();
         Migrations\Product::up();
         Migrations\Image::up();
+        Migrations\Discount::up();
+        Migrations\DiscountConfig::up();
         Migrations\Cart::up();
         Migrations\CartProduct::up();
         Migrations\ProductReview::up();

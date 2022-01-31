@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Middleware\Validation\ProductReview;
+namespace App\Middleware\Validation\ProductCategory;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
@@ -11,9 +11,9 @@ use App\Serializer\JsonResponse;
 use App\Services\Validator;
 
 use App\Middleware\Validation\Rule\Exist;
-use App\Middleware\Validation\Rule\ListContent;
+use App\Middleware\Validation\Rule\ItemOwner;
 
-class Update
+class State
 {
     use JsonResponse;
     
@@ -23,22 +23,16 @@ class Update
         $session = $request->getAttribute('session');
         $check_permission_admin = $request->getAttribute('check_permission_admin');
 
-        $validators = [    
-            'id' => ['required', 'integer', new Exist('products_reviews', 'id')],
-            'product_id' => ['required_without:parent_id','integer', new Exist('products', 'id')],
-            'parent_id' => ['integer', new Exist('products_reviews', 'id')],
-            'content' => ['required','string', 'max:250'], 
-            'rating' => ['required_without:parent_id', 'integer','between:1,5'],
-            'user_id' => ['integer', new Exist('users', 'id')],
-            'image' => ['array',new ListContent('image')],
+        $validators = [
+            'id' => ['required', 'integer', new Exist('products_categories', 'id')],
+            'is_active' => ['required', 'boolean'],
         ];
-        if ($check_permission_admin) {
-            $validators['user_id'] = ['integer', new Exist('users', 'id')];
-        }else{
+
+        if (!$check_permission_admin) {
             $user_id = $session->user_id;
             $body['user_id'] = $user_id;
             $validators['id'] = [new Exist(
-                table: 'products_reviews',
+                table: 'products_categories',
                 column: 'id',
                 owner: 'user_id',
             )];

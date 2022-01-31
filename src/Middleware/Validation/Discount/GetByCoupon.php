@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Middleware\Validation\User;
+namespace App\Middleware\Validation\ProductCategory;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
@@ -13,9 +13,9 @@ use App\Services\Validator;
 
 use App\Middleware\Validation\Rule;
 
-use App\Model\User;
+use App\Model\ProductCategory;
 
-class GetByNickname
+class GetBySlug
 {
     use RequestValidatorErrors;
     use JsonResponse;
@@ -25,7 +25,7 @@ class GetByNickname
         $args = $request->getAttribute('args');
 
         $validators = [
-            'nickname' => [
+            'slug' => [
                 'required', 
                 'string',
             ],
@@ -43,18 +43,18 @@ class GetByNickname
                 ]);
             }
 
-            $user = User::where('nickname', $validator->data['nickname'])->where('is_active', 1);
+            $product_category = ProductCategory::where('slug', $validator->data['slug'])->where('is_active', 1)->first();
 
-            if(!$user->first()){
+            if(!$product_category){
                 $response = new Response();
                 return $this->response($response, 404, [
                     'errors' => [
-                        'user' => 'User not found',
+                        'product_category' => 'Product not found',
                     ],
                 ]);
             }
 
-            $validator->data['user'] = $user;
+            $validator->data['product_category'] = $product_category;
 
             $request = $request->withAttribute('args', $validator->data);
             

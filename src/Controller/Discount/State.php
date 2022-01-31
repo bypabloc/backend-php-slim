@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Product;
+namespace App\Controller\Discount;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -11,17 +11,21 @@ use App\Services\Hash;
 
 use App\Model\Product;
 
-final class GetBySlug
+final class State
 {
     use JsonResponse;
 
     public function __invoke(Request $request, Response $response): Response
     {
-        $args = $request->getAttribute('args');
+        $session = $request->getAttribute('session');
+        $body = $request->getAttribute('body');
 
-        $product = $args['product'];
-        $args['product']->related;
-        $args['product']->rating;
+        $product = Product::find($body['id']);
+        $product->state = $body['state'];
+        
+        // $product->updatingCustom();
+
+        $product->save();
 
         $res = [
             'data' => [
