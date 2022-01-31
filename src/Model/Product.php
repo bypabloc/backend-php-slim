@@ -69,18 +69,12 @@ class Product extends Model
     public function creatingCustom()
     {
         $this->slug = rand(1, 999999999) . "-" . Slug::make($this->name);
-        if(!empty($this->image)){
-            $this->image = self::saveProductImage($this->image);
-        }
     }
 
     public function updatingCustom()
     {
         if ($this->name != $this->getOriginal('name')) {
             $this->slug = explode("-", $this->getOriginal('slug'))[0] . "-" . Slug::make($this->name);
-        }
-        if(isset($this->image)){
-            $this->image = self::saveProductImage($this->image);
         }
     }
 

@@ -19,7 +19,7 @@ use App\Controller\Product;
 use App\Controller\ProductReview;
 use App\Controller\MyProfile;
 use App\Controller\Cart;
-
+use App\Controller\Discount;
 use App\Middleware\Token;
 use App\Middleware\BodyParser;
 use App\Middleware\CanPermission;
@@ -66,6 +66,11 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
      */
     $app->get('/product/{slug}', Product\GetBySlug::class)->add(new \App\Middleware\Validation\Product\GetBySlug());
 
+    /*
+    *  Consulta un cupon por codigo
+    */
+    // $app->get('/discount/{coupon}', Discount\GetByCoupon::class)->add(new \App\Middleware\Validation\Discount\GetByCoupon()); //falta programar
+
     $app->group('/carts', function (RouteCollectorProxy $app) {
 
         $app->get('/get_all', Cart\GetAll::class)->add(new \App\Middleware\Pagination())->add(new CheckPermissionAdmin('carts.get_all.admin'));
@@ -90,8 +95,6 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
 
     })->add(new CanPermission('products_reviews'))->add(Token::class);
 
-
-
     $app->group('/products', function (RouteCollectorProxy $app) {
     
         $app->get('/get_all', Product\GetAll::class)->add(new \App\Middleware\Pagination())->add(new CheckPermissionAdmin('products.get_all.admin'));
@@ -106,6 +109,16 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
         $app->post('/cart_product_canceled', Cart\CartProductCanceled::class)->add(new \App\Middleware\Validation\Cart\CartProductCanceled())->add(new CheckPermissionAdmin('carts.cart_product_canceled.admin'));
 
     })->add(new CanPermission('products'))->add(Token::class);
+
+    $app->group('/discounts', function (RouteCollectorProxy $app) {
+    
+        $app->get('/get_all', Discount\GetAll::class)->add(new \App\Middleware\Pagination())->add(new CheckPermissionAdmin('discounts.get_all.admin'));
+        $app->get('/find', Discount\Find::class)->add(new \App\Middleware\Validation\Product\Find())->add(new CheckPermissionAdmin('discounts.find.admin'));
+        $app->post('/create', Discount\Create::class)->add(new \App\Middleware\Validation\Discount\Create())->add(new CheckPermissionAdmin('discounts.create.admin'));
+        $app->post('/update', Discount\Update::class)->add(new \App\Middleware\Validation\Product\Update())->add(new CheckPermissionAdmin('discounts.update.admin'));
+        $app->post('/state', Discount\State::class)->add(new \App\Middleware\Validation\Product\State())->add(new CheckPermissionAdmin('discounts.state.admin'));
+        
+    })->add(new CanPermission('discounts'))->add(Token::class);
 
     $app->group('/products_categories', function (RouteCollectorProxy $app) {
         

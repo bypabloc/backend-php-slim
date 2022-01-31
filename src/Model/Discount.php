@@ -20,12 +20,9 @@ class Discount extends Model
      */
     protected $fillable = [
         'coupon',
-        'product_id',
-        'category_id',
-        'user_id',
         'discount_type',
         'discount_quantity',
-        'mount_mx_dsc',
+        'mount_max_discount',
         'is_active',
         'created_by',
         'expired_at'
@@ -37,11 +34,8 @@ class Discount extends Model
      * @var array
      */
     protected $casts = [
-        'category_id' => 'integer',
-        'product_id' => 'integer',
-        'user_id' => 'integer',
         'discount_type' => 'integer',
-        'mount_mx_dsc' => 'float',
+        'mount_max_discount' => 'float',
         'is_active' => 'boolean',
         'created_by' => 'integer'
     ];
@@ -52,9 +46,9 @@ class Discount extends Model
      * @var array
      */
 
-    public function creatingCustom()
+    public function discount_config()
     {
-        $this->coupon = Slug::generateRandomCodes($this->coupon);
+        return $this->hasMany(DiscountConfig::class, 'discount_id', 'id')->select('table_id','table_name','discount_id');
     }
 
 }

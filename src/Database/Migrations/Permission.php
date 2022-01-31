@@ -173,6 +173,11 @@ class Permission
                         'created_by' => 1,
                     ],
                     [
+                        'name' => 'discounts.get_all.admin',
+                        'alias' => 'discounts.get_all.admin',
+                        'created_by' => 1,
+                    ],
+                    [
                         'name' => 'discounts.create.admin',
                         'alias' => 'discounts.create.admin',
                         'created_by' => 1,

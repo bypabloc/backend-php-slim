@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Middleware\Validation\ProductCategory;
+namespace App\Middleware\Validation\Discount;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
@@ -11,9 +11,11 @@ use App\Serializer\RequestValidatorErrors;
 
 use App\Services\Validator;
 
-use App\Middleware\Validation\Rule\Unique;
+use App\Middleware\Validation\Rule\UniqueWhitSugestion;
 use App\Middleware\Validation\Rule\Exist;
-use App\Middleware\Validation\Rule\OnlyLetters;
+use App\Middleware\Validation\Rule\ExistList;
+use App\Middleware\Validation\Rule\ListNotRepeat;
+use App\Middleware\Validation\Rule\ListContent;
 
 class Create
 {
@@ -23,18 +25,32 @@ class Create
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
         $body = $request->getAttribute('body');
+
+        if(isset($body['coupon'])){
+            $body['coupon'] = strtoupper($body['coupon']);
+        }
+
         $session = $request->getAttribute('session');
         $check_permission_admin = $request->getAttribute('check_permission_admin');
         
         $validators = [
-            'name' => ['required', 'string', 'max:20', new Unique('products_categories', 'name')],
+            'coupon' => ['required', 'string', 'between:5,15' ,new UniqueWhitSugestion('discounts', 'coupon')],
+            'discount_type' => ['required','integer', 'in:0,1,2'],
+            'discount_quantity' => ['required', 'numeric', 'min:0', 'required_with:discount_type'],
+            'mount_max_discount' => ['required','numeric'],  // ,'between:0,100' validation
             'is_active' => ['boolean'],
-            'parent_id' => ['integer', new Exist('products_categories', 'id')],
-            'user_id' => ['integer', new Exist('users', 'id')],
+            'created_by' => ['required','integer', new Exist('users', 'id')],
+            'expired_at'=>['required','date','after:today'],
+
+            'user_id'=>['required_without_all:product_id,category_id', 'array',new ListContent('integer'), new ExistList('users', 'id'), new ListNotRepeat()],
+            'product_id'=>['required_without_all:user_id,category_id', 'array',new ListContent('integer'), new ExistList('products', 'id'), new ListNotRepeat()],
+            'category_id'=>['required_without_all:user_id,product_id', 'array',new ListContent('integer'), new ExistList('products_categories', 'id'), new ListNotRepeat()],
         ];
         if (!$check_permission_admin) {
-            $body['user_id'] = $session->user_id;
-            $validators['user_id'] = ['integer'];
+            $body['created_by'] = $session->user_id;
+            $validators['created_by'] = ['integer'];
+        }else{
+            array_push($validators['created_by'],'required');
         }
 
         try {
@@ -56,7 +72,11 @@ class Create
         } catch (\Throwable $th) {
             $response = new Response();
             $response = $this->response($response, 500, [
-                'errors' => $th,
+                'errors' => [
+                    'message' => $th->getMessage(),
+                    'getFile' => $th->getFile(),
+                    'getLine' => $th->getLine(),
+                ],
             ]);
         }
 
