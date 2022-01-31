@@ -24,6 +24,6 @@ class SessionMongo extends MongoModel
 
     public function user()
     {
-        return User::find($this->user_id);
+        return User::find($this->data['user_id']);
     }
 }
