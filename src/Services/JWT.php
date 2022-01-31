@@ -9,7 +9,6 @@ use App\Model\Session;
 
 class JWT
 {
-
     private static $key;
 
     private static $session = null;
@@ -23,7 +22,7 @@ class JWT
     {
         
         $expirationInSeconds = 60 * 60; // one hour
-     
+        
         if($remember_me){
             $expirationInSeconds = 60 * 60 * 24 * 7;
         }
@@ -35,7 +34,6 @@ class JWT
             'dateTokenExpiration' => $dateTokenExpiration,
             'expirationInSeconds' => $expirationInSeconds
         ];
-        // return time() + (60 * 60 * 24 * 7);
     }
 
     public static function GenerateToken(
@@ -44,8 +42,6 @@ class JWT
         $remember_me = false,
     ) : string
     {
-
-
         $timeExpired = self::TimeExpired($remember_me);
 
         $dateTokenExpiration = $timeExpired->dateTokenExpiration;
@@ -73,10 +69,14 @@ class JWT
         string $token,
     ) : bool
     {
-        $session = Session::find($token);
+        $session = Session::findByPk($token);
+
         if(!$session){
             return false;
+        }else if($session->isDeleted()){
+            return false;
         }
+
         self::$session = $session;
         return true;
     }
@@ -125,7 +125,9 @@ class JWT
         int $user_id,
     ) : void
     {
-        Session::where('user_id', $user_id)->delete();
+        Session::findMany([
+            'user_id' => $user_id,
+        ])->delete();
     }
 
     public static function isValid(
@@ -146,7 +148,6 @@ class JWT
     public static function session(
     ) : Session
     {
-
         return self::$session;
     }
 }

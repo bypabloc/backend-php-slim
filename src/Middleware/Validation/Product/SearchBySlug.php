@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Middleware;
+namespace App\Middleware\Validation\Product;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
@@ -11,7 +11,11 @@ use App\Serializer\RequestValidatorErrors;
 
 use App\Services\Validator;
 
-class Pagination
+use App\Middleware\Validation\Rule;
+
+use App\Model\Product;
+
+class SearchBySlug
 {
     use RequestValidatorErrors;
     use JsonResponse;
@@ -20,14 +24,19 @@ class Pagination
     {
         $params = $request->getAttribute('params');
 
+        $validators = [
+            'p' => [
+                'required',
+                'string',
+                'regex:/^[a-zA-Z0-9\s]+$/u',
+            ],
+        ];
+
         try {
             $validator = new Validator();
 
-            $validator->validate($params, [
-                'page' => ['required', 'integer', 'min:1'],
-                'per_page' => ['required', 'integer', 'min:5'],
-            ]);
-    
+            $validator->validate($params, $validators);
+
             if(!$validator->isValid()){
                 $response = new Response();
                 return $this->response($response, 422, [

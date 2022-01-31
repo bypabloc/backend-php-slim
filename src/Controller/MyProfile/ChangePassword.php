@@ -20,7 +20,7 @@ final class ChangePassword
         $session = $request->getAttribute('session');
         $body = $request->getAttribute('body');
 
-        $user = $session->user;
+        $user = $session->user();
         if(!Hash::validate($body['password_current'], $user->password)){
             return $this->response($response, 422, [
                 'errors' => [

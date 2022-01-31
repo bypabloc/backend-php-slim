@@ -39,6 +39,7 @@ class Validator
             'before' => 'The :attribute must be less than today.',
             'after' => 'The :attribute must be after than today.',
             'date'=> 'The :attribute must be a valid date (Y-m-d).',
+            'regex'=> 'The :attribute must be a format valid.',
             'required_without'=> 'The :attribute field is required',
             'required_without_all'=> 'The :attribute field is required',
         ]);

@@ -16,7 +16,7 @@ final class MeActive
     public function __invoke(Request $request, Response $response): Response
     {
         $session = $request->getAttribute('session');
-        $user_id = $session->user->id;
+        $user_id = $session->user_id;
 
         $cart = Cart::where('user_id',$user_id)->where('state',1)->with('products')->latest()->first();
         
