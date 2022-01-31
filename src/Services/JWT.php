@@ -5,7 +5,7 @@ namespace App\Services;
 use Firebase\JWT\JWT as FirebaseJWT;
 use Firebase\JWT\Key;
 
-use App\Model\SessionMongo;
+use App\Model\Session;
 
 class JWT
 {
@@ -56,7 +56,7 @@ class JWT
 
         self::DestroyTokens($user_id);
 
-        SessionMongo::create([
+        Session::create([
             'token' => $token,
             'user_id' => $user_id,
             'expired_at' => $dateTokenFormat,
@@ -69,7 +69,7 @@ class JWT
         string $token,
     ) : bool
     {
-        $session = SessionMongo::findByPk($token);
+        $session = Session::findByPk($token);
 
         if(!$session){
             return false;
@@ -102,7 +102,7 @@ class JWT
     }
 
     public static function RefreshToken(
-        SessionMongo $session,
+        Session $session,
     ) : void
     {
         $timeExpired = self::TimeExpired();
@@ -115,7 +115,7 @@ class JWT
     }
 
     public static function DestroySession(
-        SessionMongo $session,
+        Session $session,
     ) : void
     {
         $session->delete();
@@ -125,7 +125,7 @@ class JWT
         int $user_id,
     ) : void
     {
-        SessionMongo::findMany([
+        Session::findMany([
             'user_id' => $user_id,
         ])->delete();
     }
@@ -146,7 +146,7 @@ class JWT
     }
 
     public static function session(
-    ) : SessionMongo
+    ) : Session
     {
         return self::$session;
     }
