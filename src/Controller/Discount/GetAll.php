@@ -23,37 +23,16 @@ final class GetAll
         $session = $request->getAttribute('session');
         $user_id = $session->user_id;
 
-        $products = new Product();
+        $discounts = new Discount();
         if (!$check_permission_admin) {
-            $products = $products->where('user_id', $user_id);
+            $discounts = $discounts->where('created_by', $user_id);
         }
-
-        $products = $products->with(['salesCanceled' => function ($query) use ($user_id) {
-            $query->where('carts_products.user_id', '!=', $user_id);
-        }]);
-        $products = $products->with(['salesRequest' => function ($query) use ($user_id) {
-            $query->where('carts_products.user_id', '!=', $user_id);
-        }]);
-        $products = $products->with(['salesPaid' => function ($query) use ($user_id) {
-            $query->where('carts_products.user_id', '!=', $user_id);
-        }]);
-        $products = $products->with(['salesSent' => function ($query) use ($user_id) {
-            $query->where('carts_products.user_id', '!=', $user_id);
-        }]);
-        $products = $products->with(['salesDelivered' => function ($query) use ($user_id) {
-            $query->where('carts_products.user_id', '!=', $user_id);
-        }]);
-        $products = $products->with(['salesFinalized' => function ($query) use ($user_id) {
-            $query->where('carts_products.user_id', '!=', $user_id);
-        }]);
-        
-
-        $products = $products->with('rating');
-        $products = $products->with('images')->pagination((int) $params['page'], (int) $params['per_page']);
+       
+        $discounts = $products->pagination((int) $params['page'], (int) $params['per_page']);
         
         $res = [
             'data' => [
-                'products' => $products,
+                'discounts' => $discounts,
             ],
         ];
         return $this->response($response, 200, $res);

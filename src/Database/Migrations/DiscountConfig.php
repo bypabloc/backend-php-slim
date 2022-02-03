@@ -19,7 +19,7 @@ class DiscountConfig
 
                 $table->string('table_name');
                 
-                $table->unsignedBigInteger('discount_id')->nullable();
+                $table->unsignedBigInteger('discount_id');
                 $table->foreign('discount_id')->references('id')->on('discounts');
 
                 $table->timestamps();
