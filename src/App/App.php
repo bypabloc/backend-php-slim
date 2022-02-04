@@ -15,6 +15,8 @@ use Slim\Psr7\Factory\StreamFactory;
 use DI\ContainerBuilder;
 use \App\App\Settings;
 
+use \App\Services\Logger;
+
 try {
 
     $containerBuilder = new ContainerBuilder();
@@ -32,6 +34,10 @@ try {
     $app->addBodyParsingMiddleware();
 
     $errorMiddleware = $app->addErrorMiddleware(true, true, true);
+
+    Logger::info(
+        message: 'App started',
+    );
 
 } catch (\Throwable $th) {
     echo $th->getMessage();
