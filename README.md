@@ -27,3 +27,11 @@
 
 ## Para usar plantilla para los commits:
     git config --global commit.template .gitmessage
+
+## para instalar laravel telescope:
+    php artisan telescope:install
+
+## y luego ejecutar las migraciones
+    php artisan migrate
+
+## para ver los eventos de telescope ir a la ruta: "/telescope"
