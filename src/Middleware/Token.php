@@ -60,8 +60,11 @@ class Token
         } catch (\Throwable $th) {
             $response = new Response();
             $response = $this->response($response, 500, [
-                'errors' => $th,
+                'message' => $th->getMessage(),
+                'getFile' => $th->getFile(),
+                'getLine' => $th->getLine(),
             ]);
+            return $response;
         }
 
         return $response;

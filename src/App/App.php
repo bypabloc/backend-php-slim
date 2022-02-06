@@ -15,6 +15,8 @@ use Slim\Psr7\Factory\StreamFactory;
 use DI\ContainerBuilder;
 use \App\App\Settings;
 
+use \App\Services\Logger;
+
 try {
 
     $containerBuilder = new ContainerBuilder();
@@ -25,25 +27,28 @@ try {
 
     AppFactory::setContainer($container);
     $app = AppFactory::create();
+    
+    $app->add(\App\Middleware\CorsMiddleware::class);
 
     $app->addRoutingMiddleware();
     $app->addBodyParsingMiddleware();
+
     $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 
-    $app->add(function ($request, $handler) {
-        $response = $handler->handle($request);
-        return $response
-                ->withHeader('Access-Control-Allow-Origin', '*')
-                ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-                ->withHeader('Access-Control-Allow-Methods', 'GET, POST');
-    });
+    Logger::info(
+        message: 'App started',
+    );
 
-    $container = $app->getContainer();
+    require __DIR__ . '/Routes.php';
+    
+    require __DIR__ . '/../Config/bootstrap.php';
 
 } catch (\Throwable $th) {
-    echo $th->getMessage();
+    Logger::error(
+        message: [
+            'message' => $th->getMessage(),
+            'file' => $th->getFile(),
+            'line' => $th->getLine(),
+        ],
+    );
 }
-
-require __DIR__ . '/Routes.php';
-
-require __DIR__ . '/../Config/bootstrap.php';

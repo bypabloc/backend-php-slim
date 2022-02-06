@@ -14,6 +14,7 @@ use App\Services\Validator;
 use App\Model\Product;
 
 use App\Middleware\Validation\Rule\Exist;
+use App\Middleware\Validation\Rule\ListContent;
 
 class Create
 {
@@ -27,11 +28,12 @@ class Create
         $check_permission_admin = $request->getAttribute('check_permission_admin');
 
         $validators = [
-            'product_id' => ['required','integer', new Exist('products', 'id')],
+            'product_id' => ['required_without:parent_id','integer', new Exist('products', 'id')],
             'parent_id' => ['integer', new Exist('products_reviews', 'id')],
             'content' => ['required','string', 'max:250'], 
-            'rating' => ['required', 'integer'],
+            'rating' => ['required_without:parent_id', 'integer','between:1,5'],
             'user_id' => ['integer', new Exist('users', 'id')],
+            'image' => ['array',new ListContent('image')],
         ];
         if (!$check_permission_admin) {
             $body['user_id'] = $session->user_id;

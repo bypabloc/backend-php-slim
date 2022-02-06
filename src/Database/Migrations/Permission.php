@@ -63,6 +63,11 @@ class Permission
                         'created_by' => 1,
                     ],
                     [
+                        'name' => 'migrations',
+                        'alias' => 'migrations',
+                        'created_by' => 1,
+                    ],
+                    [
                         'name' => 'carts.get_all.admin',
                         'alias' => 'carts.get_all.admin',
                         'created_by' => 1,
@@ -160,6 +165,36 @@ class Permission
                     [
                         'name' => 'products.to_pay.admin',
                         'alias' => 'products.to_pay.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'discounts',
+                        'alias' => 'discounts',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'discounts.get_all.admin',
+                        'alias' => 'discounts.get_all.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'discounts.create.admin',
+                        'alias' => 'discounts.create.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'discounts.find.admin',
+                        'alias' => 'discounts.find.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'discounts.state.admin',
+                        'alias' => 'discounts.state.admin',
+                        'created_by' => 1,
+                    ],
+                    [
+                        'name' => 'discounts.update.admin',
+                        'alias' => 'discounts.update.admin',
                         'created_by' => 1,
                     ],
                 ],

@@ -24,7 +24,7 @@ final class Find
         $user_id = $session->user_id;
 
         $product = new Product();
-        $product = $product->where('id', $params['id']);
+        $product = $product->where('id', $params['id'])->with('images');
         if (!$check_permission_admin) {
             $product = $product->where('user_id', $user_id);
         }
@@ -48,6 +48,8 @@ final class Find
             $query->where('carts_products.user_id', '!=', $user_id);
         }]);
 
+        $products = $product->with('rating');
+        $product = $product->with('images');
         $product = $product->first();
         
 

@@ -2,44 +2,28 @@
 
 namespace App\Model;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
+use App\Services\MongoModel;
 
-class Session extends Model
+class Session extends MongoModel
 {
+    protected $collection = 'sessions';
     protected $primaryKey = 'token';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
+    protected $fields = [
         'token',
         'user_id',
         'expired_at',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'is_active' => 'boolean',
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
+    protected $validations = [
+        'expired_at' => [
+            'required' => true,
+            'type' => 'datetime',
+        ],
     ];
 
     public function user()
     {
-        return $this->hasOne(User::class, 'id', 'user_id');
-        // return $this->belongsTo(User::class);
+        return User::find($this->data['user_id']);
     }
 }

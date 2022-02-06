@@ -24,7 +24,7 @@ class Update
         $body = $request->getAttribute('body');
         $session = $request->getAttribute('session');
 
-        $user_id = $session->user->id;
+        $user_id = $session->user_id;
 
         try {
             $validator = new Validator();

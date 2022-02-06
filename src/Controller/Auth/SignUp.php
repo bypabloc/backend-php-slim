@@ -20,6 +20,8 @@ final class SignUp
         $user = new User();
         $user->nickname = $body['nickname'];
         $user->email = $body['email'];
+        $user->sex = $body['sex'];
+        $user->birthday = $body['birthday'];
         $user->password = $body['password'];
 
         $user->creatingCustom();

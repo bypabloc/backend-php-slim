@@ -14,6 +14,7 @@ use App\Middleware\Validation\Rule\Unique;
 use App\Middleware\Validation\Rule\Exist;
 use App\Middleware\Validation\Rule\OnlyLetters;
 use App\Middleware\Validation\Rule\IsBase64;
+use App\Middleware\Validation\Rule\IsDate;
 
 class Update
 {
@@ -30,7 +31,8 @@ class Update
                 'id' => ['required', 'integer', new Exist('users', 'id')],
                 'email' => ['string', 'email', new Unique('users', 'email')],
                 'nickname' => ['string', new Unique('users', 'nickname')],
-                
+                'sex'=>['required','integer', 'between:1,3'],
+                'birthday'=>['required','date','before:today'],
                 'password' => ['string', 'min:6', 'max:50'],
                 'passwordConfirmation' => ['string', 'min:6', 'max:50', 'same:password', 'required_with:password'],
                 'role_id' => ['integer', new Exist('roles', 'id')],

@@ -5,6 +5,8 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
+use Illuminate\Database\Capsule\Manager as DB;
+
 use App\Services\Slug;
 use App\Services\Storage;
 
@@ -34,8 +36,6 @@ class Product extends Model
 
         'stock',
 
-        'image',
-
         'weight',
         'height',
         'width',
@@ -55,7 +55,6 @@ class Product extends Model
      */
     protected $casts = [
         'price' => 'float',
-        'price' => 'float',
         'discount_type' => 'integer',
     ];
 
@@ -70,9 +69,6 @@ class Product extends Model
     public function creatingCustom()
     {
         $this->slug = rand(1, 999999999) . "-" . Slug::make($this->name);
-        if(!empty($this->image)){
-            $this->image = self::saveProductImage($this->image);
-        }
     }
 
     public function updatingCustom()
@@ -80,9 +76,21 @@ class Product extends Model
         if ($this->name != $this->getOriginal('name')) {
             $this->slug = explode("-", $this->getOriginal('slug'))[0] . "-" . Slug::make($this->name);
         }
-        if(isset($this->image)){
-            $this->image = self::saveProductImage($this->image);
-        }
+    }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class, 'table_id', 'id')->select('id','path','table_id')->where('table_name', 'products');
+    }
+
+    public function rating()
+    {
+        return $this->hasMany(ProductReview::class, 'product_id', 'id')
+            ->select([
+                DB::raw('ROUND(AVG(rating),2) as rating'),
+                'product_id',
+            ])
+            ->groupBy('product_id');
     }
 
     public function discountStock(
@@ -110,7 +118,7 @@ class Product extends Model
 
     public function related()
     {
-        return $this->hasMany(Product::class, 'product_category_id', 'product_category_id');
+        return $this->hasMany(Product::class, 'product_category_id', 'product_category_id')->where('id', '!=', $this->id);
     }
 
     public function salesCanceled()
