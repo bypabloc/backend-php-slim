@@ -58,6 +58,10 @@ class CreateTest extends TestCase
                     ],
                 ],
             ]);
+
+        $this->assertDatabaseHas('roles', [
+            'name' => $role->name,
+        ]);
     }
 
 }
