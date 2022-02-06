@@ -4,5 +4,4 @@ vendor/
 public/product_images/
 public/storage/
 
-exit
-git checkout master
+Storage/logs/

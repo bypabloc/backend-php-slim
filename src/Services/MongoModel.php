@@ -5,6 +5,8 @@ namespace App\Services;
 use MongoDB\Client as MongoClient;
 use MongoDB\BSON\toPHP as toPHP;
 
+use App\Services\Logger;
+
 class MongoModel
 {
     private static $connection;
@@ -154,10 +156,32 @@ class MongoModel
         
         self::creating_this();
 
-        $instance = self::$class_instance;
-        $newItem = self::$connection->{self::$collection}->insertOne($instance->data);
-        if(self::$primaryKey === '_id'){
-            $instance->_id = $newItem->getInsertedId();
+        try {
+            $instance = self::$class_instance;
+            // $newItem = self::$connection->{self::$collection}->insertOne($instance->data);
+            print_r(self::$connection->listCollections());
+            
+            $newItem = self::$connection->selectCollection(self::$collection)->insertOne($instance->data);
+
+            // self::$connection->{self::$collection}->createIndex(['token' => 1]);
+            // self::$connection->{self::$collection}->createIndex(['user_id' => 1]);
+            // self::$connection->{self::$collection}->createIndex(['token' => 1]);
+            // self::$connection->{self::$collection}->createIndex(['token' => 1]);
+
+            if(self::$primaryKey === '_id'){
+                $instance->_id = $newItem->getInsertedId();
+            }
+            Logger::info(
+                message: 'Created new item in collection: ' . self::$collection . ' with data: ' . json_encode($instance->data)
+            );
+        } catch (\Throwable $th) {
+            Logger::error(
+                message: [
+                    'message' => $th->getMessage(),
+                    'file' => $th->getFile(),
+                    'line' => $th->getLine(),
+                ],
+            );
         }
 
         self::created_this();
