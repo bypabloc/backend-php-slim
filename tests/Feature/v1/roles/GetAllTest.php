@@ -8,9 +8,13 @@ use Tests\TestCase;
 
 class GetAllTest extends TestCase
 {
-    public function test_get_all()
+    /** @test */
+    public function get_all()
     {
-        $response = $this->get('/api/v1/roles/get_all');
+        $response = $this->jsonFetch(
+            'GET',
+            '/api/v1/roles/get_all'
+        );
 
         $response->assertStatus(200)
             ->assertJsonStructure([

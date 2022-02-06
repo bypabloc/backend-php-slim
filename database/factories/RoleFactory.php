@@ -12,7 +12,7 @@ class RoleFactory extends Factory
     {
         return [
             'name' => $this->faker->unique()->jobTitle(),
-            'is_active' => $this->faker->numberBetween(0, 1),
+            'is_active' => $this->faker->boolean(),
             'created_by' => User::all()->random(1)->first()->id,
         ];
     }

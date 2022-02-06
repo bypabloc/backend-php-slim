@@ -27,6 +27,11 @@ Route::prefix('v1')->middleware([DataParser::class])->group(function () {
             Requests\RoleValidation\GetAll::class,
         ])
         ->get('get_all', Controllers\RoleController\GetAll::class);
+
+        Route::middleware([
+            Requests\RoleValidation\FindOne::class,
+        ])
+        ->get('find_one', Controllers\RoleController\FindOne::class);
         
         Route::middleware([
             Requests\RoleValidation\Create::class,

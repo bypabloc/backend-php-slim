@@ -21,3 +21,9 @@
 
 ## Comando para crear un test:
     php artisan make:test v1\\name\\ActionTest
+
+## Para filtrar test a uno o unos en especifico puede agregar la bandera:
+    --filter=FindOneTest
+
+## Para usar plantilla para los commits:
+    git config --global commit.template .gitmessage

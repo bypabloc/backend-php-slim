@@ -10,13 +10,15 @@ use App\Models\Role;
 
 class UpdateTest extends TestCase
 {
-    public function test_validation_fails()
+    /** @test */
+    public function validation_fails()
     {
         $roleOld = Role::all()->random();
 
         $roleNew = Role::factory()->make();
 
-        $response = $this->postJson(
+        $response = $this->jsonFetch(
+            'POST',
             '/api/v1/roles/update', 
             [
                 'name' => $roleNew->name,
@@ -32,13 +34,15 @@ class UpdateTest extends TestCase
             ]);
     }
 
-    public function test_validation_success()
+    /** @test */
+    public function validation_success()
     {
         $roleOld = Role::all()->random();
 
         $roleNew = Role::factory()->make();
 
-        $response = $this->postJson(
+        $response = $this->jsonFetch(
+            'POST',
             '/api/v1/roles/update', 
             [
                 'id' => $roleOld->id,
@@ -69,5 +73,67 @@ class UpdateTest extends TestCase
             'id' => $roleOld->id,
             'name' => $roleNew->name,
         ]);
+    }
+
+    /** @test */
+    public function validation_is_active_fails()
+    {
+        $roleOld = Role::all()->random();
+
+        $roleNew = Role::factory()->make();
+
+        $response = $this->jsonFetch(
+            'POST',
+            '/api/v1/roles/update', 
+            [
+                'id' => $roleOld->id,
+                'is_active' => 3,
+            ],
+        );
+
+        $response->assertStatus(422)
+            ->assertJsonStructure([
+                'message',
+                'errors' => [
+                    'is_active',
+                ],
+            ]);
+    }
+
+    /** @test */
+    public function validation_is_active_success()
+    {
+        $roleOld = Role::all()->random();
+
+        $roleNew = Role::factory()->make();
+
+        $response = $this->jsonFetch(
+            'POST',
+            '/api/v1/roles/update', 
+            [
+                'id' => $roleOld->id,
+                'is_active' => $roleNew->is_active,
+            ],
+        );
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'message',
+                'data' => [
+                    'role' => [
+                        'name',
+                        'is_active',
+                    ],
+                ],
+            ])
+            ->assertJson([
+                'message' => 'Role updated successfully.',
+                'data' => [
+                    'role' => [
+                        'id' => $roleOld->id,
+                        'is_active' => $roleNew->is_active,
+                    ],
+                ],
+            ]);
     }
 }

@@ -8,18 +8,20 @@ use Tests\TestCase;
 
 use App\Models\Role;
 
-class CreateTest extends TestCase
+class FindOneTest extends TestCase
 {
-    // https://auth0.com/blog/testing-laravel-apis-with-phpunit/
-    
     /** @test */
     public function validation_fails()
     {
+        $roleOld = Role::all()->random();
+
+        $roleNew = Role::factory()->make();
+
         $response = $this->jsonFetch(
-            'POST',
-            '/api/v1/roles/create',
+            'GET',
+            '/api/v1/roles/find_one', 
             [
-                'name' => '',
+                'id' => $roleNew->id,
             ],
         );
 
@@ -27,45 +29,47 @@ class CreateTest extends TestCase
             ->assertJsonStructure([
                 'message',
                 'errors' => [
-                    'name',
-                ]
+                    'id',
+                ],
             ]);
     }
 
     /** @test */
     public function validation_success()
     {
-        $role = Role::factory()->make();
+        $roleOld = Role::factory()->create();
 
         $response = $this->jsonFetch(
-            'POST',
-            '/api/v1/roles/create', 
+            'GET',
+            '/api/v1/roles/find_one',
             [
-                'name' => $role->name,
-            ]
+                'id' => $roleOld->id,
+            ],
         );
 
-        $response->assertStatus(201)
+        $response->assertStatus(200)
             ->assertJsonStructure([
                 'message',
                 'data' => [
                     'role' => [
+                        'id',
                         'name',
                     ],
                 ],
             ])
             ->assertJson([
-                'message' => 'Role created successfully.',
+                'message' => 'Role found successfully.',
                 'data' => [
                     'role' => [
-                        'name' => $role->name,
+                        'id' => $roleOld->id,
+                        'name' => $roleOld->name,
                     ],
                 ],
             ]);
 
         $this->assertDatabaseHas('roles', [
-            'name' => $role->name,
+            'id' => $roleOld->id,
+            'name' => $roleOld->name,
         ]);
     }
-
 }

@@ -15,7 +15,12 @@ class Update extends Controller
 
         $role = Role::find($body['id']);
 
-        $role->name = $body['name'];
+        if(isset($body['name'])) {
+            $role->name = $body['name'];
+        }
+        if(isset($body['is_active'])) {
+            $role->is_active = $body['is_active'];
+        }
         
         $role->save();
 

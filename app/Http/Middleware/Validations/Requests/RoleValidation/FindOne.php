@@ -5,29 +5,17 @@ namespace App\Http\Middleware\Validations\Requests\RoleValidation;
 use Closure;
 use Illuminate\Http\Request;
 
-use Illuminate\Validation\Rule;
-
 use Illuminate\Support\Facades\Validator;
 
-class Update
+class FindOne
 {
     public function handle(Request $request, Closure $next)
     {
-        $validator = Validator::make($request['body'], [
+        $validator = Validator::make($request['query'], [
             'id' => [
-                'required', 
-                'integer', 
-                'exists:roles,id'
-            ],
-            'name' => [
-                'string',
-                'max:255',
-                Rule::unique('roles')->ignore(
-                    isset($request['body']['id']) ? $request['body']['id'] : null
-                ),
-            ],
-            'is_active' => [
-                'boolean',
+                'required',
+                'integer',
+                'exists:roles,id',
             ],
         ]);
 
@@ -39,7 +27,7 @@ class Update
         }
 
         $request->merge([
-            'body' => $validator->validated(),
+            'query' => $validator->validated(),
         ]);
 
         return $next($request);
