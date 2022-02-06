@@ -39,10 +39,16 @@ try {
         message: 'App started',
     );
 
+    require __DIR__ . '/Routes.php';
+    
+    require __DIR__ . '/../Config/bootstrap.php';
+
 } catch (\Throwable $th) {
-    echo $th->getMessage();
+    Logger::error(
+        message: [
+            'message' => $th->getMessage(),
+            'file' => $th->getFile(),
+            'line' => $th->getLine(),
+        ],
+    );
 }
-
-require __DIR__ . '/Routes.php';
-
-require __DIR__ . '/../Config/bootstrap.php';
