@@ -8,15 +8,24 @@ use Tests\TestCase;
 
 class GetAllTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
     public function test_get_all()
     {
         $response = $this->get('/api/v1/roles/get_all');
 
-        $response->assertStatus(200);
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    'roles' => [
+                        'data' => [
+                            '*' => [
+                                'id',
+                                'name',
+                                'is_active',
+                                'created_by',
+                            ]
+                        ],
+                    ],
+                ],
+            ]);
     }
 }
