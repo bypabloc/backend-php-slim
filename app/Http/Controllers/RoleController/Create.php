@@ -26,7 +26,10 @@ class Create extends Controller
         $role->save();
 
         return response()->json([
-            'role' => $role,
-        ]);
+            'message' => 'Role created successfully.',
+            'data' => [
+                'role' => $role,
+            ]
+        ], 201);
     }
 }
