@@ -1,0 +1,59 @@
+version: "3.8"
+
+# post guide
+# https://dev.to/cherif_b/using-docker-for-slim-4-application-development-environment-1opm
+
+volumes:
+  db_ecommerce_php_slim:
+
+networks:
+  network_ecommerce_php_slim:
+    driver: bridge
+
+services:
+  php:
+    container_name: "slim_php"
+    build:
+      context: ./docker/php
+    volumes:
+      - .:/var/www/slim_app
+    ports:
+      - '9000:9000'
+    env_file:
+      - ./.env
+    depends_on:
+      - db_php_slim
+    links:
+      - db_php_slim
+    networks:
+      - network_ecommerce_php_slim
+
+  nginx:
+    container_name: "slim_nginx"
+    image: nginx:stable-alpine
+    ports:
+      - '8080:80'
+    volumes:
+      - .:/var/www/slim_app
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    links:
+      - db_php_slim
+    networks:
+      - network_ecommerce_php_slim
+
+  db_php_slim:
+    image: postgres:13.0-alpine
+    restart: 'always'
+    container_name: db_php_slim
+    volumes:
+      - db_ecommerce_php_slim:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: "${DB_NAME}"
+      POSTGRES_USER: "${DB_USER}"
+      POSTGRES_PASSWORD: "${DB_PASS}"
+    ports:
+      - "5440:${DB_PORT}"
+    networks:
+      - network_ecommerce_php_slim

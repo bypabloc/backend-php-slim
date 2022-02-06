@@ -28,7 +28,7 @@ final class Create
         if(!empty($body['parent_id'])){
             $product_category->parent_id = $body['parent_id'];
         }
-        if(!empty($body['user_id'])){
+        if(isset($body['user_id'])){
             $product_category->user_id = $body['user_id'];
         }
         $product_category->created_by = $session->user_id;

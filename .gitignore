@@ -3,3 +3,5 @@ composer.lock
 vendor/
 public/product_images/
 public/storage/
+
+Storage/logs/

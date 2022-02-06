@@ -20,7 +20,7 @@ final class Update
         $session = $request->getAttribute('session');
         $body = $request->getAttribute('body');
 
-        $user = $session->user;
+        $user = $session->user();
         if(!empty($body['nickname'])){
             $user->nickname = $body['nickname'];
         }

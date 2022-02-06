@@ -21,7 +21,7 @@ class CheckPermissionAdmin
 
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
-        $request = $request->withAttribute('check_permission_admin', $request->getAttribute('session')->user->role->can($this->permission));
+        $request = $request->withAttribute('check_permission_admin', $request->getAttribute('session')->user()->role->can($this->permission));
 
         return $handler->handle($request);
     }

@@ -35,8 +35,6 @@ class Create
         if (!$check_permission_admin) {
             $body['user_id'] = $session->user_id;
             $validators['user_id'] = ['integer'];
-        }else{
-            array_push($validators['user_id'],'required');
         }
 
         try {

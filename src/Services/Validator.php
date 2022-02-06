@@ -27,6 +27,7 @@ class Validator
             'required' => 'The :attribute field is required.',
             'string' => 'The :attribute must be a string.',
             'integer' => 'The :attribute must be a integer.',
+            'between' => 'The :attribute must have between :min and :max',
             'array' => 'The :attribute must be a list (array).',
             'email' => 'The :attribute field must type email.',
             'min' => 'The :attribute field must greater than :min.',
@@ -35,6 +36,12 @@ class Validator
             'in' => 'The :attribute must be one of the following types: :values',
             'file.image' => 'The :attribute must be an image.',
             'file.max' => 'The :attribute must be less than :max kilobytes.',
+            'before' => 'The :attribute must be less than today.',
+            'after' => 'The :attribute must be after than today.',
+            'date'=> 'The :attribute must be a valid date (Y-m-d).',
+            'regex'=> 'The :attribute must be a format valid.',
+            'required_without'=> 'The :attribute field is required',
+            'required_without_all'=> 'The :attribute field is required',
         ]);
 
         if(!$validator->fails()){

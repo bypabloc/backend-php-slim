@@ -21,19 +21,30 @@ class CanPermission
 
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
-        $permission = $this->permission;
-        
-        $session = $request->getAttribute('session');
+        try{
+            $permission = $this->permission;
+            
+            $session = $request->getAttribute('session');
 
-        $canPermission = $session->user->role->can($this->permission);
+            $canPermission = $session->user()->role->can($this->permission);
 
-        if(!$canPermission){
+            if(!$canPermission){
+                $response = new Response();
+                return $this->response($response, 401, [
+                    'errors' => ['Permission denied'],
+                ]);
+            }
+
+            return $handler->handle($request);
+
+        } catch (\Throwable $th) {
             $response = new Response();
-            return $this->response($response, 401, [
-                'errors' => ['Permission denied'],
+            $response = $this->response($response, 500, [
+                'message' => $th->getMessage(),
+                'getFile' => $th->getFile(),
+                'getLine' => $th->getLine(),
             ]);
+            return $response;
         }
-
-        return $handler->handle($request);
     }
 }

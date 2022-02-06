@@ -31,8 +31,6 @@ class Product
 
                 $table->integer('stock');
 
-                $table->string('image',255)->nullable();
-
                 $table->string('weight',50)->nullable();
                 $table->string('height',50)->nullable();
                 $table->string('width',50)->nullable();

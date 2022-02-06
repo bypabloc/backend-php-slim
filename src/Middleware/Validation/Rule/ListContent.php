@@ -8,7 +8,9 @@ use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 use App\Services\Validator;
+
 use App\Middleware\Validation\Rule\Exist;
+use App\Middleware\Validation\Rule\IsBase64;
 
 class ListContent implements Rule, DataAwareRule
 {
@@ -59,6 +61,27 @@ class ListContent implements Rule, DataAwareRule
                     }
                 }
                 $this->data['message_error'] = $value;
+                break;
+            case 'image':
+                $array_of_errors = [];
+                foreach($value as $key => $v){
+
+                    $validator = new Validator();
+                    $validator->validate([
+                        'v' => $v,
+                    ], [
+                        'v' => [new IsBase64(
+                            types: ['png','jpg', 'jpeg', 'gif'],
+                            size: 2048,
+                        )],
+                    ]);
+                    if($validator->isValid()){
+                        unset($value[$key]);
+                    }else{
+                        array_push($array_of_errors, $key + 1);
+                    }
+                }
+                $this->data['message_error'] = $array_of_errors;
                 break;
             /*
             case 'object':
@@ -122,6 +145,10 @@ class ListContent implements Rule, DataAwareRule
      */
     public function message()
     {
-        return 'The :attribute must be list of ' . $this->type . ', the items with errors are: ' . isset($this->data['message_error']) ? implode(', ', $this->data['message_error'] ) : "";
+        $message = 'The :attribute must be list of ' . $this->type . ', the items with errors are: ' ;
+        if(isset($this->data['message_error'])){
+            $message .= implode(',', $this->data['message_error']); 
+        }
+        return $message;
     }
 }

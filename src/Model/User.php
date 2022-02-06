@@ -77,13 +77,22 @@ class User extends Model
         }
     }
 
-    public function generateToken($remember_me)
+    public function generateToken($remember_me = false)
     {
-        $this->token = JWT::GenerateToken($this->uuid, $this->id,$remember_me);
+        $this->token = JWT::GenerateToken(
+            uuid: $this->uuid, 
+            user_id: $this->id,
+            remember_me: $remember_me,
+        );
     }
 
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
     }
 }

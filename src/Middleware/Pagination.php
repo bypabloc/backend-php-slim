@@ -35,7 +35,7 @@ class Pagination
                 ]);
             }
 
-            $request = $request->withAttribute('params', $validator->data);
+            $request = $request->withAttribute('params', $params);
             
             return $handler->handle($request);
 

@@ -17,6 +17,17 @@ trait Storage
         return self::save_base64_image($base64, $name_file ,$path);
     }
 
+    public static function saveProductReviewImage($base64){
+        $name_file = time() . bin2hex(random_bytes(10));
+
+        $path = self::$storage . 'products_reviews_images/';
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        return self::save_base64_image($base64, $name_file ,$path);
+    }
+
     public static function saveProfileImage($base64){
         $name_file = time() . bin2hex(random_bytes(10));
 
