@@ -9,7 +9,7 @@ use App\Serializer\JsonResponse;
 
 use App\Services\Hash;
 
-use App\Model\Product;
+use App\Model\Discount;
 
 final class Find
 {
@@ -23,39 +23,18 @@ final class Find
         $session = $request->getAttribute('session');
         $user_id = $session->user_id;
 
-        $product = new Product();
-        $product = $product->where('id', $params['id'])->with('images');
+        $discounts = new Discount();
+        $discounts = $discounts->where('id', $params['id'])->with(['discount_config']);
         if (!$check_permission_admin) {
-            $product = $product->where('user_id', $user_id);
+            $discounts = $discounts->where('created_by', $user_id);
         }
 
-        $product = $product->with(['salesCanceled' => function ($query) use ($user_id) {
-            $query->where('carts_products.user_id', '!=', $user_id);
-        }]);
-        $product = $product->with(['salesRequest' => function ($query) use ($user_id) {
-            $query->where('carts_products.user_id', '!=', $user_id);
-        }]);
-        $product = $product->with(['salesPaid' => function ($query) use ($user_id) {
-            $query->where('carts_products.user_id', '!=', $user_id);
-        }]);
-        $product = $product->with(['salesSent' => function ($query) use ($user_id) {
-            $query->where('carts_products.user_id', '!=', $user_id);
-        }]);
-        $product = $product->with(['salesDelivered' => function ($query) use ($user_id) {
-            $query->where('carts_products.user_id', '!=', $user_id);
-        }]);
-        $product = $product->with(['salesFinalized' => function ($query) use ($user_id) {
-            $query->where('carts_products.user_id', '!=', $user_id);
-        }]);
-
-        $products = $product->with('rating');
-        $product = $product->with('images');
-        $product = $product->first();
+        $discounts = $discounts->first();
         
 
         $res = [
             'data' => [
-                'product' => $product,
+                'discounts' => $discounts,
             ],
         ];
         return $this->response($response, 200, $res);

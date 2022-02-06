@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Middleware\Validation\ProductCategory;
+namespace App\Middleware\Validation\Discount;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
@@ -27,11 +27,11 @@ class Find
         ];
         if (!$check_permission_admin) {
             $user_id = $session->user_id;
-            $body['user_id'] = $user_id;
+            $body['created_by'] = $user_id;
             $validators['id'] = [new Exist(
-                table: 'products_categories',
+                table: 'discounts',
                 column: 'id',
-                owner: 'user_id',
+                owner: 'created_by',
             )];
         }
 

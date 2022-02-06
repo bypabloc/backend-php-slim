@@ -5,8 +5,6 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
-use App\Services\Coupon;
-
 class Discount extends Model
 {
     use Pagination;

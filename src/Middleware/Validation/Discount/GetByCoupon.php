@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Middleware\Validation\ProductCategory;
+namespace App\Middleware\Validation\Discount;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
@@ -13,9 +13,9 @@ use App\Services\Validator;
 
 use App\Middleware\Validation\Rule;
 
-use App\Model\ProductCategory;
+use App\Model\Discount;
 
-class GetBySlug
+class GetByCoupon
 {
     use RequestValidatorErrors;
     use JsonResponse;
@@ -25,10 +25,7 @@ class GetBySlug
         $args = $request->getAttribute('args');
 
         $validators = [
-            'slug' => [
-                'required', 
-                'string',
-            ],
+            'coupon' => ['required', 'string', 'between:5,15'],
         ];
 
         try {
@@ -43,18 +40,18 @@ class GetBySlug
                 ]);
             }
 
-            $product_category = ProductCategory::where('slug', $validator->data['slug'])->where('is_active', 1)->first();
+            $discount = Discount::where('coupon', $validator->data['coupon'])->where('is_active', 1)->first();
 
-            if(!$product_category){
+            if(!$discount){
                 $response = new Response();
                 return $this->response($response, 404, [
                     'errors' => [
-                        'product_category' => 'Product not found',
+                        'discount' => 'Discount not found',
                     ],
                 ]);
             }
 
-            $validator->data['product_category'] = $product_category;
+            $validator->data['discount'] = $discount;
 
             $request = $request->withAttribute('args', $validator->data);
             

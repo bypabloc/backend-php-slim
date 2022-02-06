@@ -74,7 +74,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
     /*
     *  Consulta un cupon por codigo
     */
-    // $app->get('/discount/{coupon}', Discount\GetByCoupon::class)->add(new \App\Middleware\Validation\Discount\GetByCoupon()); //falta programar
+    $app->get('/discount/{coupon}', Discount\GetByCoupon::class)->add(new \App\Middleware\Validation\Discount\GetByCoupon()); //falta programar
 
     $app->group('/carts', function (RouteCollectorProxy $app) {
 
@@ -118,7 +118,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $app) {
     $app->group('/discounts', function (RouteCollectorProxy $app) {
     
         $app->get('/get_all', Discount\GetAll::class)->add(new \App\Middleware\Pagination())->add(new CheckPermissionAdmin('discounts.get_all.admin'));
-        $app->get('/find', Discount\Find::class)->add(new \App\Middleware\Validation\Product\Find())->add(new CheckPermissionAdmin('discounts.find.admin'));
+        $app->get('/find', Discount\Find::class)->add(new \App\Middleware\Validation\Discount\Find())->add(new CheckPermissionAdmin('discounts.find.admin'));
         $app->post('/create', Discount\Create::class)->add(new \App\Middleware\Validation\Discount\Create())->add(new CheckPermissionAdmin('discounts.create.admin'));
         $app->post('/update', Discount\Update::class)->add(new \App\Middleware\Validation\Product\Update())->add(new CheckPermissionAdmin('discounts.update.admin'));
         $app->post('/state', Discount\State::class)->add(new \App\Middleware\Validation\Product\State())->add(new CheckPermissionAdmin('discounts.state.admin'));

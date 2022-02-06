@@ -7,7 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 use App\Serializer\JsonResponse;
 
-use App\Model\Product;
+use App\Model\Discount;
 
 use App\Services\Pagination;
 
@@ -28,7 +28,7 @@ final class GetAll
             $discounts = $discounts->where('created_by', $user_id);
         }
        
-        $discounts = $products->pagination((int) $params['page'], (int) $params['per_page']);
+        $discounts = $discounts->pagination((int) $params['page'], (int) $params['per_page']);
         
         $res = [
             'data' => [

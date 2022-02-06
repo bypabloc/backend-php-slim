@@ -9,23 +9,22 @@ use App\Serializer\JsonResponse;
 
 use App\Services\Hash;
 
-use App\Model\Product;
+use App\Model\Discount;
 
-final class GetBySlug
+final class GetByCoupon
 {
     use JsonResponse;
 
     public function __invoke(Request $request, Response $response): Response
     {
         $args = $request->getAttribute('args');
-
-        $product = $args['product'];
-        $args['product']->related;
-        $args['product']->rating;
+        
+        $discount = $args['discount'];
+        // coupon
 
         $res = [
             'data' => [
-                'product' => $product,
+                'discount' => $discount,
             ],
         ];
         return $this->response($response, 200, $res);
