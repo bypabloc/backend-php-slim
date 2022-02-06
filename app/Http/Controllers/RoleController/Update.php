@@ -7,29 +7,28 @@ use Illuminate\Http\Request;
 
 use App\Models\Role;
 
-class Create extends Controller
+class Update extends Controller
 {
-    /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function __invoke(Request $request)
     {
         $body = $request['body'];
 
-        $role = new Role;
+        $role = Role::find($body['id']);
 
-        $role->name = $body['name'];
+        if(isset($body['name'])) {
+            $role->name = $body['name'];
+        }
+        if(isset($body['is_active'])) {
+            $role->is_active = $body['is_active'];
+        }
         
         $role->save();
 
         return response()->json([
-            'message' => 'Role created successfully.',
+            'message' => 'Role updated successfully.',
             'data' => [
                 'role' => $role,
             ]
-        ], 201);
+        ], 200);
     }
 }

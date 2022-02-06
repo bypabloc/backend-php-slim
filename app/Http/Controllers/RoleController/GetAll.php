@@ -29,7 +29,9 @@ class GetAll extends Controller
         );
 
         return response()->json([
-            'data' => ['roles' => $roles],
-        ]);
+            'data' => [
+                'roles' => $roles,
+            ],
+        ], 200);
     }
 }

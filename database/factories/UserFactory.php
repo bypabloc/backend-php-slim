@@ -19,7 +19,7 @@ class UserFactory extends Factory
             'birthday' => $this->faker->dateTimeBetween($startDate = '-50 years', $endDate = 'now', $timezone = null),
             'uuid' => (string) Str::uuid(),
             'password' => Hash::make('12345678'),
-            'is_active' => $this->faker->numberBetween(0, 1),
+            'is_active' => $this->faker->boolean(),
             'role_id' => Role::all()->random(1)->first()->id,
         ];
     }
