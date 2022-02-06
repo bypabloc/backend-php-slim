@@ -5,7 +5,7 @@ namespace App\Http\Middleware\Validations\Requests\AuthValidation;
 use Closure;
 use Illuminate\Http\Request;
 
-class Sign
+class SignIn
 {
     /**
      * Handle an incoming request.

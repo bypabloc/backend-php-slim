@@ -22,12 +22,12 @@ class Role extends Model
         // https://www.nicesnippets.com/blog/laravel-model-created-event-example
 
         static::created(function($item) {
-            \Log::info('Item Created Event:'.$item);
+            \Log::info('Role Created Event:'.$item);
         });
 
         static::creating(function($item) {
             $item->created_by = 1;
-            \Log::info('Item Creating Event:'.$item);
+            \Log::info('Role Creating Event:'.$item);
         });
         
 	}

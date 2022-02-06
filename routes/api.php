@@ -14,9 +14,14 @@ Route::prefix('v1')->middleware([DataParser::class])->group(function () {
     Route::prefix('auth')->group(function () {
 
         Route::middleware([
+            Requests\AuthValidation\SignUp::class,
+        ])
+        ->post('sign_up', Controllers\AuthController\SignUp::class);
+
+        Route::middleware([
             Requests\AuthValidation\SignIn::class,
         ])
-        ->get('sign_in', Controllers\AuthController\SignIn::class);
+        ->post('sign_in', Controllers\AuthController\SignIn::class);
 
     });
 
