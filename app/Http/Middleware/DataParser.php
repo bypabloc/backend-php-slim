@@ -15,6 +15,7 @@ class DataParser
         $request->merge([
             'body' => $request->post(),
             'query' => $request->query(),
+            'parameters' => $request->route()->parameters(),
             'token' => $token,
             'ip_address' => $ipAddress,
         ]);
