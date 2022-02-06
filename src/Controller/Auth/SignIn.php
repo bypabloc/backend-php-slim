@@ -10,6 +10,7 @@ use App\Serializer\JsonResponse;
 use App\Model\User;
 
 use App\Services\Hash;
+use App\Services\Logger;
 
 final class SignIn
 {
@@ -38,7 +39,17 @@ final class SignIn
             ]);
         }
 
-        $user->generateToken($body['remember_me']);
+        try {
+            $user->generateToken($body['remember_me']);
+        } catch (\Throwable $th) {
+            Logger::error(
+                message: [
+                    'message' => $th->getMessage(),
+                    'file' => $th->getFile(),
+                    'line' => $th->getLine(),
+                ],
+            );
+        }
 
         $data = [
             'user' => [

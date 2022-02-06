@@ -56,11 +56,21 @@ class JWT
 
         self::DestroyTokens($user_id);
 
-        Session::create([
-            'token' => $token,
-            'user_id' => $user_id,
-            'expired_at' => $dateTokenFormat,
-        ]);
+        try {
+            Session::create([
+                'token' => $token,
+                'user_id' => $user_id,
+                'expired_at' => $dateTokenFormat,
+            ]);
+        } catch (\Throwable $th) {
+            Logger::error(
+                message: [
+                    'message' => $th->getMessage(),
+                    'file' => $th->getFile(),
+                    'line' => $th->getLine(),
+                ],
+            );
+        }
 
         return $token;
     }
