@@ -14,9 +14,16 @@ class Session extends Model
 
     protected $collection = 'sessions';
 
+    protected $primaryKey = 'token';
+
     protected $fillable = [
         'token',
         'user_id',
         'expired_at',
     ];
+
+    public function isDeleted()
+    {
+        return $this->deleted_at !== null;
+    }
 }

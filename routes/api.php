@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Middleware\DataParser;
 
+use App\Http\Middleware\Auth;
 use App\Http\Middleware\Validations;
 use App\Http\Middleware\Validations\Requests;
 use App\Http\Controllers;
@@ -22,6 +23,11 @@ Route::prefix('v1')->middleware([DataParser::class])->group(function () {
             Requests\AuthValidation\SignIn::class,
         ])
         ->post('sign_in', Controllers\AuthController\SignIn::class);
+
+        Route::middleware([
+            Auth::class,
+        ])
+        ->post('sign_out', Controllers\AuthController\SignOut::class);
 
     });
 

@@ -15,7 +15,7 @@ class JWT
     private static $errors = [];
 
     public function __construct(){
-        $this->key = getenv("APP_KEY");
+        self::$key = getenv("APP_KEY");
     }
 
     public static function TimeExpired($remember_me=false) : object
@@ -77,7 +77,7 @@ class JWT
         string $token,
     ) : bool
     {
-        $session = Session::findByPk($token);
+        $session = Session::find($token);
 
         if(!$session){
             return false;
