@@ -29,7 +29,11 @@ Route::prefix('v1')->middleware([DataParser::class])->group(function () {
         ])
         ->post('sign_out', Controllers\AuthController\SignOut::class);
 
-        Route::middleware([Validations\Requests\Pagination::class,Requests\ProductCategoryValidation\GetAll::class])->get('products_categories', Controllers\ProductCategory\GetAllList::class);
+        Route::middleware([
+            Validations\Requests\Pagination::class,
+            Requests\ProductCategoryValidation\GetAll::class
+        ])
+        ->get('products_categories', Controllers\ProductCategory\GetAllList::class);
 
     });
 
@@ -62,10 +66,20 @@ Route::prefix('v1')->middleware([DataParser::class])->group(function () {
 
         Route::prefix('products_categories')->group(function () {
 
-            Route::middleware([Validations\Requests\Pagination::class,Requests\ProductCategoryValidation\GetAll::class])->get('get_all',  Controllers\ProductCategory\GetAll::class);
+            Route::middleware([
+                Validations\Requests\Pagination::class,
+                Requests\ProductCategoryValidation\GetAll::class
+            ])
+            ->get('get_all',  Controllers\ProductCategory\GetAll::class);
             // $app->get('/find', ProductCategory\Find::class)->add(new \App\Middleware\Validation\ProductCategory\Find())->add(new CheckPermissionAdmin('products_categories.find.admin'));
-            Route::middleware([Requests\ProductCategoryValidation\Create::class])->post('create', Controllers\ProductCategory\Create::class);
-            Route::middleware([Requests\ProductCategoryValidation\Update::class])->post('update', Controllers\ProductCategory\Update::class);
+            Route::middleware([
+                Requests\ProductCategoryValidation\Create::class
+            ])
+            ->post('create', Controllers\ProductCategory\Create::class);
+            Route::middleware([
+                Requests\ProductCategoryValidation\Update::class
+            ])
+            ->post('update', Controllers\ProductCategory\Update::class);
             // $app->post('/update', ProductCategory\Update::class)->add(new \App\Middleware\Validation\ProductCategory\Update())->add(new CheckPermissionAdmin('products_categories.update.admin'));
             // $app->post('/state', ProductCategory\State::class)->add(new \App\Middleware\Validation\ProductCategory\State())->add(new CheckPermissionAdmin('products_categories.state.admin'));
 
