@@ -20,8 +20,9 @@ abstract class TestCase extends BaseTestCase
 
         $this->faker = Factory::create();
 
-        Artisan::call('migrate:refresh');
-        Artisan::call('db:seed');
+        Artisan::call('migrate:rollback');
+        Artisan::call('migrate');
+        // Artisan::call('db:seed');
 
         $this->withoutExceptionHandling();
     }

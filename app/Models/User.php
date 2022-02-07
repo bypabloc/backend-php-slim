@@ -10,6 +10,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 
+use App\Services\JWT;
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
@@ -39,8 +41,11 @@ class User extends Authenticatable
 
         // https://www.nicesnippets.com/blog/laravel-model-created-event-example
 
-        static::created(function($item) {
-            \Log::info('User Created Event:'.$item);
+        static::created(function($user) {
+
+            $user->token = JWT::GenerateToken($user->uuid, $user->id);
+
+            \Log::info('User Created Event:'.$user);
         });
 
         static::creating(function( $user ) {
