@@ -5,16 +5,59 @@ namespace App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Hash;
+
+use App\Models\User;
+
 class SignIn extends Controller
 {
-    /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function __invoke(Request $request)
     {
-        //
+        $body = $request['body'];
+
+        $column = '';
+        $value = '';
+        if (filter_var($body['user'], FILTER_VALIDATE_EMAIL)) {
+            $column = 'email';
+            $value = $body['user'];
+        }else{
+            $column = 'nickname';
+            $value = $body['user'];
+        }
+
+        $user = User::where($column, $value)->get()->first();
+        if(!Hash::check($body['password'], $user->password)){
+            return $this->response($response, 422, [
+                'errors' => [
+                    'user' => ['Credentials are incorrect.'],
+                ],
+            ]);
+        }
+
+        $remember_me = isset($body['remember_me']) ? $body['remember_me'] : false;
+
+        try {
+            $user->generateToken($remember_me);
+        } catch (\Throwable $th) {
+            \Log::error([
+                'message' => $th->getMessage(),
+                'file' => $th->getFile(),
+                'line' => $th->getLine(),
+            ]);
+        }
+
+        $data = [
+            'user' => [
+                'nickname' => $user->nickname,
+                'email' => $user->email,
+                'token' => $user->token,
+            ],
+        ];
+        
+        $res = [
+            'data' => $data,
+        ];
+
+        return response()->json($res, 201);
     }
 }

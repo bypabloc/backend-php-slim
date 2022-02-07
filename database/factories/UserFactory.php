@@ -30,8 +30,7 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->email(),
             'sex' => $this->faker->numberBetween(1, 2),
             'birthday' => $this->faker->date($format = 'Y-m-d', $max = 'now'),
-            'uuid' => (string) Str::uuid(),
-            'password' => Hash::make('12345678'),
+            'password' => '12345678',
             'is_active' => $this->faker->boolean(),
             'role_id' => Role::all()->random(1)->first()->id,
         ];

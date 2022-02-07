@@ -60,4 +60,13 @@ class User extends Authenticatable
         });
         
 	}
+
+    public function generateToken($remember_me = false)
+    {
+        $this->token = JWT::GenerateToken(
+            uuid: $this->uuid, 
+            user_id: $this->id,
+            remember_me: $remember_me,
+        );
+    }
 }
