@@ -6,11 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateSessionsTable extends Migration
 {
+    protected $connection = 'mongodb';
+    public function __construct()
+    {
+        $this->connection = config('app.env') === 'testing' ? 'mongodb_test' : 'mongodb';
+    }
+
     private $table = 'sessions';
 
     public function up()
     {
-        Schema::connection('mongodb')->create($this->table, function (Blueprint $table) {
+        Schema::connection($this->connection)->create($this->table, function (Blueprint $table) {
             $table->string('token');
             $table->bigInteger('user_id');
             $table->timestamp('expired_at', $precision = 0);
@@ -23,6 +29,6 @@ class CreateSessionsTable extends Migration
 
     public function down()
     {
-        Schema::connection('mongodb')->dropIfExists($this->table);
+        Schema::connection($this->connection)->dropIfExists($this->table);
     }
 }
