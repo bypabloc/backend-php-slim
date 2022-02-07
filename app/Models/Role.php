@@ -26,7 +26,7 @@ class Role extends Model
         });
 
         static::creating(function($item) {
-            $item->created_by = 1;
+            $item->created_by = \Auth::user()->id;
             \Log::info('Role Creating Event:'.$item);
         });
         
