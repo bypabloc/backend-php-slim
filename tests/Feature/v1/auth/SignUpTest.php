@@ -29,14 +29,6 @@ class SignUpTest extends TestCase
         $response->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors' => [
-                    'email',
-                    'nickname',
-                    'sex',
-                    'birthday',
-                    'password',
-                    'passwordConfirmation',
-                ]
             ]);
     }
 
@@ -53,8 +45,8 @@ class SignUpTest extends TestCase
                 'nickname' => $user->nickname,
                 'sex' => $user->sex,
                 'birthday' => $user->birthday,
-                'password' => '12345678',
-                'passwordConfirmation' => '12345678',
+                'password' => $user->password,
+                'passwordConfirmation' => $user->password,
             ],
         );
 
