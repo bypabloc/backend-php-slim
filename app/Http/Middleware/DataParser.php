@@ -11,10 +11,13 @@ class DataParser
     {
         $token = $request->bearerToken();
 
-        session([
-            'ipAddress' => $request->ip(),
-            'userAgent' => $request->userAgent(),
-        ]);
+        // session([
+        //     'ipAddress' => $request->ip(),
+        //     'userAgent' => $request->userAgent(),
+        // ]);
+
+        session()->put('ipAddress', $request->ip());
+        session()->put('userAgent', $request->userAgent());
 
         $request->merge([
             'body' => $request->post(),
