@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ProductCategory;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\ProductCategory;
 
@@ -19,9 +20,8 @@ class GetAll extends Controller
         $products_categories = new ProductCategory;
 
         // if (!$check_permission_admin) {
-        //     $session = $query['session'];
-        //     $user_id = $session->user_id;
-            $products_categories = $products_categories->where('user_id', '1');
+
+            $products_categories = $products_categories->where('created_by', Auth::user()->id);
         // }
         $products_categories = $products_categories->whereNull('parent_id')->with('children');
 

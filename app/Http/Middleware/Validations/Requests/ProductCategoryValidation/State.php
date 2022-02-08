@@ -5,10 +5,8 @@ namespace App\Http\Middleware\Validations\Requests\ProductCategoryValidation;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str as Str;
-use Illuminate\Validation\Rule;
 
-class Update
+class State
 {
     /**
      * Handle an incoming request.
@@ -19,22 +17,9 @@ class Update
      */
     public function handle(Request $request, Closure $next)
     {
-
-        $slug = Str::slug($request['body']['name']);
-        $slugToArray = array('slug' => $slug);
-        $validate = array_merge($request['body'], $slugToArray);
-
-        $validator = Validator::make($validate, [
+        $validator = Validator::make($request['body'], [
             'id' => ['required', 'integer','exists:products_categories,id'],
-            'name' => [
-                'regex:/^\w+( +\w+)*$/i' ,
-                'not_regex:/\s{2,}/i',
-                'min:5','max:20',
-                'unique:products_categories,name,'.$request['body']['id']
-            ],
             'is_active' => ['boolean'],
-            'parent_id' => ['integer', 'exists:products_categories,id'],
-            'slug' => ['unique:products_categories,slug,'.$request['body']['id']]
         ]);
 
         if($validator->fails()){

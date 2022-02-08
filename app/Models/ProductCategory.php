@@ -46,12 +46,12 @@ class ProductCategory extends Model
         // https://www.nicesnippets.com/blog/laravel-model-created-event-example
 
         static::created(function($item) {
-            \Log::info('Item Created Event:'.$item);
+            \Log::info('ProductCategory Created Event:'.$item);
         });
 
         static::creating(function($item) {
-            $item->created_by = 1;
-            \Log::info('Item Creating Event:'.$item);
+            $item->created_by = \Auth::user()->id;
+            \Log::info('ProductCategory Creating Event:'.$item);
         });
 
 	}

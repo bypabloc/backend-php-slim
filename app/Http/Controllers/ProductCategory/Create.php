@@ -19,8 +19,8 @@ class Create extends Controller
         $product_category->name = $body['name'];
         $product_category->slug = Str::slug($product_category->name);
 
-        if(!empty($body['state'])){
-            $product_category->is_active = $body['state'];
+        if(!empty($body['is_active'])){
+            $product_category->is_active = $body['is_active'];
         }
         if(!empty($body['parent_id'])){
             $product_category->parent_id = $body['parent_id'];
