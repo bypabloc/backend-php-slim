@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Hash;
 
+use App\Services\Response;
+
 use App\Models\User;
 
 class SignIn extends Controller
@@ -54,10 +56,9 @@ class SignIn extends Controller
             ],
         ];
         
-        $res = [
-            'data' => $data,
-        ];
-
-        return response()->json($res, 201);
+        return Response::OK(
+            data: $data,
+            message: 'User signed in successfully.',
+        );
     }
 }

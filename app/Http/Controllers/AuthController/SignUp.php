@@ -5,6 +5,8 @@ namespace App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Services\Response;
+
 use App\Models\User;
 
 class SignUp extends Controller
@@ -31,11 +33,9 @@ class SignUp extends Controller
             ],
         ];
 
-        $res = [
-            'message' => 'User created successfully.',
-            'data' => $data,
-        ];
-        
-        return response()->json($res, 201);
+        return Response::CREATED(
+            message: 'User created successfully.',
+            data: $data,
+        );
     }
 }
