@@ -19,6 +19,8 @@ class Session extends Model
     protected $fillable = [
         'token',
         'user_id',
+        'ip_address',
+        'user_agent',
         'expired_at',
     ];
 
@@ -26,4 +28,22 @@ class Session extends Model
     {
         return $this->deleted_at !== null;
     }
+
+    public static function boot() {
+
+        parent::boot();
+
+        // https://www.nicesnippets.com/blog/laravel-model-created-event-example
+
+        static::creating(function($item) {
+            $item->ip_address = session('ipAddress', '');
+            $item->user_agent = session('userAgent', '');
+            \Log::info('Session Creating Event:'.$item);
+        });
+
+        static::created(function($item) {
+            \Log::info('Session Created Event:'.$item);
+        });
+        
+	}
 }
