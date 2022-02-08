@@ -104,5 +104,37 @@ Route::prefix('v1')->middleware([DataParser::class])->group(function () {
 
         });
 
+        Route::middleware([
+
+            ])->prefix('permissions')->group(function () {
+
+                Route::middleware([
+                    Validations\Requests\Pagination::class,
+                    Requests\PermissionValidation\GetAll::class
+                ])
+                ->get('get_all',  Controllers\Permission\GetAll::class);
+
+                Route::middleware([
+                    Requests\PermissionValidation\Find::class
+                ])
+                ->get('find',  Controllers\Permission\Find::class);
+
+                Route::middleware([
+                    Requests\PermissionValidation\Create::class
+                ])
+                ->post('create', Controllers\Permission\Create::class);
+
+                Route::middleware([
+                    Requests\PermissionValidation\Update::class
+                ])
+                ->post('update', Controllers\Permission\Update::class);
+
+                Route::middleware([
+                    Requests\PermissionValidation\State::class
+                ])
+                ->post('state', Controllers\Permission\State::class);
+
+            });
+
     });
 });

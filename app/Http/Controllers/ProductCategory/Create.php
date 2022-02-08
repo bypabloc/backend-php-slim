@@ -28,8 +28,6 @@ class Create extends Controller
             $product_category->user_id = $body['user_id'];
         }
 
-        // $product_category->creatingCustom();
-
         $product_category->save();
 
         return response()->json([

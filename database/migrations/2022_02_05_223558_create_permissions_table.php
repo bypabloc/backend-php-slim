@@ -13,6 +13,7 @@ class CreatePermissionsTable extends Migration
         Schema::create($this->table, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->unique();
+            $table->string('alias')->unique();
             $table->boolean('is_active')->default(1);
 
             $table->unsignedBigInteger('created_by');

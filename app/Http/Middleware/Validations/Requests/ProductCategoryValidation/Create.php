@@ -19,30 +19,39 @@ class Create
     public function handle(Request $request, Closure $next)
     {
 
-        $slug = Str::slug($request['body']['name']);
-        $slugToArray = array('slug' => $slug);
-        $validate = array_merge($request['body'], $slugToArray);
-
-        $validator = Validator::make($validate, [
-            'name' => ['required','regex:/^\w+( +\w+)*$/i' ,'not_regex:/\s{2,}/i','min:5','max:20','unique:products_categories'],
-            'is_active' => ['boolean'],
-            'parent_id' => ['integer', 'exists:products_categories,id'],
-            'user_id' => ['integer', 'exists:users,id'],
-            'slug' => ['required', 'unique:products_categories'],
-        ]);
-
-        // if (!$check_permission_admin) {
-        //     $body['user_id'] = $session->user_id;
-        //     $validator['user_id'] = ['integer'];
-        // }
-
-        if($validator->fails()){
+        if(!$request['body']){
             return response()->json([
                 'message' => 'Validation failed',
-                'errors' => $validator->errors(),
+                'errors' => 'Parameters is empty',
             ], 422);
-        }
+        }else{
+            $validate = $request['body'];
+            if(isset($request['body']['name'])){
+                $slug = Str::slug($request['body']['name']);
+                $slugToArray = array('slug' => $slug);
+                $validate = array_merge($request['body'], $slugToArray);
+            }
 
+            $validator = Validator::make($validate, [
+                'name' => ['required','regex:/^\w+( +\w+)*$/i' ,'not_regex:/\s{2,}/i','min:5','max:20','unique:products_categories'],
+                'is_active' => ['boolean'],
+                'parent_id' => ['integer', 'exists:products_categories,id'],
+                'user_id' => ['integer', 'exists:users,id'],
+                'slug' => ['required', 'unique:products_categories'],
+            ]);
+
+            // if (!$check_permission_admin) {
+            //     $body['user_id'] = $session->user_id;
+            //     $validator['user_id'] = ['integer'];
+            // }
+
+            if($validator->fails()){
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors(),
+                ], 422);
+            }
+        }
         $request->merge([
             'body' => $validator->validated(),
         ]);
