@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\DataParser;
 
 use App\Http\Middleware\Auth;
+use App\Http\Middleware\CanPermission;
+
 use App\Http\Middleware\Validations;
 use App\Http\Middleware\Validations\Requests;
 use App\Http\Controllers;
@@ -38,6 +40,11 @@ Route::prefix('v1')->middleware([DataParser::class])->group(function () {
     ->get('products_categories', Controllers\ProductCategory\GetAllList::class);
 
     Route::middleware([
+        Requests\ProductCategoryValidation\GetBySlug::class
+    ])
+    ->get('product_category/{slug}', Controllers\ProductCategory\GetBySlug::class);
+
+    Route::middleware([
         Auth::class,
     ])->group(function () {
         Route::prefix('roles')->group(function () {
@@ -65,7 +72,9 @@ Route::prefix('v1')->middleware([DataParser::class])->group(function () {
 
         });
 
-        Route::prefix('products_categories')->group(function () {
+        Route::middleware([
+
+        ])->prefix('products_categories')->group(function () {
 
             Route::middleware([
                 Validations\Requests\Pagination::class,

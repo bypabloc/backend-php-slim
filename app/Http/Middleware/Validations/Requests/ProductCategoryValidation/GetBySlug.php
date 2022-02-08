@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class Find
+class GetBySlug
 {
     /**
      * Handle an incoming request.
@@ -17,8 +17,8 @@ class Find
      */
     public function handle(Request $request, Closure $next)
     {
-        $validator = Validator::make($request['query'], [
-            'id' => ['required', 'integer','exists:products_categories,id']
+        $validator = Validator::make($request['parameters'], [
+            'slug' => ['required', 'string','exists:products_categories,slug'],
         ]);
 
         if($validator->fails()){
@@ -29,7 +29,7 @@ class Find
         }
 
         $request->merge([
-            'query' => $validator->validated(),
+            'body' => $validator->validated(),
         ]);
 
         return $next($request);

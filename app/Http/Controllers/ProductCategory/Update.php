@@ -17,6 +17,7 @@ class Update extends Controller
 
         if(isset($body['name'])) {
             $product_category->name = $body['name'];
+            $product_category->slug = $body['slug'];
         }
         if(!empty($body['parent_id'])){
             $product_category->parent_id = $body['parent_id'];

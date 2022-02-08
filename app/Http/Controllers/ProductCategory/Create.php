@@ -4,7 +4,6 @@ namespace App\Http\Controllers\ProductCategory;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str as Str;
 
 use App\Models\ProductCategory;
 
@@ -17,7 +16,7 @@ class Create extends Controller
         $product_category = new ProductCategory();
 
         $product_category->name = $body['name'];
-        $product_category->slug = Str::slug($product_category->name);
+        $product_category->slug = $body['slug'];
 
         if(!empty($body['is_active'])){
             $product_category->is_active = $body['is_active'];

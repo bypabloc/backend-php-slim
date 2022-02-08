@@ -19,8 +19,6 @@ class Create
     public function handle(Request $request, Closure $next)
     {
 
-        $session = $request['session'];
-        $check_permission_admin = $request['check_permission_admin'];
         $slug = Str::slug($request['body']['name']);
         $slugToArray = array('slug' => $slug);
         $validate = array_merge($request['body'], $slugToArray);
