@@ -7,6 +7,7 @@ use App\Http\Middleware\DataParser;
 
 use App\Http\Middleware\Auth;
 use App\Http\Middleware\CanPermission;
+use App\Http\Middleware\CheckPermissionAdmin;
 
 use App\Http\Middleware\Validations;
 use App\Http\Middleware\Validations\Requests;
@@ -37,12 +38,12 @@ Route::prefix('v1')->middleware([DataParser::class])->group(function () {
         Validations\Requests\Pagination::class,
         Requests\ProductCategoryValidation\GetAll::class
     ])
-    ->get('products_categories', Controllers\ProductCategory\GetAllList::class);
+    ->get('products_categories', Controllers\ProductCategoryController\GetAllList::class);
 
     Route::middleware([
         Requests\ProductCategoryValidation\GetBySlug::class
     ])
-    ->get('product_category/{slug}', Controllers\ProductCategory\GetBySlug::class);
+    ->get('product_category/{slug}', Controllers\ProductCategoryController\GetBySlug::class);
 
     Route::middleware([
         Auth::class,
@@ -80,59 +81,92 @@ Route::prefix('v1')->middleware([DataParser::class])->group(function () {
                 Validations\Requests\Pagination::class,
                 Requests\ProductCategoryValidation\GetAll::class
             ])
-            ->get('get_all',  Controllers\ProductCategory\GetAll::class);
+            ->get('get_all',  Controllers\ProductCategoryController\GetAll::class);
 
             Route::middleware([
                 Requests\ProductCategoryValidation\Find::class
             ])
-            ->get('find',  Controllers\ProductCategory\Find::class);
+            ->get('find',  Controllers\ProductCategoryController\Find::class);
 
             Route::middleware([
-                Requests\ProductCategoryValidation\Create::class
+                CheckPermissionAdmin::class.':products_categories.create.admin',
+                Requests\ProductCategoryValidation\Create::class,
             ])
-            ->post('create', Controllers\ProductCategory\Create::class);
+            ->post('create', Controllers\ProductCategoryController\Create::class);
 
             Route::middleware([
                 Requests\ProductCategoryValidation\Update::class
             ])
-            ->post('update', Controllers\ProductCategory\Update::class);
+            ->post('update', Controllers\ProductCategoryController\Update::class);
 
             Route::middleware([
                 Requests\ProductCategoryValidation\State::class
             ])
-            ->post('state', Controllers\ProductCategory\State::class);
+            ->post('state', Controllers\ProductCategoryController\State::class);
 
         });
 
         Route::middleware([
 
-            ])->prefix('permissions')->group(function () {
+        ])->prefix('permissions')->group(function () {
+
+            Route::middleware([
+                Validations\Requests\Pagination::class,
+                Requests\PermissionValidation\GetAll::class
+            ])
+            ->get('get_all',  Controllers\PermissionController\GetAll::class);
+
+            Route::middleware([
+                Requests\PermissionValidation\Find::class
+            ])
+            ->get('find',  Controllers\PermissionController\Find::class);
+
+            Route::middleware([
+                Requests\PermissionValidation\Create::class
+            ])
+            ->post('create', Controllers\PermissionController\Create::class);
+
+            Route::middleware([
+                Requests\PermissionValidation\Update::class
+            ])
+            ->post('update', Controllers\PermissionController\Update::class);
+
+            Route::middleware([
+                Requests\PermissionValidation\State::class
+            ])
+            ->post('state', Controllers\PermissionController\State::class);
+
+        });
+
+        Route::middleware([
+            CanPermission::class.':users',
+            ])->prefix('users')->group(function () {
 
                 Route::middleware([
                     Validations\Requests\Pagination::class,
-                    Requests\PermissionValidation\GetAll::class
+                    Requests\UserValidation\GetAll::class
                 ])
-                ->get('get_all',  Controllers\Permission\GetAll::class);
+                ->get('get_all',  Controllers\UserController\GetAll::class);
 
                 Route::middleware([
-                    Requests\PermissionValidation\Find::class
+                    Requests\UserValidation\Find::class
                 ])
-                ->get('find',  Controllers\Permission\Find::class);
+                ->get('find',  Controllers\UserController\Find::class);
 
                 Route::middleware([
-                    Requests\PermissionValidation\Create::class
+                    Requests\UserValidation\Create::class
                 ])
-                ->post('create', Controllers\Permission\Create::class);
+                ->post('create', Controllers\UserController\Create::class);
 
                 Route::middleware([
-                    Requests\PermissionValidation\Update::class
+                    Requests\UserValidation\Update::class
                 ])
-                ->post('update', Controllers\Permission\Update::class);
+                ->post('update', Controllers\UserController\Update::class);
 
                 Route::middleware([
-                    Requests\PermissionValidation\State::class
+                    Requests\UserValidation\State::class
                 ])
-                ->post('state', Controllers\Permission\State::class);
+                ->post('state', Controllers\UserController\State::class);
 
             });
 

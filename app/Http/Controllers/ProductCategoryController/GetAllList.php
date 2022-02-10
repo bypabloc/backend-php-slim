@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\ProductCategory;
+namespace App\Http\Controllers\ProductCategoryController;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 use App\Models\ProductCategory;
 
-class GetAll extends Controller
+
+class GetAllList extends Controller
 {
     public function __invoke(Request $request)
     {
@@ -16,14 +16,13 @@ class GetAll extends Controller
 
         $page = $query['page'];
         $per_page = $query['per_page'];
-        // $check_permission_admin = $query['check_permission_admin'];
+
         $products_categories = new ProductCategory;
 
-        // if (!$check_permission_admin) {
-
-            $products_categories = $products_categories->where('created_by', Auth::user()->id);
-        // }
-        $products_categories = $products_categories->whereNull('parent_id')->with('children');
+        $products_categories = $products_categories->where('is_active', true)
+            ->whereNull('parent_id')
+            ->whereNull('user_id')
+            ->with('children');
 
         if(isset($query['sort_by'])){
             $products_categories = $products_categories->orderBy($query['sort_by'], $query['sort_direction']);

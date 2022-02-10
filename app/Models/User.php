@@ -10,11 +10,13 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 
-use App\Services\JWT;
+use App\Models\Role;
+
+use App\Services;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable,Services\Storage;
 
     protected $fillable = [
         'nickname',
@@ -43,7 +45,7 @@ class User extends Authenticatable
 
         static::created(function($user) {
 
-            $user->token = JWT::GenerateToken($user->uuid, $user->id);
+            $user->token = Services\JWT::GenerateToken($user->uuid, $user->id);
 
             \Log::info('User Created Event:'.$user);
         });
@@ -58,15 +60,30 @@ class User extends Authenticatable
 
             \Log::info('User Creating Event:'.$user);
         });
-        
+
 	}
 
     public function generateToken($remember_me = false)
     {
-        $this->token = JWT::GenerateToken(
-            uuid: $this->uuid, 
+        $this->token = Services\JWT::GenerateToken(
+            uuid: $this->uuid,
             user_id: $this->id,
             remember_me: $remember_me,
         );
     }
+
+    public function creatingCustom()
+    {
+        $this->image = self::saveProfileImage($this->image);
+    }
+
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+
+
+
 }

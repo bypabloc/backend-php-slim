@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware\Validations\Requests\PermissionValidation;
+namespace App\Http\Middleware\Validations\Requests\UserValidation;
 
 use Closure;
 use Illuminate\Http\Request;
@@ -18,8 +18,8 @@ class State
     public function handle(Request $request, Closure $next)
     {
         $validator = Validator::make($request['body'], [
-            'id' => ['required', 'integer','exists:permissions,id'],
-            'is_active' => ['boolean'],
+            'id' => ['required', 'integer', 'exists:users,id'],
+            'is_active' => ['required','boolean']
         ]);
 
         // if (!$check_permission_admin) {
@@ -33,7 +33,6 @@ class State
                 'errors' => $validator->errors(),
             ], 422);
         }
-
         $request->merge([
             'body' => $validator->validated(),
         ]);

@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str as Str;
+use Illuminate\Support\Facades\Auth;
 
 class Create
 {
@@ -18,7 +19,8 @@ class Create
      */
     public function handle(Request $request, Closure $next)
     {
-
+        $check_permission_admin = $request['check_permission_admin'];
+        print_r($check_permission_admin." check_permission_admin");
         if(!$request['body']){
             return response()->json([
                 'message' => 'Validation failed',
@@ -40,10 +42,9 @@ class Create
                 'slug' => ['required', 'unique:products_categories'],
             ]);
 
-            // if (!$check_permission_admin) {
-            //     $body['user_id'] = $session->user_id;
-            //     $validator['user_id'] = ['integer'];
-            // }
+            if (!$check_permission_admin) {
+                $body['user_id'] = Auth::user()->user_id;
+            }
 
             if($validator->fails()){
                 return response()->json([

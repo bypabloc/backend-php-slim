@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\ProductCategory;
+namespace App\Http\Controllers\ProductCategoryController;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\ProductCategory;
 
-class Find extends Controller
+class GetBySlug extends Controller
 {
     /**
      * Handle the incoming request.
@@ -17,9 +17,9 @@ class Find extends Controller
      */
     public function __invoke(Request $request)
     {
-        $query = $request['query'];
+        $query = $request['parameters'];
 
-        $product_category = ProductCategory::where('id',$query['id'])->with('children')->get();
+        $product_category = ProductCategory::where('slug',$query['slug'])->with('children')->get();
 
         foreach ($product_category as $key => $value) {
             $product_category[$key]['hasChildren'] = count($value['children']);
@@ -32,6 +32,5 @@ class Find extends Controller
                 'product_category' => $product_category,
             ]
         ], 200);
-
     }
 }

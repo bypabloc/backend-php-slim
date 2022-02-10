@@ -38,8 +38,14 @@ class Update
 
             $validator = Validator::make($validate, [
                 'id' => ['required', 'integer','exists:permissions,id'],
-                'name' => ['string','min:5','max:20','unique:permissions,name,'.$request['body']['id']],
-                'alias' => ['required_with:name','string','min:5','max:20','unique:permissions,alias,'.$request['body']['id']],
+                'name' => [
+                    'string','min:5','max:20',
+                    !empty($request->id) ? 'unique:permissions,name,'.$request->id :null
+                ],
+                'alias' => [
+                    'required_with:name','string','min:5','max:20',
+                    !empty($request->id) ? 'unique:permissions,alias,'.$request->id :null
+                ],
                 'is_active' => ['boolean']
             ]);
 
