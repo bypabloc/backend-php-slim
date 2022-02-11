@@ -3,17 +3,18 @@
 namespace App\Http\Middleware\Validations\Requests\RoleValidation;
 
 use Closure;
-
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 
-use App\Http\Middleware\ListContent;
-use App\Http\Middleware\ExistList;
-use App\Http\Middleware\ListNotRepeat;
-
-class Update
+class State
 {
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     */
     public function handle(Request $request, Closure $next)
     {
         $validator = Validator::make($request['body'], [
@@ -22,12 +23,8 @@ class Update
                 'integer',
                 'exists:roles,id'
             ],
-            'name' => [
-                'string',
-                'max:255',
-                !empty($request->id) ? 'unique:roles,name,'.$request->id :null
-            ],
             'is_active' => [
+                'required',
                 'boolean',
             ],
         ]);

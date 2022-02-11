@@ -16,13 +16,12 @@ class GetAll extends Controller
 
         $page = $query['page'];
         $per_page = $query['per_page'];
-        // $check_permission_admin = $query['check_permission_admin'];
+        $check_permission_admin = $request['check_permission_admin'];
         $products_categories = new ProductCategory;
 
-        // if (!$check_permission_admin) {
-
-            $products_categories = $products_categories->where('created_by', Auth::user()->id);
-        // }
+        if (!$check_permission_admin) {
+            $products_categories = $products_categories->where('user_id', Auth::user()->id);
+        }
         $products_categories = $products_categories->whereNull('parent_id')->with('children');
 
         if(isset($query['sort_by'])){

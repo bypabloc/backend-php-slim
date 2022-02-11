@@ -8,52 +8,32 @@ use Illuminate\Support\Facades\Validator;
 
 class Create
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
-     */
     public function handle(Request $request, Closure $next)
     {
-        if(!$request['body']){
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => 'Parameters is empty',
-            ], 422);
-        }else{
-
-            if(isset($request['name'])){
-                $request['name'] = strtolower($request['name']);
-            }
-            if(isset($request['alias'])){
-                $request['alias'] = strtolower($request['alias']);
-            }
-            $lowerCaseToArray = array(
-                'alias' => $request['alias'],
-                'name' => $request['name'],
-            );
-            $validate = array_merge($request['body'], $lowerCaseToArray);
-
-            $validator = Validator::make($validate, [
-                'name' => ['required','string','min:5','max:20','unique:permissions'],
-                'alias' => ['required','string','min:5','max:20','unique:permissions'],
-                'is_active' => ['boolean'],
-            ]);
-
-        // if (!$check_permission_admin) {
-        //     $body['user_id'] = $session->user_id;
-        //     $validator['user_id'] = ['integer'];
-        // }
+        if(isset($request['name'])){
+            $request['name'] = strtolower($request['name']);
         }
+        if(isset($request['alias'])){
+            $request['alias'] = strtolower($request['alias']);
+        }
+        $lowerCaseToArray = array(
+            'alias' => $request['alias'],
+            'name' => $request['name'],
+        );
+        $validate = array_merge($request['body'], $lowerCaseToArray);
+
+        $validator = Validator::make($validate, [
+            'name' => ['required','string','min:5','max:20','unique:permissions'],
+            'alias' => ['required','string','min:5','max:20','unique:permissions'],
+            'is_active' => ['boolean'],
+        ]);
+
         if($validator->fails()){
             return response()->json([
                 'message' => 'Validation failed',
                 'errors' => $validator->errors(),
             ], 422);
         }
-
         $request->merge([
             'body' => $validator->validated(),
         ]);

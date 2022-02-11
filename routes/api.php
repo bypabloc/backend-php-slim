@@ -48,7 +48,10 @@ Route::prefix('v1')->middleware([DataParser::class])->group(function () {
     Route::middleware([
         Auth::class,
     ])->group(function () {
-        Route::prefix('roles')->group(function () {
+
+        Route::middleware([
+            CanPermission::class.':roles',
+        ])->prefix('roles')->group(function () {
 
             Route::middleware([
                 Validations\Requests\Pagination::class,
@@ -71,19 +74,26 @@ Route::prefix('v1')->middleware([DataParser::class])->group(function () {
             ])
             ->post('update', Controllers\RoleController\Update::class);
 
+            Route::middleware([
+                Requests\RoleValidation\State::class,
+            ])
+            ->post('state', Controllers\RoleController\State::class);
+
         });
 
         Route::middleware([
-
+            CanPermission::class.':products_categories',
         ])->prefix('products_categories')->group(function () {
 
             Route::middleware([
+                CheckPermissionAdmin::class.':products_categories.get_all.admin',
                 Validations\Requests\Pagination::class,
                 Requests\ProductCategoryValidation\GetAll::class
             ])
             ->get('get_all',  Controllers\ProductCategoryController\GetAll::class);
 
             Route::middleware([
+                CheckPermissionAdmin::class.':products_categories.find.admin',
                 Requests\ProductCategoryValidation\Find::class
             ])
             ->get('find',  Controllers\ProductCategoryController\Find::class);
@@ -95,11 +105,13 @@ Route::prefix('v1')->middleware([DataParser::class])->group(function () {
             ->post('create', Controllers\ProductCategoryController\Create::class);
 
             Route::middleware([
+                CheckPermissionAdmin::class.':products_categories.update.admin',
                 Requests\ProductCategoryValidation\Update::class
             ])
             ->post('update', Controllers\ProductCategoryController\Update::class);
 
             Route::middleware([
+                CheckPermissionAdmin::class.':products_categories.state.admin',
                 Requests\ProductCategoryValidation\State::class
             ])
             ->post('state', Controllers\ProductCategoryController\State::class);
@@ -107,7 +119,7 @@ Route::prefix('v1')->middleware([DataParser::class])->group(function () {
         });
 
         Route::middleware([
-
+            CanPermission::class.':permissions',
         ])->prefix('permissions')->group(function () {
 
             Route::middleware([

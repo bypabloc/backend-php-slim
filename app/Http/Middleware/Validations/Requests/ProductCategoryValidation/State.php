@@ -17,10 +17,15 @@ class State
      */
     public function handle(Request $request, Closure $next)
     {
+        $check_permission_admin = $request['check_permission_admin'];
         $validator = Validator::make($request['body'], [
             'id' => ['required', 'integer','exists:products_categories,id'],
             'is_active' => ['boolean'],
         ]);
+
+        if (!$check_permission_admin) {
+            $body['user_id'] = Auth::user()->id;
+        }
 
         if($validator->fails()){
             return response()->json([

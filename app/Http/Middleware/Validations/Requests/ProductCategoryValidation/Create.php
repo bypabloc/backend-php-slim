@@ -20,7 +20,6 @@ class Create
     public function handle(Request $request, Closure $next)
     {
         $check_permission_admin = $request['check_permission_admin'];
-        print_r($check_permission_admin." check_permission_admin");
         if(!$request['body']){
             return response()->json([
                 'message' => 'Validation failed',
@@ -43,7 +42,7 @@ class Create
             ]);
 
             if (!$check_permission_admin) {
-                $body['user_id'] = Auth::user()->user_id;
+                $body['user_id'] = Auth::user()->id;
             }
 
             if($validator->fails()){

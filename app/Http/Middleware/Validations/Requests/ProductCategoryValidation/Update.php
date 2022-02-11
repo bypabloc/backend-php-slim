@@ -19,6 +19,7 @@ class Update
      */
     public function handle(Request $request, Closure $next)
     {
+
         if(!$request['body']){
             return response()->json([
                 'message' => 'Validation failed',
@@ -26,6 +27,7 @@ class Update
             ], 422);
         }else{
             $validate = $request['body'];
+            $check_permission_admin = $request['check_permission_admin'];
             if(isset($request['body']['name'])){
                 $slug = Str::slug($request['body']['name']);
                 $slugToArray = array('slug' => $slug);
@@ -44,6 +46,10 @@ class Update
                 'parent_id' => ['integer', 'exists:products_categories,id'],
                 'slug' => [!empty($request->id) ? 'unique:products_categories,slug,'.$request->id :null]
             ]);
+
+            if (!$check_permission_admin) {
+                $body['user_id'] = Auth::user()->id;
+            }
 
             if($validator->fails()){
                 return response()->json([
