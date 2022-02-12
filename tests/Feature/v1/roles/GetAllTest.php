@@ -11,7 +11,7 @@ class GetAllTest extends TestCase
     /** @test */
     public function get_all()
     {
-        $response = $this->jsonFetch(
+        $response = $this->fetch(
             'GET',
             '/api/v1/roles/get_all'
         );

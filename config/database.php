@@ -40,9 +40,24 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'database' => env('DB_DATABASE', 'ecommerce_db_dev'),
+            'username' => env('DB_USERNAME', 'postgres'),
+            'password' => env('DB_PASSWORD', 123456),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
+        'pgsql_test' => [
+            'driver' => 'pgsql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_TEST_HOST', '127.0.0.1'),
+            'port' => env('DB_TEST_PORT', '5432'),
+            'database' => env('DB_TEST_DATABASE', 'ecommerce_db_test'),
+            'username' => env('DB_TEST_USERNAME', 'postgres'),
+            'password' => env('DB_TEST_PASSWORD', 123456),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
@@ -52,12 +67,13 @@ return [
 
         'mongodb' => [
             'driver' => 'mongodb',
-
-            'dsn' => env('MONGO_DSN', 'mongodb://localhost:27017'),
-
-            // 'host' => env('MONGO_HOST', '127.0.0.1'),
-            // 'port' => env('MONGO_PORT', 27017),
-            'database' => env('MONGO_DATABASE', 'db_ecommerce_php_slim'),
+            'dsn' => env('MONGO_TEST_DSN', 'mongodb://localhost:27017'),
+            'database' => env('MONGO_TEST_DATABASE', 'ecommerce_db_dev'),
+        ],
+        'mongodb_test' => [
+            'driver' => 'mongodb',
+            'dsn' => 'mongodb://localhost:27017',
+            'database' => 'ecommerce_db_test',
         ],
     ],
 

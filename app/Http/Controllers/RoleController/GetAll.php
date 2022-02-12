@@ -5,6 +5,8 @@ namespace App\Http\Controllers\RoleController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Services\Response;
+
 use App\Models\Role;
 
 class GetAll extends Controller
@@ -28,10 +30,10 @@ class GetAll extends Controller
             $page // current page, default 1
         );
 
-        return response()->json([
-            'data' => [
+        return Response::OK(
+            data: [
                 'roles' => $roles,
             ],
-        ], 200);
+        );
     }
 }

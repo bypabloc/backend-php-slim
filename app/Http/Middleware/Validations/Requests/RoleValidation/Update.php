@@ -9,6 +9,8 @@ use Illuminate\Validation\Rule;
 
 use Illuminate\Support\Facades\Validator;
 
+use App\Services\Response;
+
 class Update
 {
     public function handle(Request $request, Closure $next)
@@ -32,10 +34,10 @@ class Update
         ]);
 
         if($validator->fails()){
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $validator->errors(),
-            ], 422);
+            return Response::UNPROCESSABLE_ENTITY(
+                message: 'Validation failed.',
+                errors: $validator->errors(),
+            );
         }
 
         $request->merge([

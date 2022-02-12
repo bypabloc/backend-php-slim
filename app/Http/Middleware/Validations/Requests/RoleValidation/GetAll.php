@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Validator;
 
 use App\Models\Role;
 
+use App\Services\Response;
+
 class GetAll
 {
     public function handle(Request $request, Closure $next)
@@ -21,10 +23,10 @@ class GetAll
         ]);
 
         if($validator->fails()){
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $validator->errors(),
-            ], 422);
+            return Response::UNPROCESSABLE_ENTITY(
+                message: 'Validation failed.',
+                errors: $validator->errors(),
+            );
         }
 
         $query = $request['query'];

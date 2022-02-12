@@ -9,6 +9,13 @@ class Role extends Model
 {
     use HasFactory;
 
+    public static $env;
+    
+    public function __construct($attributes = [])
+    {
+        parent::__construct($attributes);
+    }
+
     protected $fillable = [
         'name',
         'is_active',
@@ -22,12 +29,12 @@ class Role extends Model
         // https://www.nicesnippets.com/blog/laravel-model-created-event-example
 
         static::created(function($item) {
-            \Log::info('Item Created Event:'.$item);
+            \Log::info('Role Created Event:'.$item);
         });
 
         static::creating(function($item) {
-            $item->created_by = 1;
-            \Log::info('Item Creating Event:'.$item);
+            $item->created_by = config('app.env') === 'testing' || config('app.env') === 'local' ? 1 : \Auth::user()->id;
+            \Log::info('Role Creating Event:'.$item);
         });
         
 	}

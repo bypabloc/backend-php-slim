@@ -17,7 +17,7 @@ class FindOneTest extends TestCase
 
         $roleNew = Role::factory()->make();
 
-        $response = $this->jsonFetch(
+        $response = $this->fetch(
             'GET',
             '/api/v1/roles/find_one', 
             [
@@ -39,7 +39,7 @@ class FindOneTest extends TestCase
     {
         $roleOld = Role::factory()->create();
 
-        $response = $this->jsonFetch(
+        $response = $this->fetch(
             'GET',
             '/api/v1/roles/find_one',
             [

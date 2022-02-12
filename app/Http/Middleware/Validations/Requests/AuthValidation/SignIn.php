@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware\Validations\Requests\RoleValidation;
+namespace App\Http\Middleware\Validations\Requests\AuthValidation;
 
 use Closure;
 use Illuminate\Http\Request;
@@ -9,12 +9,14 @@ use Illuminate\Support\Facades\Validator;
 
 use App\Services\Response;
 
-class Create
+class SignIn
 {
     public function handle(Request $request, Closure $next)
     {
         $validator = Validator::make($request['body'], [
-            'name' => ['required', 'string', 'max:255', 'unique:roles'],
+            'user' => ['required', 'string', 'min:3', 'max:20'],
+            'password' => ['required', 'string', 'min:6', 'max:50'],
+            'remember_me'=>['boolean'],
         ]);
 
         if($validator->fails()){
