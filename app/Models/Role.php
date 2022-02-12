@@ -9,6 +9,13 @@ class Role extends Model
 {
     use HasFactory;
 
+    public static $env;
+    
+    public function __construct($attributes = [])
+    {
+        parent::__construct($attributes);
+    }
+
     protected $fillable = [
         'name',
         'is_active',
@@ -26,7 +33,7 @@ class Role extends Model
         });
 
         static::creating(function($item) {
-            $item->created_by = \Auth::user()->id;
+            $item->created_by = config('app.env') === 'testing' || config('app.env') === 'local' ? 1 : \Auth::user()->id;
             \Log::info('Role Creating Event:'.$item);
         });
 

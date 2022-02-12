@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth as AuthLaravel;
 
 use App\Services\JWT;
+use App\Services\Response;
 
 class Auth
 {
@@ -23,10 +24,7 @@ class Auth
         ]);
 
         if($validator->fails()){
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => ['Token not found'],
-            ], 401);
+            return Response::UNAUTHORIZED();
         }
 
         $token = $validator->validated()['token'];
@@ -34,10 +32,7 @@ class Auth
         $jwt = new JWT();
         $jwt->VerifyToken($token);
         if(!$jwt->isValid()){
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $jwt->errors(),
-            ], 401);
+            return Response::UNAUTHORIZED();
         }
 
         AuthLaravel::loginUsingId($jwt::session()->user_id);

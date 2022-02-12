@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Services\JWT;
+use App\Services\Response;
+
 use App\Model\User;
 
 class SignOut extends Controller
@@ -22,6 +24,8 @@ class SignOut extends Controller
             ],
         ];
 
-        return response()->json($res, 200);
+        return Response::OK(
+            message: 'User signed in successfully.',
+        );
     }
 }

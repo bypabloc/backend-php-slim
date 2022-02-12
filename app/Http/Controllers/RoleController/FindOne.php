@@ -5,6 +5,8 @@ namespace App\Http\Controllers\RoleController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Services\Response;
+
 use App\Models\Role;
 
 class FindOne extends Controller
@@ -15,11 +17,11 @@ class FindOne extends Controller
 
         $role = Role::find($query['id']);
 
-        return response()->json([
-            'message' => 'Role found successfully.',
-            'data' => [
+        return Response::OK(
+            message: 'Role found successfully.',
+            data: [
                 'role' => $role,
             ]
-        ], 200);
+        );
     }
 }

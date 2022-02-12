@@ -9,11 +9,16 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Artisan;
 
+use App\Models\User;
+use App\Models\Session;
+
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication, DatabaseMigrations;
 
     private Generator $faker;
+
+    private string $token = '';
     
     public function setUp() : void {
         parent::setUp();
@@ -33,13 +38,34 @@ abstract class TestCase extends BaseTestCase
         throw new Exception('Unknown Key Requested');
     }
 
-    public function jsonFetch($method, $uri, $data = []) {
+    public function fetch(
+        $method, 
+        $uri, 
+        $data = [],
+        $auth = false,
+        $headers = [],
+    ) {
+        $headers = array_merge($headers, [
+            'Content-Type' => 'application/json',
+        ]);
+        if ($auth){
+            $headers['Authorization'] = "Bearer {$this->token}";
+        }
         if($method === 'GET') {
             if(count($data) > 0) {
                 $uri .= '?' . http_build_query($data);
             }
-            return $this->json($method, $uri);
+            return $this->withHeaders($headers)->json($method, $uri,);
         }
-        return $this->json($method, $uri, $data);
+        return $this->json($method, $uri, $data, $headers);
+    }
+
+    public function authorize() : void
+    {
+        $user = User::factory()->make();
+        $session = Session::factory()->create([
+            'user_id' => $user->id,
+        ]);
+        $this->token = $session->token;
     }
 }

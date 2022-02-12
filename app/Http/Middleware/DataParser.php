@@ -10,14 +10,15 @@ class DataParser
     public function handle(Request $request, Closure $next)
     {
         $token = $request->bearerToken();
-        $ipAddress = $request->ip();
+
+        session()->put('ipAddress', $request->ip());
+        session()->put('userAgent', $request->userAgent());
 
         $request->merge([
             'body' => $request->post(),
             'query' => $request->query(),
             'parameters' => $request->route()->parameters(),
             'token' => $token,
-            'ip_address' => $ipAddress,
         ]);
 
         return $next($request);

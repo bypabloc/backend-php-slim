@@ -11,16 +11,23 @@ use App\Models\Role;
 class CreateTest extends TestCase
 {
     // https://auth0.com/blog/testing-laravel-apis-with-phpunit/
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->authorize();
+    }
     
     /** @test */
     public function validation_fails()
     {
-        $response = $this->jsonFetch(
-            'POST',
-            '/api/v1/roles/create',
-            [
+        $response = $this->fetch(
+            method: 'POST',
+            uri: '/api/v1/roles/create',
+            data: [
                 'name' => '',
             ],
+            auth: true,
         );
 
         $response->assertStatus(422)
@@ -28,7 +35,7 @@ class CreateTest extends TestCase
                 'message',
                 'errors' => [
                     'name',
-                ]
+                ],
             ]);
     }
 
@@ -37,12 +44,13 @@ class CreateTest extends TestCase
     {
         $role = Role::factory()->make();
 
-        $response = $this->jsonFetch(
-            'POST',
-            '/api/v1/roles/create', 
-            [
+        $response = $this->fetch(
+            method: 'POST',
+            uri: '/api/v1/roles/create',
+            data: [
                 'name' => $role->name,
-            ]
+            ],
+            auth: true,
         );
 
         $response->assertStatus(201)

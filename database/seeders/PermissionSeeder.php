@@ -4,13 +4,13 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-use App\Models\Role;
+use App\Models\Permission;
 
-class RoleSeeder extends Seeder
+class PermissionSeeder extends Seeder
 {
     public function run()
     {
-        Role::factory()
+        Permission::factory()
                 ->count(50)
                 ->create();
     }

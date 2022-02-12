@@ -13,7 +13,7 @@ class SignUpTest extends TestCase
     /** @test */
     public function validation_fails()
     {
-        $response = $this->jsonFetch(
+        $response = $this->fetch(
             'POST',
             '/api/v1/auth/sign_up',
             [
@@ -29,14 +29,6 @@ class SignUpTest extends TestCase
         $response->assertStatus(422)
             ->assertJsonStructure([
                 'message',
-                'errors' => [
-                    'email',
-                    'nickname',
-                    'sex',
-                    'birthday',
-                    'password',
-                    'passwordConfirmation',
-                ]
             ]);
     }
 
@@ -45,7 +37,7 @@ class SignUpTest extends TestCase
     {
         $user = User::factory()->make();
 
-        $response = $this->jsonFetch(
+        $response = $this->fetch(
             'POST',
             '/api/v1/auth/sign_up',
             [
@@ -53,8 +45,8 @@ class SignUpTest extends TestCase
                 'nickname' => $user->nickname,
                 'sex' => $user->sex,
                 'birthday' => $user->birthday,
-                'password' => '12345678',
-                'passwordConfirmation' => '12345678',
+                'password' => $user->password,
+                'passwordConfirmation' => $user->password,
             ],
         );
 
@@ -65,6 +57,7 @@ class SignUpTest extends TestCase
                     'user' => [
                         'email',
                         'nickname',
+                        'token',
                     ],
                 ],
             ])
