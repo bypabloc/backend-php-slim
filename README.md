@@ -15,7 +15,7 @@
     
 ## Comando para crear un seeder:
     php artisan make:seeder NameSeeder
-
+    
 ## Comando para crear una nueva validacion:
     php artisan make:middleware Validations\\Requests\\NameValidation\\Action
 

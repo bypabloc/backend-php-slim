@@ -24,6 +24,9 @@ class SessionFactory extends Factory
 
         $token = JWT::GenerateToken($user->uuid, $user->id);
 
+        session()->put('ipAddress', $this->faker->ipv4());
+        session()->put('userAgent', $this->faker->userAgent());
+
         return [
             'token' => $token,
             'user_id' => $user->id,

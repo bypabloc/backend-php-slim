@@ -4,13 +4,13 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-use App\Models\Session;
+use App\Models\Permission;
 
-class SessionSeeder extends Seeder
+class PermissionSeeder extends Seeder
 {
     public function run()
     {
-        Session::factory()
+        Permission::factory()
                 ->count(50)
                 ->create();
     }

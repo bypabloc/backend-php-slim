@@ -12,13 +12,10 @@ class CreateTest extends TestCase
 {
     // https://auth0.com/blog/testing-laravel-apis-with-phpunit/
 
-    private string $token;
-
     public function setUp(): void
     {
         parent::setUp();
-
-        $this->token = $this->sessionToken();
+        $this->authorize();
     }
     
     /** @test */
@@ -30,7 +27,7 @@ class CreateTest extends TestCase
             data: [
                 'name' => '',
             ],
-            token: $this->token,
+            auth: true,
         );
 
         $response->assertStatus(422)
@@ -53,7 +50,7 @@ class CreateTest extends TestCase
             data: [
                 'name' => $role->name,
             ],
-            token: $this->token,
+            auth: true,
         );
 
         $response->assertStatus(201)
