@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jenssegers\Mongodb\Eloquent\Model;
 
 class Session extends Model
 {
+    use HasFactory;
+    
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);

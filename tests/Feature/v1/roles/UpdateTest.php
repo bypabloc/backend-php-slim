@@ -17,7 +17,7 @@ class UpdateTest extends TestCase
 
         $roleNew = Role::factory()->make();
 
-        $response = $this->jsonFetch(
+        $response = $this->fetch(
             'POST',
             '/api/v1/roles/update', 
             [
@@ -41,7 +41,7 @@ class UpdateTest extends TestCase
 
         $roleNew = Role::factory()->make();
 
-        $response = $this->jsonFetch(
+        $response = $this->fetch(
             'POST',
             '/api/v1/roles/update', 
             [
@@ -82,7 +82,7 @@ class UpdateTest extends TestCase
 
         $roleNew = Role::factory()->make();
 
-        $response = $this->jsonFetch(
+        $response = $this->fetch(
             'POST',
             '/api/v1/roles/update', 
             [
@@ -107,7 +107,7 @@ class UpdateTest extends TestCase
 
         $roleNew = Role::factory()->make();
 
-        $response = $this->jsonFetch(
+        $response = $this->fetch(
             'POST',
             '/api/v1/roles/update', 
             [

@@ -178,7 +178,7 @@ class Response
         $res = [
             'message' => 'Unprocessable Entity',
         ];
-        if(is_array($errors)){
+        if($errors){
             $res['errors'] = $errors;
         }
         if(is_string($message)){

@@ -13,7 +13,7 @@ class SignUpTest extends TestCase
     /** @test */
     public function validation_fails()
     {
-        $response = $this->jsonFetch(
+        $response = $this->fetch(
             'POST',
             '/api/v1/auth/sign_up',
             [
@@ -37,7 +37,7 @@ class SignUpTest extends TestCase
     {
         $user = User::factory()->make();
 
-        $response = $this->jsonFetch(
+        $response = $this->fetch(
             'POST',
             '/api/v1/auth/sign_up',
             [
@@ -57,6 +57,7 @@ class SignUpTest extends TestCase
                     'user' => [
                         'email',
                         'nickname',
+                        'token',
                     ],
                 ],
             ])

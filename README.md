@@ -12,7 +12,7 @@
 
 ## Comando para crear un factory:
     php artisan make:factory NameFactory
-
+    
 ## Comando para crear un seeder:
     php artisan make:seeder NameSeeder
 
