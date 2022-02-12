@@ -13,17 +13,13 @@ class CreateDiscountsConfigsTable extends Migration
         Schema::create($this->table, function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->integer('table_id');
 
-            $table->double('price', 8, 2)->nullable();
+            $table->string('table_name');
 
-            $table->string('observation')->nullable();
+            $table->unsignedBigInteger('discount_id');
+            $table->foreign('discount_id')->references('id')->on('discounts');
 
-            $table->string('address')->nullable();
-
-            $table->smallInteger('state')->default(1);
-            
             $table->timestamp('created_at', $precision = 0)->default(DB::raw('NOW()'));
             $table->timestamp('updated_at', $precision = 0)->nullable();
             $table->timestamp('deleted_at', $precision = 0)->nullable();

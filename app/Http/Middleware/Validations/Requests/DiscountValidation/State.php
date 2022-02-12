@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Middleware\Validations\Requests\ProductCategoryValidation;
+namespace App\Http\Middleware\Validations\Requests\DiscountValidation;
 
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class State
 {
@@ -12,12 +13,12 @@ class State
     {
         $check_permission_admin = $request['check_permission_admin'];
         $validator = Validator::make($request['body'], [
-            'id' => ['required', 'integer','exists:products_categories,id'],
+            'id' => ['required', 'integer','exists:discounts,id'],
             'is_active' => ['boolean'],
         ]);
 
         if (!$check_permission_admin) {
-            $body['user_id'] = Auth::user()->id;
+            $body['created_by'] = Auth::user()->id;
         }
 
         if($validator->fails()){

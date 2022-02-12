@@ -17,13 +17,15 @@ class Create
     {
         $validator = Validator::make($request['body'], [
             'name' => ['required', 'string', 'max:255', 'unique:roles'],
-            'permissions' => ['array',
-                                Rule::when(is_array($request->permissions), [
-                                    new ListContent('integer'),
-                                    new ExistList('permissions', 'id'),
-                                    new ListNotRepeat()
-                                ])
-                            ],
+            'permissions' => [
+                'required',
+                'array',
+                Rule::when(is_array($request->permissions), [
+                    new ListContent('integer'),
+                    new ExistList('permissions', 'id'),
+                    new ListNotRepeat()
+                ])
+            ],
         ]);
 
         if($validator->fails()){

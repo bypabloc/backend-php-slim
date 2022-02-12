@@ -82,6 +82,70 @@ Route::prefix('v1')->middleware([DataParser::class])->group(function () {
         });
 
         Route::middleware([
+            CanPermission::class.':permissions',
+        ])->prefix('permissions')->group(function () {
+
+            Route::middleware([
+                Validations\Requests\Pagination::class,
+                Requests\PermissionValidation\GetAll::class
+            ])
+            ->get('get_all',  Controllers\PermissionController\GetAll::class);
+
+            Route::middleware([
+                Requests\PermissionValidation\Find::class
+            ])
+            ->get('find',  Controllers\PermissionController\Find::class);
+
+            Route::middleware([
+                Requests\PermissionValidation\Create::class
+            ])
+            ->post('create', Controllers\PermissionController\Create::class);
+
+            Route::middleware([
+                Requests\PermissionValidation\Update::class
+            ])
+            ->post('update', Controllers\PermissionController\Update::class);
+
+            Route::middleware([
+                Requests\PermissionValidation\State::class
+            ])
+            ->post('state', Controllers\PermissionController\State::class);
+
+        });
+
+        Route::middleware([
+            CanPermission::class.':users',
+        ])->prefix('users')->group(function () {
+
+            Route::middleware([
+                Validations\Requests\Pagination::class,
+                Requests\UserValidation\GetAll::class
+            ])
+            ->get('get_all',  Controllers\UserController\GetAll::class);
+
+            Route::middleware([
+                Requests\UserValidation\Find::class
+            ])
+            ->get('find',  Controllers\UserController\Find::class);
+
+            Route::middleware([
+                Requests\UserValidation\Create::class
+            ])
+            ->post('create', Controllers\UserController\Create::class);
+
+            Route::middleware([
+                Requests\UserValidation\Update::class
+            ])
+            ->post('update', Controllers\UserController\Update::class);
+
+            Route::middleware([
+                Requests\UserValidation\State::class
+            ])
+            ->post('state', Controllers\UserController\State::class);
+
+        });
+
+        Route::middleware([
             CanPermission::class.':products_categories',
         ])->prefix('products_categories')->group(function () {
 
@@ -119,68 +183,41 @@ Route::prefix('v1')->middleware([DataParser::class])->group(function () {
         });
 
         Route::middleware([
-            CanPermission::class.':permissions',
-        ])->prefix('permissions')->group(function () {
+            CanPermission::class.':discounts',
+        ])->prefix('discounts')->group(function () {
 
             Route::middleware([
+                CheckPermissionAdmin::class.':discounts.get_all.admin',
                 Validations\Requests\Pagination::class,
-                Requests\PermissionValidation\GetAll::class
+                Requests\DiscountValidation\GetAll::class
             ])
-            ->get('get_all',  Controllers\PermissionController\GetAll::class);
+            ->get('get_all',  Controllers\DiscountController\GetAll::class);
 
             Route::middleware([
-                Requests\PermissionValidation\Find::class
+                CheckPermissionAdmin::class.':discounts.find.admin',
+                Requests\DiscountValidation\Find::class
             ])
-            ->get('find',  Controllers\PermissionController\Find::class);
+            ->get('find',  Controllers\DiscountController\Find::class);
 
             Route::middleware([
-                Requests\PermissionValidation\Create::class
+                CheckPermissionAdmin::class.':discounts.create.admin',
+                Requests\DiscountValidation\Create::class,
             ])
-            ->post('create', Controllers\PermissionController\Create::class);
+            ->post('create', Controllers\DiscountController\Create::class);
 
             Route::middleware([
-                Requests\PermissionValidation\Update::class
+                CheckPermissionAdmin::class.':discounts.update.admin',
+                Requests\DiscountValidation\Update::class
             ])
-            ->post('update', Controllers\PermissionController\Update::class);
+            ->post('update', Controllers\DiscountController\Update::class);
 
             Route::middleware([
-                Requests\PermissionValidation\State::class
+                CheckPermissionAdmin::class.':discounts.state.admin',
+                Requests\DiscountValidation\State::class
             ])
-            ->post('state', Controllers\PermissionController\State::class);
+            ->post('state', Controllers\DiscountController\State::class);
 
         });
-
-        Route::middleware([
-            CanPermission::class.':users',
-            ])->prefix('users')->group(function () {
-
-                Route::middleware([
-                    Validations\Requests\Pagination::class,
-                    Requests\UserValidation\GetAll::class
-                ])
-                ->get('get_all',  Controllers\UserController\GetAll::class);
-
-                Route::middleware([
-                    Requests\UserValidation\Find::class
-                ])
-                ->get('find',  Controllers\UserController\Find::class);
-
-                Route::middleware([
-                    Requests\UserValidation\Create::class
-                ])
-                ->post('create', Controllers\UserController\Create::class);
-
-                Route::middleware([
-                    Requests\UserValidation\Update::class
-                ])
-                ->post('update', Controllers\UserController\Update::class);
-
-                Route::middleware([
-                    Requests\UserValidation\State::class
-                ])
-                ->post('state', Controllers\UserController\State::class);
-
-            });
 
     });
 });
