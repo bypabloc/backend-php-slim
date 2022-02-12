@@ -51,7 +51,6 @@ class User extends Authenticatable
         });
 
         static::creating(function( $user ) {
-
             $user->uuid = (string) Str::uuid();
             $user->password = Hash::make($user->password);
             if(!$user->role_id) {
@@ -60,7 +59,6 @@ class User extends Authenticatable
 
             \Log::info('User Creating Event:'.$user);
         });
-
 	}
 
     public function generateToken($remember_me = false)
