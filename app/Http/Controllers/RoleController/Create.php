@@ -5,6 +5,8 @@ namespace App\Http\Controllers\RoleController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Services\Response;
+
 use App\Models\Role;
 use App\Models\RolePermission;
 
@@ -29,11 +31,11 @@ class Create extends Controller
         }
         RolePermission::insert($roles_permissions);
 
-        return response()->json([
-            'message' => 'Role created successfully.',
-            'data' => [
+        return Response::CREATED(
+            message: 'Role created successfully.',
+            data: [
                 'role' => $role,
             ]
-        ], 201);
+        );
     }
 }

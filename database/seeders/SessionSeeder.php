@@ -4,13 +4,13 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-use App\Models\Role;
+use App\Models\Session;
 
-class RoleSeeder extends Seeder
+class SessionSeeder extends Seeder
 {
     public function run()
     {
-        Role::factory()
+        Session::factory()
                 ->count(50)
                 ->create();
     }

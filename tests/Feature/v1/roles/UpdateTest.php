@@ -10,6 +10,12 @@ use App\Models\Role;
 
 class UpdateTest extends TestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->authorize();
+    }
+
     /** @test */
     public function validation_fails()
     {
@@ -17,12 +23,13 @@ class UpdateTest extends TestCase
 
         $roleNew = Role::factory()->make();
 
-        $response = $this->jsonFetch(
-            'POST',
-            '/api/v1/roles/update', 
-            [
+        $response = $this->fetch(
+            method: 'POST',
+            uri: '/api/v1/roles/update',
+            data: [
                 'name' => $roleNew->name,
             ],
+            auth: true,
         );
 
         $response->assertStatus(422)
@@ -41,13 +48,14 @@ class UpdateTest extends TestCase
 
         $roleNew = Role::factory()->make();
 
-        $response = $this->jsonFetch(
-            'POST',
-            '/api/v1/roles/update', 
-            [
+        $response = $this->fetch(
+            method: 'POST',
+            uri: '/api/v1/roles/update',
+            data: [
                 'id' => $roleOld->id,
                 'name' => $roleNew->name,
             ],
+            auth: true,
         );
 
         $response->assertStatus(200)
@@ -82,13 +90,14 @@ class UpdateTest extends TestCase
 
         $roleNew = Role::factory()->make();
 
-        $response = $this->jsonFetch(
-            'POST',
-            '/api/v1/roles/update', 
-            [
+        $response = $this->fetch(
+            method: 'POST',
+            uri: '/api/v1/roles/update',
+            data: [
                 'id' => $roleOld->id,
                 'is_active' => 3,
             ],
+            auth: true,
         );
 
         $response->assertStatus(422)
@@ -107,13 +116,14 @@ class UpdateTest extends TestCase
 
         $roleNew = Role::factory()->make();
 
-        $response = $this->jsonFetch(
-            'POST',
-            '/api/v1/roles/update', 
-            [
+        $response = $this->fetch(
+            method: 'POST',
+            uri: '/api/v1/roles/update',
+            data: [
                 'id' => $roleOld->id,
                 'is_active' => $roleNew->is_active,
             ],
+            auth: true,
         );
 
         $response->assertStatus(200)

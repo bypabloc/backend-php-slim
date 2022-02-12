@@ -8,12 +8,19 @@ use Tests\TestCase;
 
 class GetAllTest extends TestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->authorize();
+    }
+
     /** @test */
     public function get_all()
     {
-        $response = $this->jsonFetch(
-            'GET',
-            '/api/v1/roles/get_all'
+        $response = $this->fetch(
+            method: 'GET',
+            uri: '/api/v1/roles/get_all',
+            auth: true,
         );
 
         $response->assertStatus(200)

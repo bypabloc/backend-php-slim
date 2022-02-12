@@ -15,7 +15,7 @@ class Permission extends Model
         'is_active',
         'created_by',
     ];
-
+  
     protected $casts = [
         'is_active' => 'boolean',
     ];
@@ -35,10 +35,9 @@ class Permission extends Model
             \Log::info('Permission Creating Event:'.$item);
         });
 
-	}
+	  }
 
     public function getFillable() {
         return $this->fillable;
     }
-
 }

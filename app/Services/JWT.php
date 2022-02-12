@@ -20,7 +20,6 @@ class JWT
 
     public static function TimeExpired($remember_me=false) : object
     {
-        
         $expirationInSeconds = 60 * 60; // one hour
         
         if($remember_me){
@@ -49,7 +48,7 @@ class JWT
 
         $payload = [
             'uuid' => $uuid,
-            'exp' => $dateTokenExpiration
+            'exp' => $dateTokenExpiration,
         ];
 
         $token = FirebaseJWT::encode($payload, self::$key, 'HS256');
