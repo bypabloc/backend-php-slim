@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Permission;
 
@@ -14,10 +15,12 @@ class CreatePermissionsTable extends Migration
     {
         Schema::create($this->table, function (Blueprint $table) {
             $table->bigIncrements('id');
-            
+          
+            $table->string('name')->unique();
+            $table->string('alias')->unique();
             $table->string('name')->unique(); // Ex: Crear productos
             $table->string('alias')->unique(); // Ex: create_products
-            
+          
             $table->boolean('is_active')->default(1);
 
             $table->unsignedBigInteger('created_by');

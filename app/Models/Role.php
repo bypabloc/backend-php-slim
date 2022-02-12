@@ -19,7 +19,7 @@ class Role extends Model
     protected $fillable = [
         'name',
         'is_active',
-        'created_by',
+        'created_by'
     ];
 
     public static function boot() {
@@ -36,10 +36,21 @@ class Role extends Model
             $item->created_by = config('app.env') === 'testing' || config('app.env') === 'local' ? 1 : \Auth::user()->id;
             \Log::info('Role Creating Event:'.$item);
         });
-        
+
 	}
 
     public function getFillable() {
         return $this->fillable;
+    }
+
+    public function permissions()
+    {
+        // https://laravel.com/docs/8.x/eloquent-relationships#many-to-many
+        return $this->belongsToMany(Permission::class, 'roles_permissions', 'role_id', 'permission_id');
+    }
+
+    public function can($permission)
+    {
+        return !empty($this->permissions->where('alias',$permission)->toArray()) ? true : false;
     }
 }

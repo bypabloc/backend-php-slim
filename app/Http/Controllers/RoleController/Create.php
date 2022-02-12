@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Services\Response;
 
 use App\Models\Role;
+use App\Models\RolePermission;
 
 class Create extends Controller
 {
@@ -24,8 +25,17 @@ class Create extends Controller
         $role = new Role;
 
         $role->name = $body['name'];
-        
+
         $role->save();
+        $role_id = $role->id;
+        $roles_permissions = [];
+        foreach ($body['permissions'] as $permission) {
+            array_push($roles_permissions, [
+                'role_id' => $role_id,
+                'permission_id' => $permission
+            ]);
+        }
+        RolePermission::insert($roles_permissions);
 
         return Response::CREATED(
             message: 'Role created successfully.',

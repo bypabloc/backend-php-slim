@@ -4,8 +4,12 @@ namespace App\Http\Middleware\Validations\Requests\RoleValidation;
 
 use Closure;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+
+use App\Http\Middleware\ListContent;
+use App\Http\Middleware\ExistList;
+use App\Http\Middleware\ListNotRepeat;
 
 use App\Services\Response;
 
@@ -15,6 +19,13 @@ class Create
     {
         $validator = Validator::make($request['body'], [
             'name' => ['required', 'string', 'max:255', 'unique:roles'],
+            'permissions' => ['array',
+                                Rule::when(is_array($request->permissions), [
+                                    new ListContent('integer'),
+                                    new ExistList('permissions', 'id'),
+                                    new ListNotRepeat()
+                                ])
+                            ],
         ]);
 
         if($validator->fails()){

@@ -3,11 +3,12 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class CreateRolesPermissionsTable extends Migration
 {
     private $table = 'roles_permissions';
-    
+
     public function up()
     {
         Schema::create($this->table, function (Blueprint $table) {
@@ -23,6 +24,36 @@ class CreateRolesPermissionsTable extends Migration
             $table->timestamp('updated_at', $precision = 0)->nullable();
             $table->timestamp('deleted_at', $precision = 0)->nullable();
         });
+
+        $permissions = DB::table('permissions')->pluck('id')->toArray();
+        $roles_permissions = [];
+        foreach ($permissions as $permission) {
+            $roles_permissions[] = [
+                'role_id' => 1,
+                'permission_id' => $permission,
+            ];
+        }
+        $roles_permissions[] = [
+            'role_id' => 2,
+            'permission_id' => 1,
+        ];
+        $roles_permissions[] = [
+            'role_id' => 2,
+            'permission_id' => 2,
+        ];
+        $roles_permissions[] = [
+            'role_id' => 2,
+            'permission_id' => 3,
+        ];
+        $roles_permissions[] = [
+            'role_id' => 2,
+            'permission_id' => 4,
+        ];
+        $roles_permissions[] = [
+            'role_id' => 2,
+            'permission_id' => 5,
+        ];
+        DB::table($this->table)->insert($roles_permissions);
     }
 
     /**

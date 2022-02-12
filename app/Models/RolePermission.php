@@ -5,21 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Permission extends Model
+class RolePermission extends Model
 {
     use HasFactory;
 
+    protected $table = 'roles_permissions';
+
     protected $fillable = [
-        'name',
-        'alias',
-        'is_active',
+        'role_id',
+        'permission_id',
         'created_by',
     ];
-  
-    protected $casts = [
-        'is_active' => 'boolean',
-    ];
-    
+
     public static function boot() {
 
         parent::boot();
@@ -27,17 +24,13 @@ class Permission extends Model
         // https://www.nicesnippets.com/blog/laravel-model-created-event-example
 
         static::created(function($item) {
-            \Log::info('Permission Created Event:'.$item);
+            \Log::info('Role Created Event:'.$item);
         });
 
         static::creating(function($item) {
             $item->created_by = \Auth::user()->id;
-            \Log::info('Permission Creating Event:'.$item);
+            \Log::info('Role Creating Event:'.$item);
         });
 
-	  }
-
-    public function getFillable() {
-        return $this->fillable;
-    }
+	}
 }
