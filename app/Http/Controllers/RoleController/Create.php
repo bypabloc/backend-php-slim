@@ -12,12 +12,6 @@ use App\Models\RolePermission;
 
 class Create extends Controller
 {
-    /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function __invoke(Request $request)
     {
         $body = $request['body'];
@@ -30,10 +24,10 @@ class Create extends Controller
         $role_id = $role->id;
         $roles_permissions = [];
         foreach ($body['permissions'] as $permission) {
-            array_push($roles_permissions, [
+            $roles_permissions[] = [
                 'role_id' => $role_id,
-                'permission_id' => $permission
-            ]);
+                'permission_id' => $permission,
+            ];
         }
         RolePermission::insert($roles_permissions);
 

@@ -8,12 +8,19 @@ use Tests\TestCase;
 
 class GetAllListTest extends TestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->authorize();
+    }
+
     /** @test */
     public function get_all_list()
     {
-        $response = $this->jsonFetch(
-            'GET',
-            '/api/v1/products_categories'
+        $response = $this->fetch(
+            method: 'GET',
+            uri: '/api/v1/products_categories',
+            auth: true,
         );
 
         $response->assertStatus(200)

@@ -50,7 +50,7 @@ class ProductCategory extends Model
         });
 
         static::creating(function($item) {
-            $item->created_by = \Auth::user()->id;
+            $item->created_by = config('app.env') === 'testing' ? 1 : \Auth::user()->id;
             \Log::info('ProductCategory Creating Event:'.$item);
         });
 

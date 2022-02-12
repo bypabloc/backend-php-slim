@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 use App\Models\Role;
+use App\Models\Permission;
 
 class CreateTest extends TestCase
 {
@@ -43,12 +44,20 @@ class CreateTest extends TestCase
     public function validation_success()
     {
         $role = Role::factory()->make();
+        $permissions = Permission::factory()
+        ->count(5)
+        ->create();
+
+        $permissions = collect($permissions)->map(function ($permission) {
+            return $permission->id;
+        });
 
         $response = $this->fetch(
             method: 'POST',
             uri: '/api/v1/roles/create',
             data: [
                 'name' => $role->name,
+                'permissions' => $permissions->toArray(),
             ],
             auth: true,
         );
