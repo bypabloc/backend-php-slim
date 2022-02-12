@@ -10,6 +10,12 @@ use App\Models\Role;
 
 class FindOneTest extends TestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->authorize();
+    }
+
     /** @test */
     public function validation_fails()
     {
@@ -18,11 +24,12 @@ class FindOneTest extends TestCase
         $roleNew = Role::factory()->make();
 
         $response = $this->fetch(
-            'GET',
-            '/api/v1/roles/find_one', 
-            [
+            method: 'GET',
+            uri: '/api/v1/roles/find_one',
+            data: [
                 'id' => $roleNew->id,
             ],
+            auth: true,
         );
 
         $response->assertStatus(422)
@@ -40,13 +47,14 @@ class FindOneTest extends TestCase
         $roleOld = Role::factory()->create();
 
         $response = $this->fetch(
-            'GET',
-            '/api/v1/roles/find_one',
-            [
+            method: 'GET',
+            uri: '/api/v1/roles/find_one',
+            data: [
                 'id' => $roleOld->id,
             ],
+            auth: true,
         );
-
+        
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'message',
